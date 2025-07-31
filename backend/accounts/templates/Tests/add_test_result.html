@@ -1,0 +1,53 @@
+{% extends "app1/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h2>Thêm Kết Quả Xét Nghiệm cho <strong>{{ patient.full_name }}</strong></h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <!-- Loại xét nghiệm -->
+        <div class="form-group">
+            {{ form.test_type.label_tag }}
+            {{ form.test_type }}
+        </div>
+
+        <!-- Các trường thông số động -->
+        {% for field in form %}
+            {% if field.name != 'test_type' %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="text-danger">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary">Lưu kết quả</button>
+    </form>
+</div>
+
+<!-- Tự động submit lại khi thay đổi loại xét nghiệm -->
+<script>
+    document.querySelector('[name="test_type"]').addEventListener("change", function () {
+        this.form.submit();
+    });
+</script>
+
+<style>
+    .container {
+        max-width: 700px;
+        margin-top: 30px;
+    }
+    h2 {
+        margin-bottom: 20px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}

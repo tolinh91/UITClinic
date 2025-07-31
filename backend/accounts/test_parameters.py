@@ -1,0 +1,41 @@
+TEST_PARAMETERS = {
+    "Công thức máu:":[
+        ("Hồng Cầu", "T/L"),
+        ("Bạch Cầu", "/mm³ "),
+        ("Neutrophil", "/mm³"),
+        ("Neutrophil", "%"),
+        ("Eosinophil", "/mm³"),
+        ("Eosinophil", "%"),
+        ("Lymphocyte", "/mm³"),
+        ("Lymphocyte", "%"),
+        ("Hb", "g/dL"),
+        ("Hct", "%"),
+        ("Tiểu Cầu:", "G/L"),
+    ],
+    "Sinh hóa máu:":[
+        ("Ure", "mmol/L"),
+        ("Creatinin", "µmol/L"),
+        ("Glucose", "mmol/L"),
+        ("Natri", "mmol/L"),
+        ("Kali", "mmol/L"),
+        ("Clo", "mmol/L"),
+        ("Calci", "mmol/L"),
+    ],
+    "Tổng phân tích nước tiểu:":[
+        ("Tỷ trọng", " "),
+        ("Ph", " "),
+        ("Tế bào bạch cầu", "µL"),
+        ("Tế bào hồng cầu", "µL"),
+        ("Nitrit"," "),
+        ("Protein", "g/L"),
+        ("Thể cetonic","mmol/L"),
+        ("Bilirubin", "µmol/L"),
+        ("Urobilinogen", "µmol/L"),
+    ],
+     "ECG:":[
+        ("Kết quả", "text"),
+    ],
+    "Siêu âm:": [
+        ("Kết quả", "text"),
+    ],
+}

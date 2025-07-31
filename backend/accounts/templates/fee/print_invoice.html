@@ -1,0 +1,90 @@
+{% extends "app1/base.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Phiếu Thanh Toán</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        .invoice-box {
+            border: 1px solid #eee;
+            padding: 30px;
+        }
+        h2, h4 {
+            text-align: center;
+        }
+        .info, .items {
+            margin-top: 20px;
+        }
+        .items table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .items th, .items td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .total {
+            text-align: right;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+<div class="invoice-box">
+    <h2>PHIẾU THANH TOÁN</h2>
+    <h4>Phòng khám ABC</h4>
+
+    <div class="info">
+        <p><strong>Bệnh nhân:</strong> {{ invoice.patient.full_name }}</p>
+        <p><strong>Ngày lập phiếu:</strong> {{ invoice.created_at|date:"d/m/Y" }}</p>
+    </div>
+
+    <div class="items">
+        <table>
+            <tr>
+                <th>Mục</th>
+                <th>Thành tiền (VNĐ)</th>
+            </tr>
+            <tr>
+                <td>Tiền khám</td>
+                <td>{{ invoice.consultation_fee|floatformat:0 }}</td>
+            </tr>
+            <tr>
+                <td>Tiền thuốc</td>
+                <td>{{ invoice.medicine_fee|floatformat:0 }}</td>
+            </tr>
+            <tr>
+                <td>Tiền xét nghiệm</td>
+                <td>{{ invoice.test_fee|floatformat:0 }}</td>
+            </tr>
+            <tr>
+                <th>Tổng cộng</th>
+                <th>{{ invoice.total_amount|floatformat:0 }}</th>
+            </tr>
+        </table>
+    </div>
+
+    <div class="info">
+        <p><strong>Phương thức thanh toán:</strong> {{ invoice.get_payment_method_display }}</p>
+        <p><strong>Trạng thái:</strong> {{ invoice.get_status_display }}</p>
+        <p><strong>Đã thanh toán:</strong> {{ invoice.amount_paid|floatformat:0 }} VNĐ</p>
+    </div>
+
+    <div class="footer">
+        <p>Xin cảm ơn quý khách!</p>
+    </div>
+</div>
+</body>
+</html>
+{% endblock %}
