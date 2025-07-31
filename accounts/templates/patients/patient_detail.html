@@ -1,7 +1,0 @@
-{% extends "app1/base.html" %}
-{% block content %}
-<h1>Thông tin bệnh nhân</h1>
-<p><strong>Mã:</strong> {{ patient.code }}</p>
-<p><strong>Họ tên:</strong> {{ patient.full_name }}</p>
-<a href="{% url 'edit_patient' patient.id %}">Sửa thông tin bệnh nhân</a>
-{% endblock %}
