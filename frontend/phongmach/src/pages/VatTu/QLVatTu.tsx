@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import appIcon from '../../assets/appicon.png';
 import { useNavigate } from "react-router-dom";
+import { useVatTu } from '../../contexts/VatTuContext';
 
 const sidebarItems = [
   { label: "Trang chủ", icon: "🏠", route: "/main" },
@@ -13,32 +14,6 @@ const sidebarItems = [
   { label: "Hỗ trợ kỹ thuật", icon: "💡", route: "/hotro" },
   { label: "Cài đặt", icon: "⚙️", route: "/caidat" },
 ];
-
-const initialVatTuList = [
-  {
-    id: "VT000001",
-    name: "Bông y tế",
-    price: "5000",
-    type: "Tiêu hao dùng 1 lần",
-    storage: "Tủ vật tư 1",
-    dateImport: "01/01/2025",
-    expiry: "10/10/2025",
-    stock: "10",
-    supplier: "Công ty Vật tư A",
-  },
-  {
-    id: "VT000002",
-    name: "Găng tay",
-    price: "10000",
-    type: "Tiêu hao nhiều lần",
-    storage: "Tủ vật tư 2",
-    dateImport: "15/02/2025",
-    expiry: "20/12/2025",
-    stock: "20",
-    supplier: "Công ty Vật tư B",
-  },
-];
-
 
 const storageOptions = [
   "Tủ vật tư 1", "Tủ vật tư 2", "Tủ vật tư 3", "Tủ vật tư 4", "Tủ vật tư 5"
@@ -54,10 +29,10 @@ const currentUser = { email: "admin@gmail.com", password: "1234" };
 
 function QLVatTu() {
   const navigate = useNavigate();
+  const { vatTuList, deleteVatTu, updateVatTu } = useVatTu();
   const [active, setActive] = useState("Vật tư");
   const [menuOpen, setMenuOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const [vatTuList, setVatTuList] = useState(initialVatTuList);
   const [deleteIdx, setDeleteIdx] = useState<number|null>(null);
   const [deletePassword, setDeletePassword] = useState("");
   const [deleteError, setDeleteError] = useState("");
@@ -117,7 +92,10 @@ function QLVatTu() {
   };
 
   const handleNameChange = (idx: number, value: string) => {
-    setVatTuList(list => list.map((item, i) => i === idx ? { ...item, name: value } : item));
+    const vatTu = vatTuList[idx];
+    if (vatTu) {
+      updateVatTu(vatTu.id, { name: value });
+    }
   };
 
   const handleSearch = () => {
@@ -131,8 +109,11 @@ function QLVatTu() {
   };
 
   const confirmDelete = () => {
-    if (deletePassword === currentUser.password) {
-      setVatTuList(list => list.filter((_, i) => i !== deleteIdx));
+    if (deletePassword === currentUser.password && deleteIdx !== null) {
+      const vatTu = vatTuList[deleteIdx];
+      if (vatTu) {
+        deleteVatTu(vatTu.id);
+      }
       setDeleteIdx(null);
       setDeletePassword("");
       setDeleteError("");
@@ -243,7 +224,7 @@ function QLVatTu() {
         {/* Title & Search & Add */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 32px', marginTop: 18 }}>
           <div style={{ fontSize: '2rem', fontWeight: 600 }}>Danh sách vật tư</div>
-          <button type="button" style={{ background: '#1ec9a4', color: '#fff', border: 'none', borderRadius: 8, padding: '12px 32px', fontWeight: 500, fontSize: 18, cursor: 'pointer' }} onClick={() => {}}>+ Thêm vật tư</button>
+          <button type="button" style={{ background: '#1ec9a4', color: '#fff', border: 'none', borderRadius: 8, padding: '12px 32px', fontWeight: 500, fontSize: 18, cursor: 'pointer' }} onClick={() => navigate('/qlvattu/tao')}>+ Thêm vật tư</button>
         </div>
         <div style={{ padding: '0 32px', marginTop: 18, marginBottom: 24 }}>
           <div style={{ background: '#fff', borderRadius: 16, padding: 32, maxWidth: 1200, margin: '0 auto', boxShadow: '0 2px 12px #0001' }}>
@@ -299,14 +280,18 @@ function QLVatTu() {
                       </td>
                       <td style={{ padding: '8px 12px', border: '1px solid #ddd', width: 70 }}>{vattu.price}</td>
                       <td style={{ padding: '8px 12px', border: '1px solid #ddd', width: 100 }}>
-                        <select value={vattu.type} style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid #ccc', fontSize: 12, background: '#fff' }} onChange={e => setVatTuList(list => list.map((item, i) => i === idx ? { ...item, type: e.target.value, name: nameOptionsByType[e.target.value]?.[0] || item.name } : item))}>
+                        <select value={vattu.type} style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid #ccc', fontSize: 12, background: '#fff' }} onChange={e => {
+                          const newType = e.target.value;
+                          const newName = nameOptionsByType[newType]?.[0] || vattu.name;
+                          updateVatTu(vattu.id, { type: newType, name: newName });
+                        }}>
                           {typeOptions.map(opt => (
                             <option key={opt} value={opt}>{opt}</option>
                           ))}
                         </select>
                       </td>
                       <td style={{ padding: '8px 12px', border: '1px solid #ddd', width: 120 }}>
-                        <select value={vattu.storage} style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid #ccc', fontSize: 12, background: '#fff' }} onChange={e => setVatTuList(list => list.map((item, i) => i === idx ? { ...item, storage: e.target.value } : item))}>
+                        <select value={vattu.storage} style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid #ccc', fontSize: 12, background: '#fff' }} onChange={e => updateVatTu(vattu.id, { storage: e.target.value })}>
                           {storageOptions.map(opt => (
                             <option key={opt} value={opt}>{opt}</option>
                           ))}
@@ -318,7 +303,7 @@ function QLVatTu() {
                       <td style={{ padding: '8px 12px', border: '1px solid #ddd', width: 120 }}>{vattu.supplier}</td>
                       <td style={{ padding: '8px 4px', border: '1px solid #ddd', width: 60, textAlign: 'center', verticalAlign: 'middle' }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                          <button type="button" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#1ec9a4', fontSize: 20 }} title="Sửa" onClick={() => {}}>
+                          <button type="button" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#1ec9a4', fontSize: 20 }} title="Sửa" onClick={() => navigate('/qlvattu/sua', { state: { vatTu: vattu } })}>
                             <span role="img" aria-label="edit">✏️</span>
                           </button>
                           <button type="button" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'red', fontSize: 20 }} title="Xóa" onClick={() => handleDelete(idx)}>
