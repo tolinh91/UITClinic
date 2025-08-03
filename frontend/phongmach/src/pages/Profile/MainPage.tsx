@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import appIcon from '../../assets/appicon.png';
+import mainpageBackground from '../../assets/mainpage-background.jpg';
 import Sidebar from '../../components/Sidebar';
 
 function MainPage() {
@@ -33,8 +34,31 @@ function MainPage() {
           minWidth: 0,
           display: 'flex',
           flexDirection: 'column',
+          backgroundImage: `url(${mainpageBackground})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          margin: '16px',
+          borderRadius: '12px',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+          position: 'relative',
         }}
       >
+        {/* Overlay để làm nền tối hơn một chút cho text dễ đọc */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            borderRadius: '12px',
+            zIndex: 1,
+          }}
+        />
+        {/* Content wrapper với z-index cao hơn */}
+        <div style={{ position: 'relative', zIndex: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
         <div
           style={{
             display: 'flex',
@@ -76,7 +100,7 @@ function MainPage() {
           <h2 style={{ color: '#2d4a7a', fontWeight: 500, fontSize: '1.3rem', marginBottom: 16 }}>Trang chủ</h2>
           <div
             style={{
-              background: '#fff',
+              background: 'rgba(255, 255, 255, 0.9)',
               borderRadius: 12,
               padding: '18px 12px',
               boxShadow: '0 2px 8px #0001',
@@ -102,17 +126,37 @@ function MainPage() {
               flexWrap: 'wrap',
             }}
           >
-            <div style={{ background: '#fff', borderRadius: 10, padding: 18, minWidth: 160, boxShadow: '0 2px 8px #0001', textAlign: 'center', flex: '1 1 160px', marginBottom: 12 }}>
+            <div style={{ background: 'rgba(255, 255, 255, 0.9)', borderRadius: 10, padding: 18, minWidth: 160, boxShadow: '0 2px 8px #0001', textAlign: 'center', flex: '1 1 160px', marginBottom: 12 }}>
               <div style={{ fontWeight: 500 }}>Giấy khám bệnh</div>
               <div style={{ fontSize: 22, fontWeight: 700, margin: '8px 0' }}>10</div>
               <span style={{ fontSize: 22, color: '#bfc8d8' }}>📄</span>
             </div>
-            <div style={{ background: '#fff', borderRadius: 10, padding: 18, minWidth: 160, boxShadow: '0 2px 8px #0001', textAlign: 'center', flex: '1 1 160px', marginBottom: 12 }}>
+            <div style={{ background: 'rgba(255, 255, 255, 0.9)', borderRadius: 10, padding: 18, minWidth: 160, boxShadow: '0 2px 8px #0001', textAlign: 'center', flex: '1 1 160px', marginBottom: 12 }}>
               <div style={{ fontWeight: 500 }}>Đơn thuốc</div>
               <div style={{ fontSize: 22, fontWeight: 700, margin: '8px 0' }}>10</div>
               <span style={{ fontSize: 22, color: '#bfc8d8' }}>📝</span>
             </div>
           </div>
+        </div>
+        </div>
+        {/* Khẩu hiệu ở góc phải dưới */}
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '20px',
+            right: '20px',
+            color: 'white',
+            fontSize: '20 px',
+            fontStyle: 'italic',
+            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
+            zIndex: 3,
+            background: 'rgba(0, 0, 0, 0.2)',
+            padding: '8px 12px',
+            borderRadius: '8px',
+            backdropFilter: 'blur(4px)',
+          }}
+        >
+          UIT Clinic - Chăm sóc sức khỏe sinh viên UIT như người thân
         </div>
       </div>
     </div>
