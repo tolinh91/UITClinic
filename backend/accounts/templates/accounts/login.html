@@ -1,0 +1,8 @@
+<h2>Login</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Đăng nhập</button>
+</form>
+<a href="{% url 'register' %}">Bạn chưa có tài khoản? Hãy đăng ký!</a><br>
+<a href="{% url 'password_reset' %}">Quên mật khẩu?</a><br>

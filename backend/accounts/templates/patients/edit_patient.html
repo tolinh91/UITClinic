@@ -1,0 +1,9 @@
+{% extends "app1/base.html" %}
+{% block content %}
+<h2>Cập nhật thông tin bệnh nhân: {{ patient.full_name }}</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Lưu thông tin</button>
+</form>
+{% endblock %}

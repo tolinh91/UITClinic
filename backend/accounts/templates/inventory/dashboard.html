@@ -1,0 +1,28 @@
+{% extends "app1/base.html" %}
+{% block content %}
+<h2>Danh sách vật tư</h2>
+
+{% if low_stock_items %}
+  <div style="color: red;">
+    <h3>Cảnh báo tồn kho thấp:</h3>
+    <ul>
+      {% for item in low_stock_items %}
+        <li>{{ item.name }} – còn lại {{ item.quantity }} đơn vị</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% else %}
+  <p>Tất cả vật tư đang ở mức an toàn.</p>
+{% endif %}
+
+{% if expiring_items %}
+  <div style="color: orange;">
+    <h3>Cảnh báo thuốc sắp hết hạn:</h3>
+    <ul>
+      {% for item in expiring_items %}
+        <li>{{ item.name }} – hết hạn vào {{ item.expiry_date|date:"d/m/Y" }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+{% endblock %}
