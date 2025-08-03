@@ -17,7 +17,7 @@ const sidebarItems = [
     hasSubmenu: true,
     submenu: [
       { label: "Tài khoản", route: "/caidat/taikhoan" },
-      { label: "Vật tư", route: "/caidat/vattu" }
+      { label: "Vai trò", route: "/caidat/vaitro" }
     ]
   },
 ];
