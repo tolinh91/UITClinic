@@ -10,7 +10,6 @@ const sidebarItems = [
   { label: "Đơn thuốc", icon: "📝", route: "/qldonthuoc" },
   { label: "Thuốc", icon: "➕", route: "/thuoc" },
   { label: "Vật tư", icon: "🔧", route: "/qlvattu" },
-  { label: "Thanh toán", icon: "💲", route: "/thanhtoan" },
   { label: "Hỗ trợ kỹ thuật", icon: "💡", route: "/hotro" },
   { label: "Cài đặt", icon: "⚙️", route: "/caidat" },
 ];

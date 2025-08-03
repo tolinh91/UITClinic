@@ -13,7 +13,7 @@ const PrintGKB: React.FC = () => {
             <tr><td style={{ padding: 6 }}>Mã giấy khám bệnh:</td><td>GKB00001</td><td>Tiêu đề:</td><td>Tổng quát</td></tr>
             <tr><td style={{ padding: 6 }}>STT khám:</td><td>1</td><td>Tên bệnh nhân:</td><td>Mạnh</td></tr>
             <tr><td style={{ padding: 6 }}>Tên phòng khám:</td><td>Phòng xét nghiệm</td><td>Trạng thái:</td><td style={{ color: '#1ec9a4' }}>Đã khám</td></tr>
-            <tr><td style={{ padding: 6 }}>Tên bác sĩ:</td><td>Lê Thắng</td><td>Thanh toán:</td><td style={{ color: '#1ec9a4' }}>Đã thanh toán</td></tr>
+            <tr><td style={{ padding: 6 }}>Tên bác sĩ:</td><td>Lê Thắng</td><td></td><td></td></tr>
             <tr><td style={{ padding: 6 }}>Giá:</td><td style={{ color: '#1ec9a4' }}>300.000 VNĐ</td><td></td><td></td></tr>
           </tbody>
         </table>

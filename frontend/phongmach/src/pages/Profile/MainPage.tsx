@@ -9,7 +9,6 @@ const sidebarItems = [
   { label: "Đơn thuốc", icon: "📝", route: "/qldonthuoc" },
   { label: "Thuốc", icon: "➕", route: "/thuoc" },
   { label: "Vật tư", icon: "🔧", route: "/qlvattu" },
-  { label: "Thanh toán", icon: "💲", route: "/thanhtoan" },
   { label: "Cài đặt", icon: "⚙️", route: "/caidat" },
 ];
 
@@ -184,11 +183,6 @@ function MainPage() {
               <div style={{ fontWeight: 500 }}>Đơn thuốc</div>
               <div style={{ fontSize: 22, fontWeight: 700, margin: '8px 0' }}>10</div>
               <span style={{ fontSize: 22, color: '#bfc8d8' }}>📝</span>
-            </div>
-            <div style={{ background: '#fff', borderRadius: 10, padding: 18, minWidth: 160, boxShadow: '0 2px 8px #0001', textAlign: 'center', flex: '1 1 160px', marginBottom: 12 }}>
-              <div style={{ fontWeight: 500 }}>Thanh toán</div>
-              <div style={{ fontSize: 22, fontWeight: 700, margin: '8px 0' }}>10</div>
-              <span style={{ fontSize: 22, color: '#bfc8d8' }}>💲</span>
             </div>
           </div>
         </div>

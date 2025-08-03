@@ -9,7 +9,6 @@ const sidebarItems = [
   { label: "Đơn thuốc", icon: "📝", route: "/qldonthuoc" },
   { label: "Thuốc", icon: "➕", route: "/thuoc" },
   { label: "Vật tư", icon: "🔧", route: "/qlvattu" },
-  { label: "Thanh toán", icon: "💲", route: "/thanhtoan" },
   { label: "Cài đặt", icon: "⚙️", route: "/caidat" },
 ];
 
@@ -23,7 +22,6 @@ const initialData = [
     doctor: "BS. Trần Văn B",
     date: "2025-07-25",
     status: "Đã khám",
-    payment: "Đã thanh toán",
   },
   {
     id: 2,
@@ -34,7 +32,6 @@ const initialData = [
     doctor: "BS. Nguyễn Văn C",
     date: "2025-07-25",
     status: "Chưa khám",
-    payment: "Chưa thanh toán",
   },
   {
     id: 3,
@@ -45,7 +42,6 @@ const initialData = [
     doctor: "BS. Lê Thắng",
     date: "2025-07-24",
     status: "Đã khám",
-    payment: "Đã thanh toán",
   },
   {
     id: 4,
@@ -56,7 +52,6 @@ const initialData = [
     doctor: "BS. Nguyễn Văn A",
     date: "2025-07-23",
     status: "Chưa khám",
-    payment: "Chưa thanh toán",
   },
   {
     id: 5,
@@ -67,7 +62,6 @@ const initialData = [
     doctor: "BS. Trần Thị B",
     date: "2025-07-22",
     status: "Đã khám",
-    payment: "Đã thanh toán",
   },
   {
     id: 6,
@@ -78,7 +72,6 @@ const initialData = [
     doctor: "BS. Phạm Văn C",
     date: "2025-07-21",
     status: "Chưa khám",
-    payment: "Chưa thanh toán",
   },
   {
     id: 7,
@@ -89,7 +82,6 @@ const initialData = [
     doctor: "BS. Lê Thắng",
     date: "2025-07-20",
     status: "Đã khám",
-    payment: "Đã thanh toán",
   },
   {
     id: 8,
@@ -100,7 +92,6 @@ const initialData = [
     doctor: "BS. Nguyễn Văn A",
     date: "2025-07-19",
     status: "Chưa khám",
-    payment: "Chưa thanh toán",
   },
   {
     id: 9,
@@ -111,7 +102,6 @@ const initialData = [
     doctor: "BS. Trần Thị B",
     date: "2025-07-18",
     status: "Đã khám",
-    payment: "Đã thanh toán",
   },
   {
     id: 10,
@@ -122,7 +112,6 @@ const initialData = [
     doctor: "BS. Phạm Văn C",
     date: "2025-07-17",
     status: "Chưa khám",
-    payment: "Chưa thanh toán",
   },
   {
     id: 11,
@@ -133,7 +122,6 @@ const initialData = [
     doctor: "BS. Lê Thắng",
     date: "2025-07-16",
     status: "Đã khám",
-    payment: "Đã thanh toán",
   },
   {
     id: 12,
@@ -144,7 +132,6 @@ const initialData = [
     doctor: "BS. Nguyễn Văn A",
     date: "2025-07-15",
     status: "Chưa khám",
-    payment: "Chưa thanh toán",
   },
 ];
 
@@ -306,14 +293,13 @@ function QLGKB() {
                     <th style={{ padding: 12 }}>Bác sĩ</th>
                     <th style={{ padding: 12 }}>Ngày</th>
                     <th style={{ padding: 12 }}>Trạng thái</th>
-                    <th style={{ padding: 12 }}>Thanh toán</th>
                     <th style={{ padding: 12 }}>Hành động</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filtered.length === 0 ? (
                     <tr>
-                      <td colSpan={10} style={{ textAlign: 'center', padding: 32, color: '#888' }}>Không có dữ liệu phù hợp.</td>
+                      <td colSpan={9} style={{ textAlign: 'center', padding: 32, color: '#888' }}>Không có dữ liệu phù hợp.</td>
                     </tr>
                   ) : (
                     filtered.map((item, idx) => (
@@ -332,13 +318,6 @@ function QLGKB() {
                             <span style={{ background: '#ffb74d', color: '#fff', borderRadius: 8, padding: '6px 18px', fontWeight: 500, fontSize: 12 }}>Chưa khám</span>
                           )}
                         </td>
-                        <td style={{ padding: 12 }}>
-                          {item.payment === "Đã thanh toán" ? (
-                            <span style={{ background: '#1ec9a4', color: '#fff', borderRadius: 8, padding: '6px 18px', fontWeight: 500, fontSize: 12 }}>Đã thanh toán</span>
-                          ) : (
-                            <span style={{ background: '#ffb74d', color: '#fff', borderRadius: 8, padding: '6px 18px', fontWeight: 500, fontSize: 12 }}>Chưa thanh toán</span>
-                          )}
-                        </td>
                         <td style={{ padding: 12, textAlign: 'center', minWidth: 120 }}>
                           <span
                             title="Xem"
@@ -354,7 +333,6 @@ function QLGKB() {
                           >
                             🖨️
                           </span>
-                          <span title="Thanh toán" style={{ color: '#1ec9a4', fontSize: 12, marginRight: 8, cursor: 'pointer' }}>💳</span>
                           <span title="Sửa" style={{ color: '#1ec9a4', fontSize: 12, marginRight: 8, cursor: 'pointer' }}>✏️</span>
                           <span
                             title="Xóa"

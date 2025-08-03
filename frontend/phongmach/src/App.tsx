@@ -13,7 +13,6 @@ import PrintGKB from './pages/GiayKhamBenh/PrintGKB';
 import QLBenhNhan from './pages/BenhNhan/QLBenhNhan';
 import QLDonThuoc from './pages/DonThuoc/QLDonThuoc';
 import QLVatTu from './pages/VatTu/QLVatTu';
-import ThanhToan from './pages/ThanhToan/ThanhToan';
 import CaiDat from './pages/CaiDat/CaiDat';
 import CreateDT from './pages/DonThuoc/CreateDT';
 import QLThuoc from './pages/Thuoc/QLThuoc';
@@ -37,7 +36,6 @@ function App() {
         <Route path="/qlbenhnhan" element={<QLBenhNhan />} />
         <Route path="/qldonthuoc" element={<QLDonThuoc />} />
         <Route path="/qlvattu" element={<QLVatTu />} />
-        <Route path="/thanhtoan" element={<ThanhToan />} />
         <Route path="/caidat" element={<CaiDat />} />
         <Route path="/qldonthuoc/tao" element={<CreateDT />} />
         <Route path="/thuoc" element={<QLThuoc />} />

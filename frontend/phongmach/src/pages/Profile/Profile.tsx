@@ -15,7 +15,6 @@ const Profile: React.FC = () => {
             <li style={{ padding: '12px 32px', display: 'flex', alignItems: 'center', gap: 12 }}><span role="img" aria-label="prescription">💊</span> Đơn thuốc</li>
             <li style={{ padding: '12px 32px', display: 'flex', alignItems: 'center', gap: 12 }}><span role="img" aria-label="medicine">🩺</span> Thuốc</li>
             <li style={{ padding: '12px 32px', display: 'flex', alignItems: 'center', gap: 12 }}><span role="img" aria-label="supply">🔔</span> Vật tư</li>
-            <li style={{ padding: '12px 32px', display: 'flex', alignItems: 'center', gap: 12 }}><span role="img" aria-label="payment">💳</span> Thanh toán</li>
             <li style={{ padding: '12px 32px', display: 'flex', alignItems: 'center', gap: 12 }}><span role="img" aria-label="settings">⚙️</span> Cài đặt</li>
           </ul>
         </nav>

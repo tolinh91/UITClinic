@@ -9,7 +9,6 @@ const sidebarItems = [
   { label: "Đơn thuốc", icon: "📝", route: "/qldonthuoc" },
   { label: "Thuốc", icon: "➕", route: "/thuoc" },
   { label: "Vật tư", icon: "🔧", route: "/qlvattu" },
-  { label: "Thanh toán", icon: "💲", route: "/thanhtoan" },
   { label: "Cài đặt", icon: "⚙️", route: "/caidat" },
 ];
 
@@ -20,7 +19,6 @@ const info = {
   patient: "Mạnh",
   room: "Phòng xét nghiệm",
   status: "Đã khám",
-  payment: "Đã thanh toán",
   doctor: "Lê Thắng",
   price: "300.000 VNĐ",
 };
@@ -180,8 +178,8 @@ const DetailGKB: React.FC = () => {
                 <tr>
                   <td style={{ padding: '6px 8px', color: '#222' }}><b>Tên bác sĩ:</b></td>
                   <td style={{ padding: '6px 8px' }}>{info.doctor}</td>
-                  <td style={{ padding: '6px 8px', color: '#222' }}><b>Thanh toán:</b></td>
-                  <td style={{ padding: '6px 8px', color: '#1ec9a4' }}>{info.payment}</td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>
                   <td style={{ padding: '6px 8px', color: '#222' }}><b>Giá:</b></td>
