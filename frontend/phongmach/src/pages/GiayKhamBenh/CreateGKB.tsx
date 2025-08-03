@@ -1,17 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import appIcon from '../../assets/appicon.png';
-
-const sidebarItems = [
-  { label: "Trang chủ", icon: "🏠", route: "/main" },
-  { label: "Giấy khám bệnh", icon: "📄", route: "/qlgkb" },
-  { label: "Bệnh nhân", icon: "👤", route: "/qlbenhnhan" },
-  { label: "Đơn thuốc", icon: "📝", route: "/qldonthuoc" },
-  { label: "Thuốc", icon: "➕", route: "/thuoc" },
-  { label: "Vật tư", icon: "🔧", route: "/qlvattu" },
-  { label: "Hỗ trợ kỹ thuật", icon: "💡", route: "/hotro" },
-  { label: "Cài đặt", icon: "⚙️", route: "/caidat" },
-];
+import Sidebar from '../../components/Sidebar';
 
 interface GiayKhamBenh {
   id: string;
@@ -28,7 +17,6 @@ interface GiayKhamBenh {
 function CreateGKB() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [active] = useState("Giấy khám bệnh");
   const [menuOpen, setMenuOpen] = useState(false);
   
   // Get patient info from location state if coming from patient list
@@ -109,42 +97,7 @@ function CreateGKB() {
   return (
     <div style={{ minHeight: '100vh', width: '100vw', display: 'flex', background: '#f5f6fa', position: 'relative' }}>
       {/* Sidebar */}
-      <div style={{ width: 250, minWidth: 70, background: '#2d4a7a', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 24, position: 'relative' }}>
-        <img src={appIcon} alt="logo" style={{ width: '70%', maxWidth: 90, minWidth: 50, borderRadius: '50%', marginBottom: 24, background: '#fff', objectFit: 'cover' }} />
-        {sidebarItems.map(item => (
-          <div
-            key={item.label}
-            onClick={() => navigate(item.route)}
-            style={{
-              width: '90%',
-              padding: '12px 16px',
-              margin: '4px 0',
-              borderRadius: 8,
-              cursor: 'pointer',
-              background: active === item.label ? '#1e3a8a' : 'transparent',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 12,
-              fontSize: 14,
-              fontWeight: 500,
-              transition: 'all 0.3s ease'
-            }}
-            onMouseOver={(e) => {
-              if (active !== item.label) {
-                e.currentTarget.style.background = '#1e40af';
-              }
-            }}
-            onMouseOut={(e) => {
-              if (active !== item.label) {
-                e.currentTarget.style.background = 'transparent';
-              }
-            }}
-          >
-            <span style={{ fontSize: 18 }}>{item.icon}</span>
-            <span>{item.label}</span>
-          </div>
-        ))}
-      </div>
+      <Sidebar activePage="Giấy khám bệnh" />
 
       {/* Main Content */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '24px 32px' }}>

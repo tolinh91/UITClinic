@@ -1,16 +1,6 @@
-import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import appIcon from '../../assets/appicon.png';
-
-const sidebarItems = [
-  { label: "Trang chủ", icon: "🏠", route: "/main" },
-  { label: "Giấy khám bệnh", icon: "📄", route: "/qlgkb" },
-  { label: "Bệnh nhân", icon: "👤", route: "/qlbenhnhan" },
-  { label: "Đơn thuốc", icon: "📝", route: "/qldonthuoc" },
-  { label: "Thuốc", icon: "➕", route: "/thuoc" },
-  { label: "Vật tư", icon: "🔧", route: "/qlvattu" },
-  { label: "Cài đặt", icon: "⚙️", route: "/caidat" },
-];
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Sidebar from '../../components/Sidebar';
 
 const initialData = [
   {
@@ -139,24 +129,29 @@ const initialData = [
 
 function QLGKB() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [active, setActive] = useState("Giấy khám bệnh");
   const [menuOpen, setMenuOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [data, setData] = useState(initialData);
   const [showDelete, setShowDelete] = useState(false);
   const [deleteCode, setDeleteCode] = useState<string | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showAddSuccess, setShowAddSuccess] = useState(false);
 
-  // Highlight sidebar item based on current route
-  React.useEffect(() => {
-    const found = sidebarItems.find(item => item.route === location.pathname);
-    if (found) setActive(found.label);
-  }, [location.pathname]);
-
-  const handleSidebarClick = (item: typeof sidebarItems[0]) => {
-    navigate(item.route);
-  };
+  // Check if new GKB was added and show success message
+  useEffect(() => {
+    const newGKBAdded = localStorage.getItem('newGKBAdded');
+    if (newGKBAdded === 'true') {
+      setShowAddSuccess(true);
+      localStorage.removeItem('newGKBAdded'); // Clean up
+      
+      // Auto hide after 5 seconds
+      const timer = setTimeout(() => {
+        setShowAddSuccess(false);
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   const handleMenuSelect = (option: string) => {
     setMenuOpen(false);
@@ -176,62 +171,10 @@ function QLGKB() {
     <>
       <div style={{ minHeight: '100vh', width: '100vw', display: 'flex', background: '#f5f6fa' }}>
         {/* Sidebar */}
-        <div
-          style={{
-            width: 250,
-            minWidth: 70,
-            background: '#2d4a7a',
-            color: '#fff',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            paddingTop: 24,
-            position: 'relative',
-          }}
-        >
-          <img
-            src={appIcon}
-            alt="logo"
-            style={{
-              width: '70%',
-              maxWidth: 90,
-              minWidth: 50,
-              borderRadius: '50%',
-              marginBottom: 24,
-              background: '#fff',
-              objectFit: 'cover',
-            }}
-          />
-          {sidebarItems.map(item => (
-            <div
-              key={item.label}
-              onClick={() => handleSidebarClick(item)}
-              style={{
-                width: '90%',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 12,
-                padding: '12px 18px',
-                marginBottom: 8,
-                borderRadius: 8,
-                background: active === item.label ? '#fff' : 'transparent',
-                color: active === item.label ? '#2d4a7a' : '#fff',
-                fontWeight: active === item.label ? 600 : 400,
-                cursor: 'pointer',
-                boxShadow: active === item.label ? '0 2px 8px #0001' : 'none',
-                transition: 'all 0.2s',
-                fontSize: '1rem',
-              }}
-            >
-              <span style={{ fontSize: 20, color: active === item.label ? '#2d4a7a' : '#e0e6ef', filter: active === item.label ? '' : 'grayscale(1)' }}>{item.icon}</span>
-              <span style={{ display: 'inline-block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.label}</span>
-            </div>
-          ))}
-        </div>
+        <Sidebar activePage="Giấy khám bệnh" />
         {/* Main content */}
         <div style={{ flex: 1, padding: '32px 16px 0 16px', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-            <img src={appIcon} alt="logo" style={{ width: 40, borderRadius: '50%' }} />
             <span style={{ fontWeight: 500, fontSize: 18, color: '#2d4a7a' }}>Mạnh</span>
             <div style={{ position: 'relative' }}>
               <button
@@ -393,7 +336,7 @@ function QLGKB() {
           </div>
         )}
       </div>
-      {/* Success message */}
+      {/* Success message for delete */}
       {showSuccess && (
         <div style={{
           position: 'fixed',
@@ -410,6 +353,26 @@ function QLGKB() {
           boxShadow: '0 2px 8px #0002',
         }}>
           Đã xóa thành công
+        </div>
+      )}
+      
+      {/* Success message for add */}
+      {showAddSuccess && (
+        <div style={{
+          position: 'fixed',
+          top: 32,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: '#1ec9a4',
+          color: '#fff',
+          padding: '12px 32px',
+          borderRadius: 8,
+          fontSize: 18,
+          fontWeight: 500,
+          zIndex: 2000,
+          boxShadow: '0 2px 8px #0002',
+        }}>
+          Thông tin giấy khám bệnh được thêm mới thành công
         </div>
       )}
     </>

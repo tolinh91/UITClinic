@@ -1,32 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import appIcon from '../../assets/appicon.png';
-
-const sidebarItems = [
-  { label: "Trang chủ", icon: "🏠", route: "/main" },
-  { label: "Giấy khám bệnh", icon: "📄", route: "/qlgkb" },
-  { label: "Bệnh nhân", icon: "👤", route: "/qlbenhnhan" },
-  { label: "Đơn thuốc", icon: "📝", route: "/qldonthuoc" },
-  { label: "Thuốc", icon: "➕", route: "/thuoc" },
-  { label: "Vật tư", icon: "🔧", route: "/qlvattu" },
-  { label: "Cài đặt", icon: "⚙️", route: "/caidat" },
-];
+import Sidebar from '../../components/Sidebar';
 
 function MainPage() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [active, setActive] = useState("Trang chủ");
   const [menuOpen, setMenuOpen] = useState(false);
-
-  // Highlight sidebar item based on current route
-  useEffect(() => {
-    const found = sidebarItems.find(item => item.route === location.pathname);
-    if (found) setActive(found.label);
-  }, [location.pathname]);
-
-  const handleSidebarClick = (item: typeof sidebarItems[0]) => {
-    navigate(item.route);
-  };
 
   const handleMenuSelect = (option: string) => {
     setMenuOpen(false);
@@ -45,58 +24,7 @@ function MainPage() {
       }}
     >
       {/* Sidebar */}
-      <div
-        style={{
-          width: 250,
-          minWidth: 70,
-          background: '#2d4a7a',
-          color: '#fff',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          paddingTop: 24,
-          position: 'relative',
-        }}
-      >
-        <img
-          src={appIcon}
-          alt="logo"
-          style={{
-            width: '70%',
-            maxWidth: 90,
-            minWidth: 50,
-            borderRadius: '50%',
-            marginBottom: 24,
-            background: '#fff',
-            objectFit: 'cover',
-          }}
-        />
-        {sidebarItems.map(item => (
-          <div
-            key={item.label}
-            onClick={() => handleSidebarClick(item)}
-            style={{
-              width: '90%',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 12,
-              padding: '12px 18px',
-              marginBottom: 8,
-              borderRadius: 8,
-              background: active === item.label ? '#fff' : 'transparent',
-              color: active === item.label ? '#2d4a7a' : '#fff',
-              fontWeight: active === item.label ? 600 : 400,
-              cursor: 'pointer',
-              boxShadow: active === item.label ? '0 2px 8px #0001' : 'none',
-              transition: 'all 0.2s',
-              fontSize: '1rem',
-            }}
-          >
-            <span style={{ fontSize: 20, color: active === item.label ? '#2d4a7a' : '#e0e6ef', filter: active === item.label ? '' : 'grayscale(1)' }}>{item.icon}</span>
-            <span style={{ display: 'inline-block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.label}</span>
-          </div>
-        ))}
-      </div>
+      <Sidebar activePage="Trang chủ" />
       {/* Main content */}
       <div
         style={{

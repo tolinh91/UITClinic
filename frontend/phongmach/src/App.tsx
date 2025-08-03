@@ -11,7 +11,9 @@ import ChangePassword from './pages/Profile/ChangePassword';
 import QLGKB from './pages/GiayKhamBenh/QLGKB';
 import DetailGKB from './pages/GiayKhamBenh/DetailGKB';
 import PrintGKB from './pages/GiayKhamBenh/PrintGKB';
-import QLBenhNhan from './pages/BenhNhan/QLBenhNhan';
+import CreateGKB from './pages/GiayKhamBenh/CreateGKB';
+import DanhSachBenhNhan from './pages/BenhNhan/DanhSachBenhNhan';
+import CreateBN from './pages/BenhNhan/CreateBN';
 import QLDonThuoc from './pages/DonThuoc/QLDonThuoc';
 import QLVatTu from './pages/VatTu/QLVatTu';
 import CreateVT from './pages/VatTu/CreateVT';
@@ -19,6 +21,9 @@ import EditVT from './pages/VatTu/EditVT';
 import CaiDat from './pages/CaiDat/CaiDat';
 import CreateDT from './pages/DonThuoc/CreateDT';
 import QLThuoc from './pages/Thuoc/QLThuoc';
+import Hotro from './pages/HoTro/Hotro';
+import CaiDatTaiKhoan from './pages/CaiDat/CaiDatTaiKhoan';
+import CaiDatVatTu from './pages/CaiDat/CaiDatVatTu';
 
 function App() {
   return (
@@ -37,7 +42,9 @@ function App() {
           <Route path="/qlgkb" element={<QLGKB />} />
           <Route path="/qlgkb/detail" element={<DetailGKB />} />
           <Route path="/qlgkb/print" element={<PrintGKB />} />
-          <Route path="/qlbenhnhan" element={<QLBenhNhan />} />
+          <Route path="/qlgkb/tao" element={<CreateGKB />} />
+          <Route path="/qlbenhnhan" element={<DanhSachBenhNhan />} />
+          <Route path="/qlbenhnhan/tao" element={<CreateBN />} />
           <Route path="/qldonthuoc" element={<QLDonThuoc />} />
           <Route path="/qlvattu" element={<QLVatTu />} />
           <Route path="/qlvattu/tao" element={<CreateVT />} />
@@ -45,6 +52,9 @@ function App() {
           <Route path="/caidat" element={<CaiDat />} />
           <Route path="/qldonthuoc/tao" element={<CreateDT />} />
           <Route path="/thuoc" element={<QLThuoc />} />
+          <Route path="/hotro" element={<Hotro />} />
+          <Route path="/caidat/taikhoan" element={<CaiDatTaiKhoan />} />
+          <Route path="/caidat/vattu" element={<CaiDatVatTu />} />
         </Routes>
       </Router>
     </VatTuProvider>
