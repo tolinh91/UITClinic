@@ -27,6 +27,7 @@ import CaiDatVatTu from './pages/CaiDat/CaiDatVatTu';
 import TaiKhoan from './pages/TaiKhoan/TaiKhoan';
 import ThemTaiKhoan from './pages/TaiKhoan/ThemTaiKhoan';
 import QLVaiTro from './pages/VaiTro/QLVaiTro';
+import QLXuatNhap from './pages/QLKho/QLXuatNhap';
 
 function App() {
   return (
@@ -61,6 +62,7 @@ function App() {
             <Route path="/caidat/taikhoan/them" element={<ThemTaiKhoan />} />
             <Route path="/caidat/vaitro" element={<QLVaiTro />} />
             <Route path="/caidat/vattu" element={<CaiDatVatTu />} />
+            <Route path="/qlkho/qlxuatnhap" element={<QLXuatNhap />} />
           </Routes>
         </Router>
       </VatTuProvider>

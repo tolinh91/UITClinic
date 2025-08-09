@@ -1,24 +1,13 @@
 import React from 'react';
+import Sidebar from '../../components/Sidebar';
 import './Profile.css';
 
 const Profile: React.FC = () => {
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa' }}>
       {/* Sidebar */}
-      <aside style={{ width: 250, background: '#43536b', color: '#fff', padding: '24px 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <img src="/logo.png" alt="Logo" style={{ width: 120, borderRadius: '50%', marginBottom: 16 }} />
-        <nav style={{ width: '100%' }}>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-            <li style={{ padding: '12px 32px', display: 'flex', alignItems: 'center', gap: 12 }}><span role="img" aria-label="home">🏠</span> Trang chủ</li>
-            <li style={{ padding: '12px 32px', display: 'flex', alignItems: 'center', gap: 12 }}><span role="img" aria-label="exam">📄</span> Giấy khám bệnh</li>
-            <li style={{ padding: '12px 32px', display: 'flex', alignItems: 'center', gap: 12 }}><span role="img" aria-label="patient">🧑‍⚕️</span> Bệnh nhân</li>
-            <li style={{ padding: '12px 32px', display: 'flex', alignItems: 'center', gap: 12 }}><span role="img" aria-label="prescription">💊</span> Đơn thuốc</li>
-            <li style={{ padding: '12px 32px', display: 'flex', alignItems: 'center', gap: 12 }}><span role="img" aria-label="medicine">🩺</span> Thuốc</li>
-            <li style={{ padding: '12px 32px', display: 'flex', alignItems: 'center', gap: 12 }}><span role="img" aria-label="supply">🔔</span> Vật tư</li>
-            <li style={{ padding: '12px 32px', display: 'flex', alignItems: 'center', gap: 12 }}><span role="img" aria-label="settings">⚙️</span> Cài đặt</li>
-          </ul>
-        </nav>
-      </aside>
+      <Sidebar activePage="Trang chủ" />
+      
       {/* Main Content */}
       <main style={{ flex: 1, padding: '32px 0 0 0' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 32px' }}>
