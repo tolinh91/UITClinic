@@ -18,7 +18,7 @@ from .models import Patient
 from .forms import PatientForm
 from .forms import PatientSearchForm
 from .forms import TreatmentForm
-from .forms import TestResultForm
+#from .forms import TestResultForm
 from .models import PrescriptionDetail
 from .models import TestResult
 from .models import Invoice
@@ -32,8 +32,72 @@ from .test_parameters import TEST_PARAMETERS
 from django.http import JsonResponse
 from .models import Patient
 from django.forms.models import model_to_dict
+from django.views.decorators.csrf import csrf_exempt
+from django import forms
+from .forms import RegisterForm
+from django.contrib.auth import logout
+from .models import UserProfile
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+import json
+from django.http import JsonResponse, Http404
+from accounts import views
+from django.http import HttpResponse
+from rest_framework.decorators import api_view, permission_classes
+def home(request):
+    return HttpResponse("Trang chủ")
+class RegisterForm(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput())
+    confirm_password = forms.CharField(widget=forms.PasswordInput())
+    email = forms.EmailField()
+    full_name = forms.CharField()
+    id_number = forms.CharField()
+    birth_date = forms.DateField(input_formats=["%d/%m/%Y", "%Y-%m-%d"])  # dùng ISO format
+    phone_number = forms.CharField()
+    gender = forms.ChoiceField(choices=[('Nam', 'Nam'), ('Nữ', 'Nữ')])
+    address = forms.CharField(required=False)
+    university = forms.CharField()
+    major = forms.CharField()
+    graduation_year = forms.IntegerField()
+    role = forms.CharField()
 
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
+        if password and confirm_password and password != confirm_password:
+            raise forms.ValidationError("Mật khẩu và xác nhận mật khẩu không khớp.")
+        return cleaned_data
+@csrf_exempt
 def register_view(request):
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = CustomUser.objects.create_user(
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password'],
+                full_name=form.cleaned_data['full_name'],
+                id_number=form.cleaned_data['id_number'],
+                birth_date=form.cleaned_data['birth_date'],
+                phone_number=form.cleaned_data['phone_number'],
+                gender=form.cleaned_data['gender'],
+                address=form.cleaned_data.get('address', ''),
+                university=form.cleaned_data['university'],
+                major=form.cleaned_data['major'],
+                graduation_year=form.cleaned_data['graduation_year'],
+                role=form.cleaned_data['role'],
+                is_manager=form.cleaned_data.get('is_manager', False),
+                email=form.cleaned_data['email']
+            )
+            return JsonResponse({'success': True, 'message': 'Đăng ký thành công'})
+        else:
+            return JsonResponse({'success': False, 'message': 'Form không hợp lệ', 'errors': form.errors})
+    else:
+        form = RegisterForm()
+        # Nếu bạn muốn render form ở backend, còn React bạn không cần, hoặc trả về lỗi
+        return JsonResponse({'success': False, 'message': 'Phương thức không hợp lệ'})
+"""def register_view(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -42,7 +106,7 @@ def register_view(request):
             user.save()
 
             # Lưu thông tin bổ sung
-            profile = UserProfile.objects.create(
+            profile = CustomUser.objects.create(
                 user=user,
                 phone_number=form.cleaned_data['phone_number'],
                 id_number=form.cleaned_data['id_number'],
@@ -56,34 +120,71 @@ def register_view(request):
             return redirect('login')
     else:
         form = RegisterForm()
-    return render(request, 'accounts/register.html', {'form': form})
-
-'''def register_view(request):
-    if request.method == "POST":
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password'])
-            user.save()
-            return redirect('login')
-    else:
-        form = RegisterForm()
-    return render(request, 'accounts/register.html', {'form': form})'''
-
+    #return render(request, 'accounts/register.html', {'form': form})
+    #Trả về có giống với React
+    return JsonResponse({'success': False, 'message': 'Form không hợp lệ', 'errors': form.errors}) """
+from rest_framework_simplejwt.tokens import RefreshToken #Trả về JSON
+@csrf_exempt
 def login_view(request):
     if request.method == "POST":
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            return redirect('home')  # thay bằng trang chính
-    else:
-        form = AuthenticationForm()
-    return render(request, 'accounts/login.html', {'form': form})
+        try:
+            data = json.loads(request.body)
+            username = data.get("username")
+            password = data.get("password")
+        except:
+            return JsonResponse({"detail": "Invalid JSON"}, status=400)
 
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            refresh = RefreshToken.for_user(user)
+            return JsonResponse({
+                'access': str(refresh.access_token),
+                'refresh': str(refresh)
+            })
+        else:
+            return JsonResponse({"detail": "Tên đăng nhập hoặc mật khẩu sai"}, status=401)
+
+    return JsonResponse({"detail": "Phương thức không được hỗ trợ"}, status=405)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def current_user(request):
+    user = request.user
+    try:
+        profile = user.userprofile  # truy cập liên kết 1-1 qua related_name mặc định
+    except UserProfile.DoesNotExist:
+        profile = None
+
+    data = {
+        'full_name': user.full_name,
+        'id_number': user.id_number,
+        'birth_date': user.birth_date.isoformat() if user.birth_date else None,
+        'phone_number': user.phone_number,
+        'gender': user.gender,
+        'address': user.address,
+        'university': user.university,
+        'major': user.major,
+        'graduation_year': user.graduation_year,
+        'is_manager': user.is_manager,
+        'role': user.role,
+    }
+
+    # Nếu muốn lấy dữ liệu từ profile (nếu khác dữ liệu user)
+    if profile:
+        data.update({
+            'phone_number': profile.phone_number or data['phone_number'],
+            'id_number': profile.id_number or data['id_number'],
+            'university': profile.university or data['university'],
+            'major': profile.major or data['major'],
+            'graduation_year': profile.graduation_year or data['graduation_year'],
+            'birth_date': profile.birth_date.isoformat() if profile.birth_date else data['birth_date'],
+            'role': profile.role or data['role'],
+            'is_manager': profile.is_manager if profile.is_manager is not None else data['is_manager'],
+        })
+
+    return Response(data)
 def logout_view(request):
-    logout(request)
-    return redirect('login')
+    request.user.auth_token.delete()  # xóa token khỏi server
+    return Response({"success": "Logged out"})
 @login_required
 def delete_account(request):
     if request.method == 'POST':
@@ -212,7 +313,7 @@ def inventory_dashboard(request):
         'low_stock_items': low_stock_items,
         'expiring_items': expiring_items,
     })
-def create_patient(request):
+'''def create_patient(request):
     if request.method == 'POST':
         form = PatientForm(request.POST)
         if form.is_valid():
@@ -221,8 +322,63 @@ def create_patient(request):
             return redirect('add_treatment',patient_id=patient.id)  # hoặc redirect đến dashboard
     else:
         form = PatientForm()
-    return render(request, 'patients/create_patient.html', {'form': form})
+    return render(request, 'patients/create_patient.html', {'form': form})'''
 
+
+@csrf_exempt
+def create_patient(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+
+            patient = Patient.objects.create(
+                full_name=data.get("full_name", ""),
+                id_number=data.get("id_number", ""),
+                has_insurance=data.get("has_insurance", False),
+                address=data.get("address", ""),
+                phone=data.get("phone", ""),
+                allergy=data.get("allergy", ""),
+                medical_history=data.get("medical_history", ""),
+                current_medications=data.get("current_medications", ""),
+                symptoms=data.get("symptoms", ""),
+                blood_pressure_systolic=data.get("blood_pressure_systolic", 0),
+                blood_pressure_diastolic=data.get("blood_pressure_diastolic", 0),
+                pulse=data.get("pulse", 0),
+                spo2=data.get("spo2", 0),
+                temperature=data.get("temperature", 0),
+                old_test_results=data.get("old_test_results", ""),
+            )
+
+            return JsonResponse({"success": True, "patient_id": patient.id})
+
+        except Exception as e:
+            return JsonResponse({"success": False, "errors": str(e)}, status=400)
+    return JsonResponse({"error": "Method not allowed"}, status=405)
+def patient_list(request):
+    patients = Patient.objects.all().order_by('-created_at')
+    data = []
+    for p in patients:
+        data.append({
+            "id": p.id,  # Thêm ID để frontend dùng
+            "code": p.code,
+            "full_name": p.full_name,
+            "id_number": p.id_number,
+            "has_insurance": p.has_insurance,
+            "address": p.address,
+            "phone": p.phone,
+            "allergy": p.allergy,
+            "medical_history": p.medical_history,
+            "current_medications": p.current_medications,
+            "symptoms": p.symptoms,
+            "blood_pressure_systolic": p.blood_pressure_systolic,
+            "blood_pressure_diastolic": p.blood_pressure_diastolic,
+            "pulse": p.pulse,
+            "spo2": p.spo2,
+            "temperature": p.temperature,
+            "old_test_results": p.old_test_results,
+            "created_at": p.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+        })
+    return JsonResponse(data, safe=False)
 def search_patient(request):
     form = PatientSearchForm(request.GET or None)
     results = None
@@ -264,10 +420,36 @@ def add_treatment(request, patient_id):
         'form': form,
         'patient': patient
     })
-def patient_detail(request, patient_id):
-    patient = get_object_or_404(Patient, id=patient_id)
-    return render(request, 'patients/patient_detail.html', {'patient': patient})
 
+from django.http import JsonResponse
+from .models import Patient
+
+def patient_detail(request, pk):
+    try:
+        p = Patient.objects.get(pk=pk)
+        data = {
+            "id": p.id,  # ID để frontend dùng
+            "code": p.code,
+            "full_name": p.full_name,
+            "id_number": p.id_number,
+            "has_insurance": p.has_insurance,
+            "address": p.address,
+            "phone": p.phone,
+            "allergy": p.allergy,
+            "medical_history": p.medical_history,
+            "current_medications": p.current_medications,
+            "symptoms": p.symptoms,
+            "blood_pressure_systolic": p.blood_pressure_systolic,
+            "blood_pressure_diastolic": p.blood_pressure_diastolic,
+            "pulse": p.pulse,
+            "spo2": p.spo2,
+            "temperature": p.temperature,
+            "old_test_results": p.old_test_results,
+            "created_at": p.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+        }
+        return JsonResponse(data)
+    except Patient.DoesNotExist:
+        return JsonResponse({})
 def edit_patient(request, patient_id):
     patient = get_object_or_404(Patient, id=patient_id)
     if request.method == 'POST':
@@ -477,3 +659,91 @@ def get_accounts(request):
         {"id": 2, "name": "Trần Thị B"},
     ]
     return JsonResponse(data, safe=False)
+#Login
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.contrib.auth import authenticate
+@api_view(['POST']) 
+def login_user(request):
+    email = request.data.get('email')
+    password = request.data.get('password')
+
+    user = authenticate(username=email, password=password)
+
+    if user is not None:
+        return Response({'success': True, 'message': 'Đăng nhập thành công'})
+    else:
+        return Response({'success': False, 'message': 'Sai tài khoản hoặc mật khẩu'}, status=401)
+#Resigter
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.response import Response
+import traceback
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+from django.contrib.auth.models import User
+from .models import UserProfile
+from accounts.models import CustomUser
+@api_view(['POST'])
+def register_view(request):
+    form = RegisterForm(data=request.data)
+    if form.is_valid():
+        data = form.cleaned_data
+        user = CustomUser.objects.create_user(
+            username=data["username"],
+            email=data["email"],
+            password=data["password"],
+            full_name=data["full_name"],
+            id_number=data["id_number"],
+            birth_date=data["birth_date"],
+            phone_number=data["phone_number"],
+            gender=data["gender"],
+            address=data.get("address", ""),
+            university=data["university"],
+            major=data["major"],
+            graduation_year=data["graduation_year"],
+            role=data["role"],  # 👈 xử lý role ở đây
+        )
+        return Response({'success': True, 'message': 'Đăng ký thành công'})
+    else:
+        return Response({'success': False, 'message': 'Form không hợp lệ', 'errors': form.errors})
+'''-- Lấy dữ liệu từ backend ra SQL'''
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from accounts.models import LoginLog  # Bảng log bạn tạo
+import json
+from accounts.models import LoginLog
+@csrf_exempt
+def login_user(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        email = data.get('email')
+        password = data.get('password')
+
+        try:
+            user = User.objects.get(email=email)
+            user_auth = authenticate(username=user.username, password=password)
+
+            if user_auth:
+                #Ghi lại login vào bảng MySQL (XAMPP)
+                LoginLog.objects.create(
+                    user=user,
+                    status='success'
+                )
+                return JsonResponse({'status': 'success', 'message': 'Đăng nhập thành công'})
+
+            else:
+                LoginLog.objects.create(
+                    user=user,
+                    status='fail'
+                )
+                return JsonResponse({'status': 'fail', 'message': 'Sai mật khẩu'}, status=401)
+
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'fail', 'message': 'Email không tồn tại'}, status=404)
+
+    return JsonResponse({'message': 'Phải dùng POST'}, status=400)
+
+# --- Xuất ORM ---
