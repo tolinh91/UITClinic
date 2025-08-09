@@ -28,6 +28,10 @@ import TaiKhoan from './pages/TaiKhoan/TaiKhoan';
 import ThemTaiKhoan from './pages/TaiKhoan/ThemTaiKhoan';
 import QLVaiTro from './pages/VaiTro/QLVaiTro';
 import QLXuatNhap from './pages/QLKho/QLXuatNhap';
+import QLTonKho from './pages/QLKho/QLTonKho';
+import AddPhieu from './pages/QLKho/AddPhieu';
+import DetailPhieu from './pages/QLKho/DetailPhieu';
+import EditPhieu from './pages/QLKho/EditPhieu';
 
 function App() {
   return (
@@ -63,6 +67,10 @@ function App() {
             <Route path="/caidat/vaitro" element={<QLVaiTro />} />
             <Route path="/caidat/vattu" element={<CaiDatVatTu />} />
             <Route path="/qlkho/qlxuatnhap" element={<QLXuatNhap />} />
+            <Route path="/qlkho/qltonkho" element={<QLTonKho />} />
+            <Route path="/qlkho/addphieu" element={<AddPhieu />} />
+            <Route path="/qlkho/detailphieu" element={<DetailPhieu />} />
+            <Route path="/qlkho/editphieu" element={<EditPhieu />} />
           </Routes>
         </Router>
       </VatTuProvider>
