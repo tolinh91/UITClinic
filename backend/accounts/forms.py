@@ -8,7 +8,7 @@ from .models import Patient
 from .models import TreatmentRecord
 from .models import TestResult
 from .models import Invoice
-from .models import UserProfile
+from .models import CustomUser #UserProfile
 from .test_parameters import TEST_PARAMETERS
 
 class RegisterForm(forms.ModelForm):
@@ -21,8 +21,17 @@ class RegisterForm(forms.ModelForm):
     university = forms.CharField(label="Trường đại học")
     major = forms.CharField(label="Chuyên ngành")
     graduation_year = forms.IntegerField(label="Năm tốt nghiệp")
-    birth_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), label="Ngày sinh")
-    role = forms.ChoiceField(choices=UserProfile.USER_ROLES, label="Vị trí làm việc")
+    birth_date = forms.DateField(input_formats=["%d/%m/%Y", "%Y-%m-%d"])
+    #birth_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), label="Ngày sinh")
+    #role = forms.ChoiceField(choices=UserProfile.USER_ROLES, label="Vị trí làm việc")
+    ROLE_CHOICES = [
+        ('BS', 'Bác sĩ'),
+        ('YT', 'Y tá'),
+        ('DD', 'Điều dưỡng'),
+        ('DS', 'Dược sĩ'),
+        ('TT', 'Tiếp tân'),
+    ]
+    role = forms.ChoiceField(choices=ROLE_CHOICES)
     is_manager = forms.BooleanField(required=False, label="Là trưởng phòng khám")
 
     class Meta:
@@ -68,7 +77,7 @@ class EditAccountForm(forms.ModelForm):
         }
 class EditProfileForm(forms.ModelForm):
     class Meta:
-        model = UserProfile
+        model = CustomUser
         fields = ['phone_number', 'id_number', 'university', 'major', 'graduation_year', 'birth_date', 'role', 'is_manager']
         widgets = {
             'phone_number': forms.TextInput(attrs={'class': 'form-control'}),

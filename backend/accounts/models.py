@@ -1,18 +1,47 @@
 from django.db import models
 from django.utils import timezone
 from django import forms
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+class CustomUser(AbstractUser):
+    # Thêm các trường tùy chỉnh
+    full_name = models.CharField(max_length=255)
+    id_number = models.CharField(max_length=20)
+    #birth_date = models.DateField()
+    birth_date = models.DateField()
+    phone_number = models.CharField(max_length=15)
+    gender = models.CharField(max_length=10, choices=[('Nam', 'Nam'), ('Nữ', 'Nữ')])
+    address = models.CharField(max_length=255, blank=True)
+    university = models.CharField(max_length=255)
+    major = models.CharField(max_length=255)
+    graduation_year = models.PositiveIntegerField()
+    is_manager = models.BooleanField(default=False) 
+    ROLE_CHOICES = [
+        ('BS', 'Bác sĩ'),
+        ('YT', 'Y tá'),
+        ('DD', 'Điều dưỡng'),
+        ('DS', 'Dược sĩ'),
+        ('TT', 'Tiếp tân'),
+    ]
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+
+    def __str__(self):
+        return self.username
 
 class UserProfile(models.Model): #Thêm tính năng trong tạo tài khoản
     USER_ROLES = [
         ('BS', 'Bác sĩ'),
+        ('YT', 'Y tá'),
         ('DD', 'Điều dưỡng'),
         ('DS', 'Dược sĩ'),
         ('TT', 'Tiếp tân'),
     ]
     # Trường user (tên), role(vai trò), is_manager: phải trưởng PK
-    user = models.OneToOneField(User, on_delete=models.CASCADE) 
+    #user = models.OneToOneField(User, on_delete=models.CASCADE) 
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=15) # SDT
     id_number = models.CharField(max_length=20)  # Số CMND/CCCD
     university = models.CharField(max_length=255) # Trường ĐH
@@ -26,7 +55,8 @@ class UserProfile(models.Model): #Thêm tính năng trong tạo tài khoản
         return self.user.get_full_name()
 
 class StaffInfo(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    #user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     phone = models.CharField(max_length=15)
     identity_number = models.CharField(max_length=20)  # CCCD
     university = models.CharField(max_length=100)
@@ -36,6 +66,7 @@ class StaffInfo(models.Model):
     
     POSITION_CHOICES = [
         ('BS', 'Bác sĩ'),
+        ('YT', 'Y tá'),
         ('DD', 'Điều dưỡng'),
         ('DS', 'Dược sĩ'),
         ('TT', 'Tiếp tân'),
@@ -194,3 +225,14 @@ class InvoiceForm(forms.ModelForm):
         model = Invoice
         fields = ['consultation_fee', 'medicine_fee', 'test_fee',
                   'payment_method', 'status', 'amount_paid']
+        
+'''Backend qua SQL'''
+
+
+
+class LoginLog(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    login_time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.login_time}"
