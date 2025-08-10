@@ -276,7 +276,13 @@ function QLGKB() {
                           >
                             🖨️
                           </span>
-                          <span title="Sửa" style={{ color: '#1ec9a4', fontSize: 12, marginRight: 8, cursor: 'pointer' }}>✏️</span>
+                          <span
+                            title="Sửa"
+                            style={{ color: '#1ec9a4', fontSize: 12, marginRight: 8, cursor: 'pointer' }}
+                            onClick={() => navigate('/qlgkb/edit')}
+                          >
+                            ✏️
+                          </span>
                           <span
                             title="Xóa"
                             style={{ color: '#e53935', fontSize: 12, cursor: 'pointer' }}

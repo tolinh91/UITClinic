@@ -11,6 +11,7 @@ import MainPage from './pages/Profile/MainPage';
 import ChangePassword from './pages/Profile/ChangePassword';
 import QLGKB from './pages/GiayKhamBenh/QLGKB';
 import DetailGKB from './pages/GiayKhamBenh/DetailGKB';
+import EditGKB from './pages/GiayKhamBenh/EditGKB';
 import PrintGKB from './pages/GiayKhamBenh/PrintGKB';
 import CreateGKB from './pages/GiayKhamBenh/CreateGKB';
 import DanhSachBenhNhan from './pages/BenhNhan/DanhSachBenhNhan';
@@ -52,6 +53,7 @@ function App() {
             <Route path="/qlgkb/detail" element={<DetailGKB />} />
             <Route path="/qlgkb/print" element={<PrintGKB />} />
             <Route path="/qlgkb/tao" element={<CreateGKB />} />
+            <Route path="/qlgkb/edit" element={<EditGKB />} />
             <Route path="/qlbenhnhan" element={<DanhSachBenhNhan />} />
             <Route path="/qlbenhnhan/tao" element={<CreateBN />} />
             <Route path="/qldonthuoc" element={<QLDonThuoc />} />
