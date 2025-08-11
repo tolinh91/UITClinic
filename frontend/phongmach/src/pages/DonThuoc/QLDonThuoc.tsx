@@ -1,41 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from '../../components/Sidebar';
-import appIcon from '../../assets/appicon.png';
 
-const prescriptions = [
-  {
-    id: 1,
-    code: "DT000001",
-    patient: "Lê Mạnh",
-    doctor: "",
-    total: "100.000",
-    status: "Hoàn thành",
-    statusColor: "#1ec9a4",
-  },
-  {
-    id: 2,
-    code: "DT000002",
-    patient: "Tô Linh",
-    doctor: "",
-    total: "",
-    status: "Chưa mua",
-    statusColor: "#ffa726",
-  },
-];
+type Prescription = {
+  id: number;
+  code: string;
+  patient: string;
+  doctor: string;
+  total: string;
+  status: string;
+  statusColor: string;
+  medicines?: { medicine: string; quantity: string; usage: string }[];
+  bhyt?: boolean;
+  createdAt?: string;
+};
+
+function getPrescriptionsFromStorage(): Prescription[] {
+  const list = JSON.parse(localStorage.getItem('donthuoc_list') || '[]');
+  // Add code and status for display
+  return list.map((item: any, idx: number) => ({
+    ...item,
+    code: `DT${(idx + 1).toString().padStart(6, '0')}`,
+    total: '',
+    status: 'Chưa mua',
+    statusColor: '#ffa726',
+    id: idx + 1,
+  }));
+}
 
 
 function QLDonThuoc() {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
-  const [filtered, setFiltered] = useState(prescriptions);
+  const [prescriptions, setPrescriptions] = useState<Prescription[]>(getPrescriptionsFromStorage());
+  const [filtered, setFiltered] = useState<Prescription[]>(prescriptions);
+
+  useEffect(() => {
+    const list = getPrescriptionsFromStorage();
+    setPrescriptions(list);
+    setFiltered(list);
+  }, []);
 
   const handleSearch = () => {
     const s = search.trim().toLowerCase();
     if (!s) {
       setFiltered(prescriptions);
     } else {
-      setFiltered(prescriptions.filter(p => p.patient.toLowerCase().includes(s)));
+      setFiltered(prescriptions.filter((p: Prescription) => p.patient.toLowerCase().includes(s)));
     }
   };
 
@@ -48,8 +59,7 @@ function QLDonThuoc() {
       <div style={{ flex: 1, padding: '32px 0 0 0', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
         {/* Top right menu */}
         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 16, flexWrap: 'wrap', padding: '0 32px' }}>
-          <img src={appIcon} alt="logo" style={{ width: 40, borderRadius: '50%' }} />
-          <span style={{ fontWeight: 500, fontSize: 18, color: '#2d4a7a' }}>Admin</span>
+          <span style={{ fontWeight: 500, fontSize: 18, color: '#2d4a7a' }}>Mạnh</span>
           <div style={{ position: 'relative' }}>
             <button
               style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }}
@@ -125,7 +135,7 @@ function QLDonThuoc() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((p, idx) => (
+                {filtered.map((p: Prescription, idx: number) => (
                   <tr key={p.code} style={{ background: '#fff', borderBottom: '1px solid #eee' }}>
                     <td style={{ padding: '10px 8px', textAlign: 'center' }}>{idx + 1}</td>
                     <td style={{ padding: '10px 8px', textAlign: 'center' }}>{p.code}</td>

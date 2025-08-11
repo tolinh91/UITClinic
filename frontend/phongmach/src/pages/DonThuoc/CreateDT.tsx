@@ -1,28 +1,26 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import appIcon from '../../assets/appicon.png';
+import Sidebar from '../../components/Sidebar';
 
-const sidebarItems = [
-  { label: "Trang chủ", icon: "🏠", route: "/main" },
-  { label: "Giấy khám bệnh", icon: "📄", route: "/qlgkb" },
-  { label: "Bệnh nhân", icon: "👤", route: "/qlbenhnhan" },
-  { label: "Đơn thuốc", icon: "📝", route: "/qldonthuoc" },
-  { label: "Thuốc", icon: "➕", route: "/thuoc" },
-  { label: "Vật tư", icon: "🔧", route: "/qlvattu" },
-  { label: "Hỗ trợ kỹ thuật", icon: "💡", route: "/hotro" },
-  { label: "Cài đặt", icon: "⚙️", route: "/caidat" },
-];
+// ...existing code...
 
 const CreateDT = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [active, setActive] = useState("Đơn thuốc");
+  // ...existing code...
   const [menuOpen, setMenuOpen] = useState(false);
 
-  React.useEffect(() => {
-    const found = sidebarItems.find(item => item.route === location.pathname);
-    if (found) setActive(found.label);
-  }, [location.pathname]);
+  // ...existing code...
+
+  // Lấy danh sách bệnh nhân từ localStorage
+  const benhNhanList = React.useMemo(() => {
+    try {
+      return JSON.parse(localStorage.getItem('benhNhanList') || '[]');
+    } catch {
+      return [];
+    }
+  }, []);
 
   // Form state
   const [form, setForm] = useState({
@@ -45,17 +43,12 @@ const CreateDT = () => {
   };
 
   // Thêm thuốc vào danh sách
+  // Thêm dòng mới rỗng vào danh sách thuốc
   const handleAddMedicine = () => {
-    if (!form.medicine || !form.quantity || !form.usage) return;
     setMedicines(prev => [
       ...prev,
-      {
-        medicine: form.medicine,
-        quantity: form.quantity,
-        usage: form.usage
-      }
+      { medicine: '', quantity: '', usage: '' }
     ]);
-    setForm(f => ({ ...f, medicine: '', quantity: '', usage: '' }));
   };
 
   // Xóa thuốc khỏi danh sách
@@ -84,40 +77,52 @@ const CreateDT = () => {
   };
 
   return (
-    <form style={{ minHeight: '100vh', width: '100vw', display: 'flex', background: '#f5f6fa' }} onSubmit={handleSave}>
-      {/* Sidebar */}
-      <div style={{ width: 250, minWidth: 70, background: '#2d4a7a', color: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 24, position: 'relative' }}>
-        <img src={appIcon} alt="logo" style={{ width: '70%', maxWidth: 90, minWidth: 50, borderRadius: '50%', marginBottom: 24, background: '#fff', objectFit: 'cover' }} />
-        {sidebarItems.map(item => (
-          <div
-            key={item.label}
-            onClick={() => navigate(item.route)}
-            style={{
-              width: '90%',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 12,
-              padding: '12px 18px',
-              marginBottom: 8,
-              borderRadius: 8,
-              background: active === item.label ? '#fff' : 'transparent',
-              color: active === item.label ? '#2d4a7a' : '#fff',
-              fontWeight: active === item.label ? 600 : 400,
-              cursor: 'pointer',
-              boxShadow: active === item.label ? '0 2px 8px #0001' : 'none',
-              transition: 'all 0.2s',
-              fontSize: '1rem',
-            }}
-          >
-            <span style={{ fontSize: 20, color: active === item.label ? '#2d4a7a' : '#e0e6ef', filter: active === item.label ? '' : 'grayscale(1)' }}>{item.icon}</span>
-            <span style={{ display: 'inline-block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.label}</span>
-          </div>
-        ))}
+    <form
+      style={{
+        minHeight: '100vh',
+        width: '100vw',
+        display: 'flex',
+        background: '#f5f6fa',
+        flexWrap: 'wrap',
+        boxSizing: 'border-box',
+      }}
+      onSubmit={handleSave}
+    >
+      {/* Sidebar thay thế bằng component Sidebar giống MainPage */}
+      <div style={{ minWidth: 0 }}>
+        <Sidebar activePage="Đơn thuốc" />
       </div>
       {/* Main content */}
-      <div style={{ flex: 1, padding: '32px 0 0 0', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
+      <div
+        style={{
+          flex: 1,
+          padding: '48px 48px 0 48px',
+          minWidth: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          background: 'rgba(255,255,255,0.92)',
+          margin: '32px',
+          borderRadius: '18px',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+          position: 'relative',
+          maxWidth: 1400,
+          width: '100%',
+          boxSizing: 'border-box',
+          transition: 'all 0.3s',
+        }}
+      >
         {/* Top right menu */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 16, flexWrap: 'wrap', padding: '0 32px' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            gap: 16,
+            flexWrap: 'wrap',
+            padding: '0 32px',
+            flexDirection: 'row',
+          }}
+        >
           <img src={appIcon} alt="logo" style={{ width: 40, borderRadius: '50%' }} />
           <span style={{ fontWeight: 500, fontSize: 18, color: '#2d4a7a' }}>Mạnh</span>
           <div style={{ position: 'relative' }}>
@@ -146,27 +151,77 @@ const CreateDT = () => {
           </div>
         </div>
         {/* Title */}
-        <div style={{ display: 'flex', alignItems: 'center', padding: '0 32px', marginTop: 18 }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            padding: '0 32px',
+            marginTop: 18,
+            flexWrap: 'wrap',
+            gap: 12,
+          }}
+        >
           <div style={{ fontSize: '2rem', fontWeight: 600 }}>Thêm đơn thuốc</div>
         </div>
         {/* Form card */}
-        <div style={{ padding: '0 32px', marginTop: 18, marginBottom: 24 }}>
-          <div style={{ background: '#fff', borderRadius: 16, padding: 32, maxWidth: 900, margin: '0 auto', boxShadow: '0 2px 12px #0001' }}>
+        <div
+          style={{
+            padding: '0 48px',
+            marginTop: 24,
+            marginBottom: 32,
+            boxSizing: 'border-box',
+            width: '100%',
+            maxWidth: 1200,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
+        >
+          <div
+            style={{
+              background: '#fff',
+              borderRadius: 20,
+              padding: '48px 32px',
+              maxWidth: 1200,
+              margin: '0 auto',
+              boxShadow: '0 4px 24px #0002',
+              boxSizing: 'border-box',
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 32,
+              transition: 'all 0.3s',
+            }}
+          >
             {/* Thông tin đơn thuốc */}
             <div style={{ fontWeight: 600, fontSize: 22, marginBottom: 8 }}>Thông tin đơn thuốc</div>
             <div style={{ color: '#1565c0', fontWeight: 500, fontSize: 17, marginBottom: 4 }}>Điền đầy đủ thông tin bên dưới</div>
-            <div style={{ display: 'flex', gap: 24, marginBottom: 18 }}>
-              <div style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div
+              style={{
+                display: 'flex',
+                gap: 48,
+                marginBottom: 24,
+                flexWrap: 'wrap',
+                width: '100%',
+                justifyContent: 'space-between',
+              }}
+            >
+              <div style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: 8, minWidth: 180, width: '100%' }}>
                 <label style={{ fontWeight: 500 }}>Tên bệnh nhân</label>
-                <input name="patient" value={form.patient ?? ''} onChange={handleChange} style={{ padding: '10px 14px', borderRadius: 8, border: '1px solid #ccc', fontSize: 16 }} placeholder="Nhập tên bệnh nhân..." />
+                <input
+                  name="patient"
+                  value={form.patient ?? ''}
+                  onChange={handleChange}
+                  style={{ padding: '10px 14px', borderRadius: 8, border: '1px solid #ccc', fontSize: 16 }}
+                  placeholder="Nhập tên bệnh nhân..."
+                />
               </div>
               <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <label style={{ fontWeight: 500 }}>Thẻ BHYT</label>
-                <input type="checkbox" name="bhyt" checked={!!form.bhyt} onChange={handleChange} style={{ width: 22, height: 22 }} />
+                <label style={{ fontWeight: 500, minWidth: 70 }}>Thẻ BHYT</label>
+                <input type="checkbox" name="bhyt" checked={!!form.bhyt} onChange={handleChange} style={{ width: 22, height: 22, minWidth: 22 }} />
               </div>
               <div style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <label style={{ fontWeight: 500 }}>Bác sĩ</label>
-                <select name="doctor" value={form.doctor ?? ''} onChange={handleChange} style={{ padding: '10px 14px', borderRadius: 8, border: '1px solid #ccc', fontSize: 16 }}>
+                <select name="doctor" value={form.doctor ?? ''} onChange={handleChange} style={{ padding: '10px 14px', borderRadius: 8, border: '1px solid #ccc', fontSize: 16, minWidth: 120 }}>
                   <option value="">Bác sĩ</option>
                   <option value="BS01">BS01</option>
                   <option value="BS02">BS02</option>
@@ -175,59 +230,98 @@ const CreateDT = () => {
             </div>
             {/* Chi tiết đơn thuốc */}
             <div style={{ fontWeight: 600, fontSize: 22, marginBottom: 8, marginTop: 24, color: '#1565c0', fontStyle: 'italic' }}>Chi tiết đơn thuốc</div>
-            <div style={{ display: 'flex', gap: 18, marginBottom: 18, alignItems: 'flex-end' }}>
-              <div style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <label style={{ fontWeight: 500 }}>Tên thuốc</label>
-                <input name="medicine" value={form.medicine ?? ''} onChange={handleChange} style={{ padding: '10px 14px', borderRadius: 8, border: '1px solid #ccc', fontSize: 16 }} placeholder="Tên thuốc..." />
-              </div>
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <label style={{ fontWeight: 500 }}>Số lượng</label>
-                <input name="quantity" value={form.quantity ?? ''} onChange={handleChange} style={{ padding: '10px 14px', borderRadius: 8, border: '1px solid #ccc', fontSize: 16 }} placeholder="Số lượng..." />
-              </div>
-              <div style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <label style={{ fontWeight: 500 }}>Cách dùng</label>
-                <input name="usage" value={form.usage ?? ''} onChange={handleChange} style={{ padding: '10px 14px', borderRadius: 8, border: '1px solid #ccc', fontSize: 16 }} placeholder="Cách dùng..." />
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'row', gap: 8, alignItems: 'flex-end', marginBottom: 4 }}>
-                <button type="button" style={{ width: 48, height: 48, background: '#1ec9a4', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 500, fontSize: 24, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }} title="Thêm" onClick={handleAddMedicine}>
-                  <span style={{ display: 'inline-block', fontSize: 24 }}>+</span>
-                </button>
-              </div>
-            </div>
-            {/* Danh sách thuốc đã thêm */}
-            {medicines.length > 0 && (
-              <div style={{ marginTop: 12, marginBottom: 18 }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 15 }}>
-                  <thead>
-                    <tr style={{ background: '#e3f2fd' }}>
+            <div style={{ width: '100%', marginBottom: 24, overflowX: 'auto', maxWidth: '100vw' }}>
+              <table style={{ minWidth: 600, width: '100%', borderCollapse: 'collapse', fontSize: 15, tableLayout: 'auto' }}>
+                <thead>
+                  <tr style={{ background: '#e3f2fd' }}>
                       <th style={{ padding: '8px 12px', border: '1px solid #ddd' }}>Tên thuốc</th>
                       <th style={{ padding: '8px 12px', border: '1px solid #ddd' }}>Số lượng</th>
                       <th style={{ padding: '8px 12px', border: '1px solid #ddd' }}>Cách dùng</th>
-                      <th style={{ padding: '8px 12px', border: '1px solid #ddd' }}>Xóa</th>
+                      <th style={{ padding: '8px 12px', border: '1px solid #ddd', textAlign: 'center', width: 60 }}>
+                        <button type="button" style={{ width: 36, height: 36, background: '#1ec9a4', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 500, fontSize: 20, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }} title="Thêm dòng mới" onClick={handleAddMedicine}>
+                          <span style={{ display: 'inline-block', fontSize: 20 }}>➕</span>
+                        </button>
+                      </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {medicines.map((med, idx) => (
+                    <tr key={idx}>
+                       <td style={{ padding: '8px 12px', border: '1px solid #ddd', minWidth: 120 }}>
+                         <input
+                           type="text"
+                           value={med.medicine}
+                           onChange={e => {
+                             const value = e.target.value;
+                             setMedicines(prev => prev.map((m, i) => i === idx ? { ...m, medicine: value } : m));
+                           }}
+                           placeholder="Tên thuốc..."
+                           style={{ width: '100%', minWidth: 100, maxWidth: 200, padding: '6px 10px', borderRadius: 6, border: '1px solid #ccc', fontSize: 15, boxSizing: 'border-box' }}
+                         />
+                       </td>
+                       <td style={{ padding: '8px 12px', border: '1px solid #ddd', minWidth: 80 }}>
+                         <input
+                           type="text"
+                           value={med.quantity}
+                           onChange={e => {
+                             const value = e.target.value;
+                             setMedicines(prev => prev.map((m, i) => i === idx ? { ...m, quantity: value } : m));
+                           }}
+                           placeholder="Số lượng..."
+                           style={{ width: '100%', minWidth: 60, maxWidth: 120, padding: '8px 12px', borderRadius: 6, border: '1px solid #ccc', fontSize: 15, boxSizing: 'border-box' }}
+                         />
+                       </td>
+                       <td style={{ padding: '8px 12px', border: '1px solid #ddd', minWidth: 120 }}>
+                         <input
+                           type="text"
+                           value={med.usage}
+                           onChange={e => {
+                             const value = e.target.value;
+                             setMedicines(prev => prev.map((m, i) => i === idx ? { ...m, usage: value } : m));
+                           }}
+                           placeholder="Cách dùng..."
+                           style={{ width: '100%', minWidth: 100, maxWidth: 220, padding: '6px 10px', borderRadius: 6, border: '1px solid #ccc', fontSize: 15, boxSizing: 'border-box' }}
+                         />
+                       </td>
+                      <td style={{ padding: '8px 12px', border: '1px solid #ddd', textAlign: 'center' }}>
+                        <button
+                          type="button"
+                          style={{ width: 32, height: 32, background: '#e53935', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 500, fontSize: 18, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                          title="Xóa dòng này"
+                          onClick={() => handleRemoveMedicine(idx)}
+                        >
+                          <span style={{ display: 'inline-block', fontSize: 18 }}>🗑️</span>
+                        </button>
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {medicines.map((med, idx) => (
-                      <tr key={idx}>
-                        <td style={{ padding: '8px 12px', border: '1px solid #ddd' }}>{med.medicine}</td>
-                        <td style={{ padding: '8px 12px', border: '1px solid #ddd' }}>{med.quantity}</td>
-                        <td style={{ padding: '8px 12px', border: '1px solid #ddd' }}>{med.usage}</td>
-                        <td style={{ padding: '8px 12px', border: '1px solid #ddd', textAlign: 'center' }}>
-                          <button type="button" style={{ background: '#e53935', color: '#fff', border: 'none', borderRadius: 6, padding: '4px 10px', cursor: 'pointer' }} title="Xóa" onClick={() => handleRemoveMedicine(idx)}>
-                            <span style={{ fontSize: 18 }}>&#128465;</span>
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
+                  ))}
+                  {medicines.length === 0 && (
+                    <tr>
+                      <td colSpan={4} style={{ textAlign: 'center', padding: '16px', color: '#aaa' }}>Chưa có thuốc nào. Nhấn ➕ để thêm dòng mới.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+            {/* Danh sách thuốc đã thêm */}
+            {/* Đã xóa icon delete, cột Tên thuốc, Số lượng, Cách dùng */}
             {/* Footer buttons */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 18, marginTop: 32 }}>
-              <button type="button" style={{ background: '#263238', color: '#fff', border: 'none', borderRadius: 8, padding: '12px 40px', fontWeight: 500, fontSize: 17, cursor: 'pointer' }} onClick={() => navigate('/qldonthuoc')}>Quay lại</button>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: 32,
+                marginTop: 48,
+                flexWrap: 'wrap',
+                width: '100%',
+              }}
+            >
+              <button type="button" style={{ background: '#757575', color: '#fff', border: 'none', borderRadius: 8, padding: '12px 40px', fontWeight: 500, fontSize: 17, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10 }} onClick={() => navigate('/qldonthuoc')}>
+                <span style={{ display: 'inline-block', fontSize: 22, color: '#fff', marginRight: 6 }}>🔙</span>
+                Quay lại
+              </button>
               <button type="submit" style={{ background: '#3949ab', color: '#fff', border: 'none', borderRadius: 8, padding: '12px 40px', fontWeight: 500, fontSize: 17, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10 }}>
-                <span style={{ display: 'inline-block', fontSize: 22, color: '#1976d2' }}>&#10003;</span>
+                <span style={{ display: 'inline-block', fontSize: 22, color: '#fff' }}>💾</span>
                 Lưu
               </button>
             </div>

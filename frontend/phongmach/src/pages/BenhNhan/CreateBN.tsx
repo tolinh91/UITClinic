@@ -92,7 +92,15 @@ function CreateBN() {
     };
 
     // Store in localStorage to pass to parent component
-    const existingPatients = JSON.parse(localStorage.getItem('benhNhanList') || '[]');
+    let existingPatients: BenhNhan[] = [];
+    try {
+      existingPatients = JSON.parse(localStorage.getItem('benhNhanList') || '[]');
+      if (!Array.isArray(existingPatients)) existingPatients = [];
+    } catch {
+      existingPatients = [];
+    }
+    // Tránh trùng id
+    existingPatients = existingPatients.filter(p => p.id !== newPatient.id);
     existingPatients.push(newPatient);
     localStorage.setItem('benhNhanList', JSON.stringify(existingPatients));
     localStorage.setItem('newPatientAdded', 'true');
