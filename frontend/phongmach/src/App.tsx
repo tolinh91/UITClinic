@@ -16,6 +16,7 @@ import EditGKB from './pages/GiayKhamBenh/EditGKB';
 import PrintGKB from './pages/GiayKhamBenh/PrintGKB';
 //import CreateGKB from './pages/GiayKhamBenh/CreateGKB';
 import QLDonThuoc from './pages/DonThuoc/QLDonThuoc';
+import EditDonThuoc from './pages/DonThuoc/EditDonThuoc';
 import QLVatTu from './pages/VatTu/QLVatTu';
 //import CreateVT from './pages/VatTu/CreateVT';
 //import EditVT from './pages/VatTu/EditVT';
@@ -30,6 +31,7 @@ import Hotro from './pages/HoTro/Hotro';
 import TaoBenhNhan from './pages/BenhNhan/TaoBenhNhan';
 import DanhSachBenhNhan from "./pages/BenhNhan/DanhSachBenhNhan";
 import QLXuatNhap from './pages/QLKho/QLXuatNhap';
+import AddPhieu from './pages/QLKho/AddPhieu';
 import CaiDatTaiKhoan from './pages/CaiDat/CaiDatTaiKhoan';
 import CaiDatVaiTro from './pages/CaiDat/CaiDatVaiTro';
 
@@ -62,6 +64,9 @@ function App() {
         <Route path="/hotro" element={<Hotro />} />
         <Route path="/caidat/taikhoan" element={<CaiDatTaiKhoan />} />
         <Route path="/caidat/vaitro" element={<CaiDatVaiTro />} />
+  <Route path="/thuoc/edit/:code" element={<EditDonThuoc />} />
+  <Route path="/qlkho/addphieu" element={<AddPhieu />} />
+  <Route path="/qlgkb/edit" element={<EditGKB />} />
       </Routes>
     </Router>
   )
