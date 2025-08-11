@@ -8,6 +8,7 @@ from .views import get_accounts
 from .views import register_view
 from rest_framework.authtoken.views import obtain_auth_token
 from .views import current_user
+from .views import ChangePasswordAPIView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -53,6 +54,8 @@ urlpatterns = [
     path('patient_list/', views.patient_list, name='patient_list'),
     path('patient_detail/<int:pk>/', views.patient_detail, name='patient_detail'),
     path('current-user/', current_user, name='current-user'),
+    path('change-password/', ChangePasswordAPIView.as_view(), name='change-password'),
+    path("update-profile/", views.update_profile, name="update_profile"),
 ]
 
 

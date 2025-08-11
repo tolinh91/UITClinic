@@ -44,6 +44,9 @@ from django.http import JsonResponse, Http404
 from accounts import views
 from django.http import HttpResponse
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 def home(request):
     return HttpResponse("Trang chủ")
 class RegisterForm(forms.Form):
@@ -69,6 +72,20 @@ class RegisterForm(forms.Form):
         if password and confirm_password and password != confirm_password:
             raise forms.ValidationError("Mật khẩu và xác nhận mật khẩu không khớp.")
         return cleaned_data
+class ChangePasswordAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        new_password = request.data.get('new_password')
+
+        if not new_password:
+            return Response({"detail": "Mật khẩu mới không được để trống."}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = request.user
+        user.set_password(new_password)  # Hash mật khẩu và lưu
+        user.save()
+
+        return Response({"detail": "Đổi mật khẩu thành công."}, status=status.HTTP_200_OK)
 @csrf_exempt
 def register_view(request):
     if request.method == "POST":
@@ -182,6 +199,41 @@ def current_user(request):
         })
 
     return Response(data)
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_profile(request):
+    user = request.user
+    data = request.data
+
+    user.full_name = data.get('full_name', user.full_name)
+    user.id_number = data.get('id_number', user.id_number)
+    user.birth_date = data.get('birth_date', user.birth_date)
+    user.phone_number = data.get('phone_number', user.phone_number)
+    user.gender = data.get('gender', user.gender)
+    user.university = data.get('university', user.university)
+    user.major = data.get('major', user.major)
+    user.graduation_year = data.get('graduation_year', user.graduation_year)
+    user.position = data.get('position', user.position)
+    user.is_manager = data.get('is_manager', user.is_manager)
+
+    user.save()
+
+    return JsonResponse({
+        "message": "Thông tin đã được cập nhật thành công",
+        "user": {
+            "username": user.username,
+            "full_name": user.full_name,
+            "id_number": user.id_number,
+            "birth_date": user.birth_date,
+            "phone_number": user.phone_number,
+            "gender": user.gender,
+            "university": user.university,
+            "major": user.major,
+            "graduation_year": user.graduation_year,
+            "position": user.position,
+            "is_manager": user.is_manager
+        }
+    })
 def logout_view(request):
     request.user.auth_token.delete()  # xóa token khỏi server
     return Response({"success": "Logged out"})

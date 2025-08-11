@@ -1,0 +1,20 @@
+# Bỏ qua file tạm Python
+__pycache__/
+*.pyc
+
+# Bỏ qua database SQLite
+db.sqlite3
+
+# Bỏ qua thư mục node_modules
+node_modules/
+
+# Bỏ qua thư mục build React
+frontend/phongmach/dist/
+frontend/phongmach/build/
+
+# Bỏ qua ảnh trong frontend
+frontend/phongmach/src/assets/*.png
+
+# Bỏ qua file log, temp
+*.log
+*.tmp

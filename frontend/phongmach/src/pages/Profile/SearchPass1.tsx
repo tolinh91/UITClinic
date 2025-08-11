@@ -6,16 +6,21 @@ import forgotPasswordImage from '../../assets/forgot-password.jpg';
 const SearchPass1: React.FC = () => {
   const [email, setEmail] = useState('');
   const [userId, setUserId] = useState('');
-  const [error, setError] = useState('');
+  const [code, setCode] = useState('');
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (userId === 'admin@gmail.com' && email === 'admin@gmail.com') {
-      setError('');
-      navigate('/profile/searchpass2');
+    // Luôn báo đã gửi mã xác nhận
+    setMessage('✅ Đã gửi mã xác nhận qua email.');
+  };
+
+  const handleVerifyCode = () => {
+    if (code.trim() === '0678') {
+      navigate('/ChangePassword');
     } else {
-      setError('Tài khoản không tồn tại');
+      setMessage('❌ Mã xác nhận không đúng.');
     }
   };
 
@@ -66,14 +71,8 @@ const SearchPass1: React.FC = () => {
         </div>
         
         {/* Right side - Form */}
-        <div
-          style={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column'
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', background: '#dbe6f7', padding: '0', justifyContent: 'space-between', height: 80 }}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', alignItems: 'center', background: '#dbe6f7', justifyContent: 'space-between', height: 80 }}>
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
               <div style={{ fontSize: 22, color: '#2a5ca4', fontWeight: 500, marginTop: 16 }}>Quên mật khẩu</div>
               <div style={{ display: 'flex', alignItems: 'center', marginTop: 8 }}>
@@ -88,25 +87,62 @@ const SearchPass1: React.FC = () => {
               <img src={appIcon} alt="logo" style={{ width: 60, borderRadius: '50%', background: '#fff', objectFit: 'cover', aspectRatio: '1/1' }} />
             </div>
           </div>
+
           <form style={{ padding: '32px 32px 0 32px', flex: 1, display: 'flex', flexDirection: 'column' }} onSubmit={handleSubmit}>
             <div style={{ marginBottom: 18 }}>
-              <label style={{ fontWeight: 500 }}>User ID</label>
+              <label style={{ fontWeight: 500 }}>Username</label>
               <input type="text" value={userId} onChange={e => setUserId(e.target.value)} placeholder="Điền tên đăng nhập." style={{ width: '100%', marginTop: 8, padding: 10, borderRadius: 6, border: 'none', background: '#e0ecf7', fontSize: 16, color: '#888' }} />
             </div>
             <div style={{ marginBottom: 18 }}>
               <label style={{ fontWeight: 500 }}>Email đăng ký</label>
               <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Điền email đã đăng kí." style={{ width: '100%', marginTop: 8, padding: 10, borderRadius: 6, border: 'none', background: '#e0ecf7', fontSize: 16, color: '#888' }} />
             </div>
-            {error && <div style={{ color: 'red', marginBottom: 12, fontWeight: 500 }}>{error}</div>}
+            {message && <div style={{ color: message.includes('❌') ? 'red' : 'green', marginBottom: 12, fontWeight: 500 }}>{message}</div>}
             <div style={{ marginTop: 'auto' }}>
               <button type="submit" style={{ width: '100%', background: '#2a5ca4', color: '#fff', border: 'none', borderRadius: 6, padding: '12px 0', fontWeight: 500, fontSize: 18, cursor: 'pointer', marginBottom: 12 }}>Gửi mã xác nhận</button>
-              <button type="button" style={{ width: '100%', background: '#aaa', color: '#fff', border: 'none', borderRadius: 6, padding: '12px 0', fontWeight: 500, fontSize: 18, cursor: 'pointer' }} onClick={() => navigate('/login')}>Quay lại</button>
             </div>
           </form>
-          <div style={{ textAlign: 'center', padding: '16px 32px 24px', color: '#222', fontSize: 12 }}>
+
+          {/* Nhập mã xác nhận */}
+          <div style={{ padding: '0 32px 16px' }}>
+            <input 
+              type="text" 
+              value={code} 
+              onChange={e => setCode(e.target.value)} 
+              placeholder="Nhập mã xác nhận" 
+              style={{ width: '100%', marginTop: 8, padding: 10, borderRadius: 6, border: '1px solid #ccc', fontSize: 16 }}
+            />
+
+            {/* Nút chia đều 2 bên */}
+            <div 
+              style={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                gap: '10px', 
+                marginTop: 12 
+              }}
+            >
+              <button 
+                type="button" 
+                style={{ flex: 1, background: '#1ca85c', color: '#fff', border: 'none', borderRadius: 6, padding: '12px 0', fontWeight: 500, fontSize: 18, cursor: 'pointer' }} 
+                onClick={handleVerifyCode}
+              >
+                Xác nhận
+              </button>
+              <button 
+                type="button" 
+                style={{ flex: 1, background: '#aaa', color: '#fff', border: 'none', borderRadius: 6, padding: '12px 0', fontWeight: 500, fontSize: 18, cursor: 'pointer' }} 
+                onClick={() => navigate('/login')}
+              >
+                Quay lại
+              </button>
+            </div>
+          </div>
+
+          <div style={{ textAlign: 'center', padding: '8px 32px 8px', color: '#222', fontSize: 12, marginTop: 'auto' }}>
             <div>
-              <span style={{ marginRight: 16 }}><span role="img" aria-label="mail">✉️</span> uitclinic@uit.edu.vn</span>
-              <span><span role="img" aria-label="phone">📞</span> (028) 372 52002</span>
+              <span style={{ marginRight: 16 }}>✉️ uitclinic@uit.edu.vn</span>
+              <span>📞 (028) 372 52002</span>
             </div>
           </div>
         </div>

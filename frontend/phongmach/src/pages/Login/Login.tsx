@@ -5,25 +5,53 @@ import appIcon from '../../assets/appicon.png';
 import loginBackground from '../../assets/login-background.jpg';
 
 function Login() {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Fake check: email 'admin' and password '1234' are correct
-    if (email === 'admin@gmail.com' && password === '1234') {
-      setError('');
-      setSuccess(true);
-      setTimeout(() => {
-        navigate('/main');
-      }, 1200);
-    } else {
-      setError('Vui lòng kiểm tra lại tài khoản hoặc mật khẩu!');
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setError('');
+  setSuccess(false);
+
+  try {
+    const response = await fetch('http://127.0.0.1:8000/api/login/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
+    });
+
+    const text = await response.text();
+    try {
+      const data = JSON.parse(text);
+
+      if (response.ok) {
+        localStorage.setItem('access_token', data.access);
+        localStorage.setItem('refresh_token', data.refresh);
+
+        setSuccess(true);
+        setTimeout(() => {
+          navigate('/main');
+        }, 1000);
+      } else {
+        setError(data.detail || 'Đăng nhập thất bại.');
+      }
+    } catch (jsonErr) {
+      console.error("Phản hồi không phải JSON:", text);
+      setError('Máy chủ trả về dữ liệu không hợp lệ.');
     }
-  };
+  } catch (err) {
+    setError('Không thể kết nối máy chủ.');
+    console.error('Login error:', err);
+  }
+};
 
   return (
     <div style={{ 
@@ -64,15 +92,15 @@ function Login() {
           <img src={appIcon} alt="logo" style={{ width: 60, marginTop: 10, borderRadius: '50%', objectFit: 'cover', aspectRatio: '1/1', background: '#fff' }} />
         </div>
         <form style={{ padding: 24 }} onSubmit={handleSubmit}>
-          <label style={{ fontWeight: 500 }}>Email</label>
-          <input type="email" placeholder="Nhập email" value={email} onChange={e => setEmail(e.target.value)} style={{ width: '100%', margin: '8px 0 16px 0', padding: 8, borderRadius: 4, border: '1px solid #ccc' }} />
+          <label style={{ fontWeight: 500 }}>Nhập tên đăng nhập</label>
+          <input type="text" placeholder="Nhập tên" value={username} onChange={e => setUsername(e.target.value)} style={{ width: '100%', margin: '8px 0 16px 0', padding: 8, borderRadius: 4, border: '1px solid #ccc' }} />
           <label style={{ fontWeight: 500 }}>Mật khẩu</label>
           <input type="password" placeholder="Nhập mật khẩu" value={password} onChange={e => setPassword(e.target.value)} style={{ width: '100%', margin: '8px 0 16px 0', padding: 8, borderRadius: 4, border: '1px solid #ccc' }} />
           {error && <div style={{ color: 'red', marginBottom: 12 }}>{error}</div>}
           {success && <div style={{ color: 'green', marginBottom: 12, fontWeight: 500 }}>Đăng nhập thành công</div>}
           <button type="submit" style={{ width: '100%', background: '#2d4a7a', color: '#fff', border: 'none', borderRadius: 4, padding: 12, fontWeight: 500, fontSize: 16, cursor: 'pointer' }}>Đăng nhập</button>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 16 }}>
-            {/* <Link to="/register" style={{ textDecoration: 'none', color: '#222', fontWeight: 500 }}> <span role="img" aria-label="user">👤</span> Tạo tài khoản</Link> */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 16, width:'300px'}}>
+            <Link to="/register" style={{ textDecoration: 'none', color: '#222', fontWeight: 500 }}> <span role="img" aria-label="user">👤</span> Tạo tài khoản</Link> 
             <span>
               <Link to="/profile/searchpass1" style={{ textDecoration: 'none', color: '#222', fontWeight: 500 }}>
                 <span role="img" aria-label="lock">🔒</span> Quên mật khẩu
@@ -94,7 +122,7 @@ function Login() {
       }}>
         <div style={{ marginBottom: 4 }}><span style={{ color: '#fff' }}>✉</span> uitclinic@uit.edu.vn</div>
         <div style={{ marginBottom: 4 }}><span style={{ color: '#fff' }}>☎</span> (028) 372 52002 </div>
-        <div><span style={{ color: '#fff' }}>📍</span> Khu phố 34, Phường Linh Xuân, Thành phố Hồ Chí Minh</div>
+        <div><span style={{ color: '#fff' }}>📍</span> Khu Phố 34, Phường Linh Xuân, Thành phố Hồ Chí Minh</div>
       </div>
     </div>
   );
