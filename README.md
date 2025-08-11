@@ -16,7 +16,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         #'NAME': BASE_DIR / 'db.sqlite3',
-        'NAME': 'qlkh',   # Input this
+        'NAME': 'mydb',   # Input this
         'USER': 'root', # Input this 
         'PASSWORD': 'root', # Input this
         'HOST': '127.0.0.1',    # 
@@ -32,6 +32,8 @@ DATABASES = {
 ## Run the backend 
 
 ```bash
+cd backend/
+python manage.py migrate
 python manage.py runserver
 ```
 

@@ -47,7 +47,7 @@ function App() {
         <Route path="/qlgkb/detail" element={<DetailGKB />} />
         <Route path="/qlgkb/print" element={<PrintGKB />} />
         <Route path="/tao-benh-nhan" element={<TaoBenhNhan />} />
-        <Route path="/danh-sach-benh-nhan" element={<DanhSachBenhNhan />} />
+        <Route path="/qlbenhnhan" element={<DanhSachBenhNhan />} />
         <Route path="/qldonthuoc" element={<QLDonThuoc />} />
         <Route path="/qlvattu" element={<QLVatTu />} />
         <Route path="/caidat" element={<CaiDat />} />
