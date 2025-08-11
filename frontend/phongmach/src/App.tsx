@@ -22,7 +22,7 @@ import QLVatTu from './pages/VatTu/QLVatTu';
 import CaiDat from './pages/CaiDat/CaiDat';
 import CreateDT from './pages/DonThuoc/CreateDT';
 import QLThuoc from './pages/Thuoc/QLThuoc';
-//import Hotro from './pages/HoTro/Hotro';
+import Hotro from './pages/HoTro/Hotro';
 //import CaiDatVatTu from './pages/CaiDat/CaiDatVatTu';
 //import TaiKhoan from './pages/TaiKhoan/TaiKhoan';
 //import ThemTaiKhoan from './pages/TaiKhoan/ThemTaiKhoan';
@@ -30,6 +30,9 @@ import QLThuoc from './pages/Thuoc/QLThuoc';
 import TaoBenhNhan from './pages/BenhNhan/TaoBenhNhan';
 import DanhSachBenhNhan from "./pages/BenhNhan/DanhSachBenhNhan";
 import QLXuatNhap from './pages/QLKho/QLXuatNhap';
+import CaiDatTaiKhoan from './pages/CaiDat/CaiDatTaiKhoan';
+import CaiDatVaiTro from './pages/CaiDat/CaiDatVaiTro';
+
 
 function App() {
   return (
@@ -44,7 +47,7 @@ function App() {
         <Route path="/profile/searchpass3" element={<SearchPass3 />} />
         <Route path="/main" element={<MainPage />} />
         <Route path="/changepassword" element={<ChangePassword />} />
-        <Route path = "/editprofile" element ={<EditProfile/>} />
+        <Route path ="/editprofile" element ={<EditProfile/>} />
         <Route path="/qlgkb" element={<QLGKB />} />
         <Route path="/qlgkb/detail" element={<DetailGKB />} />
         <Route path="/qlgkb/print" element={<PrintGKB />} />
@@ -56,6 +59,9 @@ function App() {
         <Route path="/qldonthuoc/tao" element={<CreateDT />} />
         <Route path="/thuoc" element={<QLThuoc />} />
         <Route path="/qlkho/qlxuatnhap" element={<QLXuatNhap />} />
+        <Route path="/hotro" element={<Hotro />} />
+        <Route path="/caidat/taikhoan" element={<CaiDatTaiKhoan />} />
+        <Route path="/caidat/vaitro" element={<CaiDatVaiTro />} />
       </Routes>
     </Router>
   )
