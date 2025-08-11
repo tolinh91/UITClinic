@@ -12,6 +12,7 @@ import ChangePassword from './pages/Profile/ChangePassword';
 import EditProfile from './pages/Profile/EditProfile';
 import QLGKB from './pages/GiayKhamBenh/QLGKB';
 import DetailGKB from './pages/GiayKhamBenh/DetailGKB';
+import EditGKB from './pages/GiayKhamBenh/EditGKB';
 import PrintGKB from './pages/GiayKhamBenh/PrintGKB';
 //import CreateGKB from './pages/GiayKhamBenh/CreateGKB';
 import QLDonThuoc from './pages/DonThuoc/QLDonThuoc';
@@ -54,7 +55,6 @@ function App() {
         <Route path="/thuoc" element={<QLThuoc />} />
       </Routes>
     </Router>
-  );
+  )
 }
-
 export default App;

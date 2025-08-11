@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from '../../components/Sidebar';
+import appIcon from '../../assets/appicon.png';
 
 const initialData = [
   {
@@ -175,7 +176,8 @@ function QLGKB() {
         {/* Main content */}
         <div style={{ flex: 1, padding: '32px 16px 0 16px', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-            <span style={{ fontWeight: 500, fontSize: 18, color: '#2d4a7a' }}>Mạnh</span>
+            <img src={appIcon} alt="logo" style={{ width: 40, borderRadius: '50%' }} />
+            <span style={{ fontWeight: 500, fontSize: 18, color: '#2d4a7a' }}>Admin</span>
             <div style={{ position: 'relative' }}>
               <button
                 style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }}
@@ -276,7 +278,13 @@ function QLGKB() {
                           >
                             🖨️
                           </span>
-                          <span title="Sửa" style={{ color: '#1ec9a4', fontSize: 12, marginRight: 8, cursor: 'pointer' }}>✏️</span>
+                          <span
+                            title="Sửa"
+                            style={{ color: '#1ec9a4', fontSize: 12, marginRight: 8, cursor: 'pointer' }}
+                            onClick={() => navigate('/qlgkb/edit')}
+                          >
+                            ✏️
+                          </span>
                           <span
                             title="Xóa"
                             style={{ color: '#e53935', fontSize: 12, cursor: 'pointer' }}

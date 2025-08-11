@@ -9,6 +9,7 @@ const sidebarItems = [
   { label: "Đơn thuốc", icon: "📝", route: "/qldonthuoc" },
   { label: "Thuốc", icon: "💊", route: "/thuoc" },
   { label: "Vật tư", icon: "🔧", route: "/qlvattu" },
+  { label: "Xuất/Nhập kho", icon: "📦", route: "/qlkho/qlxuatnhap" },
   { label: "Hỗ trợ kỹ thuật", icon: "💡", route: "/hotro" },
   { 
     label: "Cài đặt", 
@@ -101,7 +102,7 @@ function Sidebar({ activePage }: SidebarProps) {
       </div>
 
       {/* Menu Items */}
-      <div style={{ flex: 1, paddingLeft: 16, paddingRight: 16 }}>
+      <div style={{ flex: 1, paddingLeft: 12, paddingRight: 12 }}>
         {sidebarItems.map(item => (
           <div key={item.label}>
             <div
@@ -112,18 +113,19 @@ function Sidebar({ activePage }: SidebarProps) {
                 marginBottom: 4,
                 borderRadius: 8,
                 cursor: 'pointer',
-                background: active === item.label ? '#4a5568' : 'transparent',
+                background: active === item.label ? '#ffffff' : 'transparent',
+                color: active === item.label ? '#2d3748' : '#ffffff',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 12,
-                fontSize: 14,
+                fontSize: 16,
                 fontWeight: 500,
                 transition: 'all 0.2s ease',
                 justifyContent: 'space-between'
               }}
               onMouseOver={(e) => {
                 if (active !== item.label) {
-                  e.currentTarget.style.background = '#4a5568';
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
                 }
               }}
               onMouseOut={(e) => {
@@ -140,7 +142,8 @@ function Sidebar({ activePage }: SidebarProps) {
                 <span style={{ 
                   fontSize: 12, 
                   transform: expandedItem === item.label ? 'rotate(180deg)' : 'rotate(0deg)',
-                  transition: 'transform 0.2s ease'
+                  transition: 'transform 0.2s ease',
+                  color: active === item.label ? '#2d3748' : '#ffffff'
                 }}>
                   ▼
                 </span>
@@ -149,7 +152,7 @@ function Sidebar({ activePage }: SidebarProps) {
             
             {/* Submenu */}
             {item.hasSubmenu && item.submenu && expandedItem === item.label && (
-              <div style={{ marginLeft: 28, marginBottom: 8 }}>
+              <div style={{ marginLeft: 20, marginBottom: 8 }}>
                 {item.submenu.map(submenuItem => (
                   <div
                     key={submenuItem.label}
@@ -159,12 +162,12 @@ function Sidebar({ activePage }: SidebarProps) {
                       marginBottom: 2,
                       borderRadius: 6,
                       cursor: 'pointer',
-                      fontSize: 13,
+                      fontSize: 15,
                       color: '#cbd5e0',
                       transition: 'all 0.2s ease'
                     }}
                     onMouseOver={(e) => {
-                      e.currentTarget.style.background = '#4a5568';
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
                       e.currentTarget.style.color = '#fff';
                     }}
                     onMouseOut={(e) => {
