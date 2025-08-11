@@ -29,6 +29,8 @@ import QLThuoc from './pages/Thuoc/QLThuoc';
 //import QLVaiTro from './pages/VaiTro/QLVaiTro';
 import TaoBenhNhan from './pages/BenhNhan/TaoBenhNhan';
 import DanhSachBenhNhan from "./pages/BenhNhan/DanhSachBenhNhan";
+import QLXuatNhap from './pages/QLKho/QLXuatNhap';
+
 function App() {
   return (
     <Router>
@@ -53,6 +55,7 @@ function App() {
         <Route path="/caidat" element={<CaiDat />} />
         <Route path="/qldonthuoc/tao" element={<CreateDT />} />
         <Route path="/thuoc" element={<QLThuoc />} />
+        <Route path="/qlkho/qlxuatnhap" element={<QLXuatNhap />} />
       </Routes>
     </Router>
   )
