@@ -1,3 +1,4 @@
+/* Đây là code tôi code */
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import appIcon from '../../assets/appicon.png';
@@ -216,3 +217,4 @@ const btnStyle = {
 };
 
 export default Register;
+/* Đây là code tôi code */

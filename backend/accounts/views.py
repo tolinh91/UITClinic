@@ -383,6 +383,7 @@ def create_patient(request):
         try:
             data = json.loads(request.body)
 
+            # Tạo bệnh nhân trước, chưa có code
             patient = Patient.objects.create(
                 full_name=data.get("full_name", ""),
                 id_number=data.get("id_number", ""),
@@ -400,6 +401,11 @@ def create_patient(request):
                 temperature=data.get("temperature", 0),
                 old_test_results=data.get("old_test_results", ""),
             )
+
+            # Gán mã bệnh nhân = id
+            patient.code = str(patient.id)
+            #patient.code = f"BN{patient.id:06d}"
+            patient.save()
 
             return JsonResponse({"success": True, "patient_id": patient.id})
 
@@ -502,16 +508,36 @@ def patient_detail(request, pk):
         return JsonResponse(data)
     except Patient.DoesNotExist:
         return JsonResponse({})
-def edit_patient(request, patient_id):
-    patient = get_object_or_404(Patient, id=patient_id)
-    if request.method == 'POST':
-        form = PatientForm(request.POST, instance=patient)
-        if form.is_valid():
-            form.save()
-            return redirect('patient_detail', patient_id=patient.id)  # hoặc trang cần đến 
+@csrf_exempt  # dùng nếu không bật CSRF protection cho PUT
+def patient_update(request, pk):
+    if request.method == "PUT":
+        try:
+            patient = Patient.objects.get(pk=pk)
+            data = json.loads(request.body)
+
+            patient.code = data.get("code", patient.code)
+            patient.full_name = data.get("full_name", patient.full_name)
+            patient.id_number = data.get("id_number", patient.id_number)
+            patient.has_insurance = data.get("has_insurance", patient.has_insurance)
+            patient.address = data.get("address", patient.address)
+            patient.phone = data.get("phone", patient.phone)
+            patient.allergy = data.get("allergy", patient.allergy)
+            patient.medical_history = data.get("medical_history", patient.medical_history)
+            patient.current_medications = data.get("current_medications", patient.current_medications)
+            patient.symptoms = data.get("symptoms", patient.symptoms)
+            patient.blood_pressure_systolic = data.get("blood_pressure_systolic", patient.blood_pressure_systolic)
+            patient.blood_pressure_diastolic = data.get("blood_pressure_diastolic", patient.blood_pressure_diastolic)
+            patient.pulse = data.get("pulse", patient.pulse)
+            patient.spo2 = data.get("spo2", patient.spo2)
+            patient.temperature = data.get("temperature", patient.temperature)
+            patient.old_test_results = data.get("old_test_results", patient.old_test_results)
+
+            patient.save()
+            return JsonResponse({"message": "Cập nhật bệnh nhân thành công"})
+        except Patient.DoesNotExist:
+            return JsonResponse({"error": "Không tìm thấy bệnh nhân"}, status=404)
     else:
-        form = PatientForm(instance=patient)
-    return render(request, 'patients/edit_patient.html', {'form': form, 'patient': patient})
+        return JsonResponse({"error": "Phương thức không được hỗ trợ"}, status=405)
 
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Patient, TestResult

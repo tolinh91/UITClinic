@@ -114,7 +114,7 @@ class InventoryTransaction(models.Model):
         super().save(*args, **kwargs)
 
 class Patient(models.Model):
-    code = models.AutoField(primary_key=True) #Mã số BN tạo tự động
+    id= models.AutoField(primary_key=True) #Mã số BN tạo tự động
     code = models.CharField(max_length=10, editable=False) #Quy tắc tạo mã số BN
     full_name = models.CharField(max_length=100) # Họ và tên BN
     id_number = models.CharField(max_length=20) #CCCD

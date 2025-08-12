@@ -1,9 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import appIcon from '../../assets/appicon.png';
 import backgroundImage from '../../assets/medical.png';
 
+
 export default function QLBenhNhan() {
+  const { id } = useParams<{ id: string }>();
   return (
     <div
     style={{
@@ -61,7 +63,7 @@ export default function QLBenhNhan() {
         </Link>
 
         <Link
-          to="/sua-benh-nhan"
+          to={`/sua-benh-nhan/${id}`}
           style={{ marginRight: "20px" }}
           className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700"
         >
@@ -69,7 +71,7 @@ export default function QLBenhNhan() {
         </Link>
 
         <Link
-          to="/xoa-benh-nhan"
+          to={`/xoa-benh-nhan/${id}`}
           className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
         >
           Xóa bệnh nhân

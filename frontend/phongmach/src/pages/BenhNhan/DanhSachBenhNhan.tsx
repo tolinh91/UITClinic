@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
+import Sidebar from '../../components/Sidebar';
+import { Link } from "react-router-dom";
 import axios from "axios";
-
+import './DanhSachBenhNhan.css';
+import styles from './DanhSachBenhNhan.module.css';
 interface Patient {
   id: number;
   code: string;
@@ -30,9 +33,45 @@ const DanhSachBenhNhan: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+  const fetchPatients = async () => {
+    try {
+      const res = await axios.get("http://127.0.0.1:8000/api/patient_list/");
+
+      // Kiểm tra dữ liệu trả về
+      if (Array.isArray(res.data)) {
+        console.log("✅ Số lượng bệnh nhân:", res.data.length);
+        console.log("🧍‍♂️ Bệnh nhân đầu tiên:", res.data[0]);
+        // Ánh xạ maBenhNhan → code
+        const mappedPatients = res.data.map(p => ({
+          ...p,
+          code: `BN-${String(p.id).padStart(5, '0')}` // ánh xạ thủ công
+        }));
+        console.log("🧪 Kiểm tra mã bệnh nhân:", res.data.map(p => p.maBenhNhan));
+        console.log("🧪 Kiểm tra các trường từ API:", Object.keys(res.data[0]));
+        setPatients(mappedPatients);
+      } else {
+        console.error("Dữ liệu không phải mảng:", res.data);
+        setError("Dữ liệu từ API không hợp lệ.");
+      }
+    } catch (err) {
+      console.error("Lỗi khi gọi API:", err);
+      setError("Không thể tải danh sách bệnh nhân.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchPatients();
+}, []);
+  /*useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const res = await axios.get<Patient[]>("http://127.0.0.1:8000/patient_list/");
+        const res = await axios.get<Patient[]>("http://127.0.0.1:8000/api/patient_list/");
+        if (Array.isArray(res.data)) {
+        console.log("✅ Số lượng bệnh nhân:", res.data.length);
+        console.log("🧍‍♂️ Bệnh nhân đầu tiên:", res.data[0]);
+        console.log("🔍 Mã bệnh nhân:", res.data[0].code);
+        }
         setPatients(res.data);
       } catch (err) {
         console.error(err);
@@ -42,7 +81,7 @@ const DanhSachBenhNhan: React.FC = () => {
       }
     };
     fetchPatients();
-  }, []);
+  }, []); */
 
   if (loading) return <p>Đang tải...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
@@ -153,9 +192,9 @@ const DanhSachBenhNhan: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="page-background">
       <h2>Danh sách bệnh nhân</h2>
-      <table border={1} cellPadding={5}>
+      <table border={1} cellPadding={5} className={styles.table}>
         <thead>
           <tr>
             <th>Mã</th>
@@ -164,6 +203,8 @@ const DanhSachBenhNhan: React.FC = () => {
             <th>Điện thoại</th>
             <th>Ngày tạo</th>
             <th>Chi tiết</th>
+            <th>Chỉnh sửa</th>
+            <th>Xóa</th>
           </tr>
         </thead>
         <tbody>
@@ -175,8 +216,23 @@ const DanhSachBenhNhan: React.FC = () => {
               <td>{p.phone}</td>
               <td>{new Date(p.created_at).toLocaleDateString()}</td>
               <td>
-                <button onClick={() => setSelectedPatient(p)}>Xem</button>
+                <button className={styles.detailButton} onClick={() => setSelectedPatient(p)}>Xem</button>
               </td>
+              <td>
+                <button>
+                   <Link to={`/danh-sach-benh-nhan/edit/${p.id}`} className={styles.editButton}>
+                      Chỉnh sửa
+                    </Link>
+                  </button>
+                </td>
+                <td>
+                  <button
+                      className={styles.deleteButton}
+                      onClick={() => handleDeleteClick(p)}
+                    >
+                      🗑️ Xóa
+                    </button>
+                </td>
             </tr>
           ))}
         </tbody>
@@ -187,7 +243,7 @@ const DanhSachBenhNhan: React.FC = () => {
           <h3>Thông tin bệnh nhân: {selectedPatient.full_name}</h3>
           <ul>
             <li>Mã: {selectedPatient.code}</li>
-            <li>CMND: {selectedPatient.id_number}</li>
+            <li>CMND/CCCD: {selectedPatient.id_number}</li>
             <li>Bảo hiểm: {selectedPatient.has_insurance ? "Có" : "Không"}</li>
             <li>Địa chỉ: {selectedPatient.address}</li>
             <li>Điện thoại: {selectedPatient.phone}</li>

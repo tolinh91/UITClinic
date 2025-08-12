@@ -28,7 +28,10 @@ import Hotro from './pages/HoTro/Hotro';
 //import TaiKhoan from './pages/TaiKhoan/TaiKhoan';
 //import ThemTaiKhoan from './pages/TaiKhoan/ThemTaiKhoan';
 //import QLVaiTro from './pages/VaiTro/QLVaiTro';
+import QLBenhNhan from './pages/BenhNhan/QLBenhNhan';
 import TaoBenhNhan from './pages/BenhNhan/TaoBenhNhan';
+import XoaBenhNhan from './pages/BenhNhan/XoaBenhNhan';
+import EditBenhNhan from './pages/BenhNhan/EditBenhNhan';
 import DanhSachBenhNhan from "./pages/BenhNhan/DanhSachBenhNhan";
 import QLXuatNhap from './pages/QLKho/QLXuatNhap';
 import AddPhieu from './pages/QLKho/AddPhieu';
@@ -54,7 +57,10 @@ function App() {
         <Route path="/qlgkb/detail" element={<DetailGKB />} />
         <Route path="/qlgkb/print" element={<PrintGKB />} />
         <Route path="/tao-benh-nhan" element={<TaoBenhNhan />} />
-        <Route path="/qlbenhnhan" element={<DanhSachBenhNhan />} />
+        <Route path="/danh-sach-benh-nhan" element={<DanhSachBenhNhan/>} />
+        <Route path="/xoa-benh-nhan/:id" element={<XoaBenhNhan/>} />
+        <Route path="/danh-sach-benh-nhan/edit/:id" element={<EditBenhNhan />} />
+        <Route path="/qlbenhnhan" element={<QLBenhNhan />} />
         <Route path="/qldonthuoc" element={<QLDonThuoc />} />
         <Route path="/qlvattu" element={<QLVatTu />} />
         <Route path="/caidat" element={<CaiDat />} />
@@ -64,9 +70,9 @@ function App() {
         <Route path="/hotro" element={<Hotro />} />
         <Route path="/caidat/taikhoan" element={<CaiDatTaiKhoan />} />
         <Route path="/caidat/vaitro" element={<CaiDatVaiTro />} />
-  <Route path="/thuoc/edit/:code" element={<EditDonThuoc />} />
-  <Route path="/qlkho/addphieu" element={<AddPhieu />} />
-  <Route path="/qlgkb/edit" element={<EditGKB />} />
+        <Route path="/thuoc/edit/:code" element={<EditDonThuoc />} />
+        <Route path="/qlkho/addphieu" element={<AddPhieu />} />
+        <Route path="/qlgkb/edit" element={<EditGKB />} />
       </Routes>
     </Router>
   )

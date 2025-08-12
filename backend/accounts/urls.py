@@ -34,7 +34,7 @@ urlpatterns = [
     #path('patients/search/', search_patient, name='search_patient'),
     #path('patients/<int:patient_id>/treatment/', views.add_treatment, name='add_treatment'),
     #path('patients/<int:patient_id>/', views.patient_detail, name='patient_detail'),
-    path('patients/<int:patient_id>/edit/', views.edit_patient, name='edit_patient'),
+    #path('patients/<int:patient_id>/edit/', views.edit_patient, name='edit_patient'),
     path('patients/<int:patient_id>/tests/add/', views.add_test_result, name='add_test_result'),
     path('patients/<int:patient_id>/tests/', views.view_test_results, name='view_test_results'),
     path('patients/<int:patient_id>/tests/print/', views.print_test_results, name='print_test_results'),
@@ -56,6 +56,7 @@ urlpatterns = [
     path('current-user/', current_user, name='current-user'),
     path('change-password/', ChangePasswordAPIView.as_view(), name='change-password'),
     path("update-profile/", views.update_profile, name="update_profile"),
+    path('patient/<int:pk>/', views.patient_update, name='update_patient'),
 ]
 
 

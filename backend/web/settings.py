@@ -107,9 +107,9 @@ DATABASES = {
         #'NAME': BASE_DIR / 'db.sqlite3',
         'NAME': 'mydb',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': '123',
         'HOST': '127.0.0.1',    # nếu DB chạy trên máy khác thì điền IP
-        'PORT': '3306', #3306 cổng xampp dùng         
+        'PORT': '3307', #3306 cổng xampp dùng         
          'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         },
