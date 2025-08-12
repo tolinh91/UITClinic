@@ -38,7 +38,6 @@ import AddPhieu from './pages/QLKho/AddPhieu';
 import CaiDatTaiKhoan from './pages/CaiDat/CaiDatTaiKhoan';
 import CaiDatVaiTro from './pages/CaiDat/CaiDatVaiTro';
 
-
 function App() {
   return (
     <Router>

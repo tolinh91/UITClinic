@@ -77,7 +77,7 @@ class StaffInfo(models.Model):
 
     def __str__(self):
         return f"{self.user.get_full_name()} ({self.position})"
-       
+    
 class MedicalSupply(models.Model):
     code = models.CharField(max_length=20) # Mã thuốc
     name = models.CharField(max_length=100) # Tên thuốc
@@ -193,6 +193,54 @@ class PrescriptionDetail(models.Model):
 
     def get_cost(self):
         return self.quantity * self.medical_supply.unit_price
+# GIẤY KHÁM BỆNH 
+class GiayKhamBenh(models.Model):
+    tieuDe = models.CharField(max_length=255)
+    tenBenhNhan = models.CharField(max_length=255)
+    theBHYT = models.BooleanField(default=False)
+    phongKham = models.CharField(max_length=255)
+    gia = models.DecimalField(max_digits=12, decimal_places=0)
+    bacSi = models.CharField(max_length=255)
+    ghiChu = models.TextField(blank=True)
+    ngayTao = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.tieuDe} - {self.tenBenhNhan}"
+class Room(models.Model):
+    name = models.CharField(max_length=100)
+    location = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Doctor(models.Model):
+    full_name = models.CharField(max_length=100)
+    specialty = models.CharField(max_length=100, blank=True, null=True)
+    phone = models.CharField(max_length=20, blank=True, null=True)
+
+    def __str__(self):
+        return self.full_name
+
+# Trường nhận thông tin của bệnh nhân để đưa qua GKB
+class Appointment(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('confirmed', 'Confirmed'),
+        ('completed', 'Completed'),
+        ('cancelled', 'Cancelled'),
+    ]
+
+    title = models.CharField(max_length=255)
+    room = models.ForeignKey(Room, on_delete=models.SET_NULL, null=True, blank=True)
+    doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.title} - {self.get_status_display()}"
 
 class Invoice(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)

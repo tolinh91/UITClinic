@@ -57,6 +57,10 @@ urlpatterns = [
     path('change-password/', ChangePasswordAPIView.as_view(), name='change-password'),
     path("update-profile/", views.update_profile, name="update_profile"),
     path('patient/<int:pk>/', views.patient_update, name='update_patient'),
+    path('giay-kham-benh/', views.giay_kham_benh_list_create, name='giay-kham-benh-list-create'),
+    path('giay-kham-benh-list/', views.giay_kham_benh_list, name='giay-kham-benh-list'),
+    path('appointments/', views.appointment_list, name='appointment_list'),
+    path('giay-kham-benh/<int:pk>/', views.giay_kham_benh_detail, name='giay_kham_benh_detail'),
 ]
 
 

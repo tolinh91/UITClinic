@@ -47,6 +47,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.http import JsonResponse, HttpResponseBadRequest
+from .models import GiayKhamBenh
 def home(request):
     return HttpResponse("Trang chủ")
 class RegisterForm(forms.Form):
@@ -538,7 +540,92 @@ def patient_update(request, pk):
             return JsonResponse({"error": "Không tìm thấy bệnh nhân"}, status=404)
     else:
         return JsonResponse({"error": "Phương thức không được hỗ trợ"}, status=405)
+# GIẤY KHÁM BỆNH
+@csrf_exempt
+def giay_kham_benh_list_create(request):
+    if request.method == "GET":
+        gkbs = GiayKhamBenh.objects.all().order_by('-ngayTao')
+        data = [model_to_dict(gkb) for gkb in gkbs]
+        return JsonResponse(data, safe=False)
 
+    elif request.method == "POST":
+        try:
+            body = json.loads(request.body)
+            # validate required fields
+            required_fields = ['tieuDe', 'tenBenhNhan', 'phongKham', 'gia', 'bacSi']
+            for field in required_fields:
+                if field not in body or not body[field]:
+                    return HttpResponseBadRequest(f"Missing field: {field}")
+
+            gkb = GiayKhamBenh.objects.create(
+                tieuDe=body['tieuDe'],
+                tenBenhNhan=body['tenBenhNhan'],
+                theBHYT=body.get('theBHYT', False),
+                phongKham=body['phongKham'],
+                gia=body['gia'],
+                bacSi=body['bacSi'],
+                ghiChu=body.get('ghiChu', '')
+            )
+            return JsonResponse(model_to_dict(gkb), status=201)
+        except json.JSONDecodeError:
+            return HttpResponseBadRequest("Invalid JSON")
+    else:
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+def giay_kham_benh_list(request):
+    gkb_list = GiayKhamBenh.objects.select_related('patient').order_by('-date')
+    data = []
+    for gkb in gkb_list:
+        data.append({
+            "id": gkb.id,
+            "code": gkb.code,
+            "patient": gkb.patient.full_name,  # lấy tên bệnh nhân
+            "title": gkb.title,
+            "room": gkb.room,
+            "doctor": gkb.doctor,
+            "date": gkb.date.strftime("%Y-%m-%d"),
+            "status": gkb.status,
+        })
+    return JsonResponse(data, safe=False)
+#Các trường của GKB
+from .models import Appointment
+from datetime import timedelta
+import random
+@csrf_exempt
+def appointment_list(request):
+    rooms = ["Phòng 101", "Phòng 102", "Phòng 201", "Phòng 202"]
+    doctors = ["BS. Nguyễn Văn A", "BS. Trần Thị B", "BS. Lê Văn C"]
+    statuses = ["Chưa khám", "Đang khám", "Đã khám"]
+
+    patients = Patient.objects.all().order_by('-created_at')
+    data = []
+
+    for p in patients:
+        start_time = p.created_at.replace(hour=random.randint(7, 15), minute=0)
+        end_time = start_time + timedelta(minutes=random.choice([15, 30, 45]))
+
+        data.append({
+            "patient": p.full_name,
+            "title": "Khám tổng quát",
+            "room": random.choice(rooms),
+            "doctor": random.choice(doctors),
+            "status": random.choice(statuses),
+            "start_time": start_time.strftime("%Y-%m-%d %H:%M"),
+            "end_time": end_time.strftime("%Y-%m-%d %H:%M"),
+            "description": "Khám sức khỏe định kỳ cho bệnh nhân."
+        })
+    
+    return JsonResponse(data, safe=False)
+#xem giấy KB
+from .serializers import GiayKhamBenhSerializer
+@api_view(['GET'])
+def giay_kham_benh_detail(request, pk):
+    try:
+        gkb = GiayKhamBenh.objects.get(pk=pk)
+    except GiayKhamBenh.DoesNotExist:
+        return Response({"error": "Không tìm thấy giấy khám bệnh"}, status=status.HTTP_404_NOT_FOUND)
+    
+    serializer = GiayKhamBenhSerializer(gkb)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Patient, TestResult
 from .forms import DynamicTestResultForm
