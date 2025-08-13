@@ -1,4 +1,3 @@
-
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm
@@ -629,6 +628,31 @@ def giay_kham_benh_detail(request, pk):
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Patient, TestResult
 from .forms import DynamicTestResultForm
+#---ĐƠN THUỐC ---
+from .models import using_Prescription
+from .serializers import PrescriptionSerializer
+@api_view(['GET', 'POST'])
+def using_prescription_list(request):
+    if request.method == 'GET':
+        prescriptions = using_Prescription.objects.all()
+        serializer = PrescriptionSerializer(prescriptions, many=True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST':
+        serializer = PrescriptionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+from rest_framework import generics
+from .models import using_Prescription
+from .serializers import PrescriptionSerializer
+
+class PrescriptionDetailView(generics.RetrieveAPIView):
+    queryset = using_Prescription.objects.all()
+    serializer_class = PrescriptionSerializer
+
 
 GIÁ_ECG = 200000
 GIÁ_SIÊU_ÂM = 300000

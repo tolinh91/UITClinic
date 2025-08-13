@@ -57,27 +57,30 @@ const CreateDT = () => {
   };
 
   // Lưu đơn thuốc vào localStorage và chuyển về QLDonThuoc
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.patient || !form.doctor || medicines.length === 0) {
-      alert('Vui lòng nhập đầy đủ thông tin và thêm ít nhất 1 thuốc!');
-      return;
-    }
-    const newDonThuoc = {
-      patient: form.patient,
-      bhyt: form.bhyt,
-      doctor: form.doctor,
-      medicines: medicines,
-      createdAt: new Date().toISOString()
-    };
-    // Lưu vào localStorage
-    const oldList = JSON.parse(localStorage.getItem('donthuoc_list') || '[]');
-    localStorage.setItem('donthuoc_list', JSON.stringify([...oldList, newDonThuoc]));
-    navigate('/qldonthuoc');
+ const handleSave = (e: React.FormEvent) => {
+  e.preventDefault();
+  console.log('patient:', form.patient);if (!form.patient || !form.doctor || medicines.length === 0) {
+    alert('Vui lòng nhập đầy đủ thông tin và thêm ít nhất 1 thuốc!');
+    return;
+  }
+
+  alert('Đã tạo toa thuốc!');  // Hiện thông báo
+
+  const newDonThuoc = {
+    patient: form.patient,
+    bhyt: form.bhyt,
+    doctor: form.doctor,
+    medicines: medicines,
+    createdAt: new Date().toISOString()
   };
 
+  const oldList = JSON.parse(localStorage.getItem('donthuoc_list') || '[]');
+  localStorage.setItem('donthuoc_list', JSON.stringify([...oldList, newDonThuoc]));
+  navigate('/qldonthuoc');
+};
+
   return (
-    <form
+    <form onSubmit={handleSave}
       style={{
         minHeight: '100vh',
         width: '100vw',
@@ -86,7 +89,6 @@ const CreateDT = () => {
         flexWrap: 'wrap',
         boxSizing: 'border-box',
       }}
-      onSubmit={handleSave}
     >
       {/* Sidebar thay thế bằng component Sidebar giống MainPage */}
       <div style={{ minWidth: 0 }}>
