@@ -60,7 +60,7 @@ const ChangePassword: React.FC = () => {
   };
 
   const handleBackToProfile = () => {
-    navigate('/Login/');
+    navigate(-1);
   };
 
   return (
@@ -95,7 +95,7 @@ const ChangePassword: React.FC = () => {
               style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 32 }}
             >
               <label style={{ fontWeight: 500 }}>
-                Mật khẩu mới <span style={{ color: 'red' }}>*</span>:
+                Mật khẩu mới :<span style={{ color: 'red' }}>*</span>
                 <input
                   type="password"
                   placeholder="Nhập mật khẩu mới"
@@ -138,7 +138,7 @@ const ChangePassword: React.FC = () => {
               <p style={{ color: 'green', textAlign: 'center', marginBottom: 16 }}>{success}</p>
             )}
 
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 16, marginTop: 8 }}>
               <button
                 type="submit"
                 disabled={loading}
@@ -153,13 +153,13 @@ const ChangePassword: React.FC = () => {
                   cursor: loading ? 'not-allowed' : 'pointer',
                   opacity: loading ? 0.6 : 1,
                   marginBottom: 12,
+                  minWidth: 140,
+                  height: 44,
+                  boxSizing: 'border-box',
                 }}
               >
                 {loading ? 'Đang xử lý...' : 'Lưu'}
               </button>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
               <button
                 type="button"
                 onClick={handleBackToProfile}
@@ -172,6 +172,10 @@ const ChangePassword: React.FC = () => {
                   fontSize: 16,
                   fontWeight: 500,
                   cursor: 'pointer',
+                  marginBottom: 12,
+                  minWidth: 140,
+                  height: 44,
+                  boxSizing: 'border-box',
                 }}
               >
                 Quay Lại
