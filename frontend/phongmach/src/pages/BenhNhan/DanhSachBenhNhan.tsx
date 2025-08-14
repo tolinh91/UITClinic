@@ -6,6 +6,93 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import './DanhSachBenhNhan.css';
 import styles from './DanhSachBenhNhan.module.css';
+// Responsive CSS riêng cho bảng
+const responsiveTableStyle = `
+@media (max-width: 900px) {
+  .dsbn-table {
+    font-size: 0.95rem !important;
+    min-width: 600px !important;
+    overflow-x: auto !important;
+    display: block !important;
+  }
+  .dsbn-table th, .dsbn-table td {
+    padding: 8px 4px !important;
+    font-size: 0.95rem !important;
+    white-space: nowrap !important;
+  }
+}
+@media (max-width: 600px) {
+  .dsbn-table {
+    font-size: 0.85rem !important;
+    min-width: 400px !important;
+    overflow-x: auto !important;
+    display: block !important;
+  }
+  .dsbn-table th, .dsbn-table td {
+    padding: 4px 2px !important;
+    font-size: 0.85rem !important;
+    white-space: nowrap !important;
+  }
+}
+`;
+// Responsive CSS cho toàn bộ màn hình
+const responsiveStyle = `
+@media (max-width: 900px) {
+  .dsbn-main {
+    padding: 8px !important;
+    margin: 4px !important;
+    box-shadow: none !important;
+    border-radius: 8px !important;
+    min-width: 0 !important;
+  }
+  .dsbn-content {
+    padding: 12px !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border-radius: 8px !important;
+    min-width: 0 !important;
+    max-width: 100vw !important;
+  }
+  .dsbn-table {
+    font-size: 0.95rem !important;
+  }
+  .dsbn-table th, .dsbn-table td {
+    padding: 8px 4px !important;
+    font-size: 0.95rem !important;
+  }
+  .dsbn-header {
+    flex-direction: column !important;
+    gap: 8px !important;
+    align-items: flex-start !important;
+  }
+}
+@media (max-width: 600px) {
+  .dsbn-main {
+    padding: 2px !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+  .dsbn-content {
+    padding: 4px !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    min-width: 0 !important;
+    max-width: 100vw !important;
+  }
+  .dsbn-table {
+    font-size: 0.85rem !important;
+  }
+  .dsbn-table th, .dsbn-table td {
+    padding: 4px 2px !important;
+    font-size: 0.85rem !important;
+  }
+  .dsbn-header {
+    flex-direction: column !important;
+    gap: 4px !important;
+    align-items: flex-start !important;
+  }
+}
+`;
 interface Patient {
   id: number;
   code: string;
@@ -28,6 +115,11 @@ interface Patient {
 }
 
 const DanhSachBenhNhan: React.FC = () => {
+  const navigate = useNavigate();
+  const [deleteTarget, setDeleteTarget] = useState<Patient | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editFormData, setEditFormData] = useState<Partial<Patient> | null>(null);
   const [patients, setPatients] = useState<Patient[]>([]);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [loading, setLoading] = useState(true);
@@ -193,12 +285,15 @@ const DanhSachBenhNhan: React.FC = () => {
   };
 
     return (
-      <div style={{ minHeight: '100vh', width: '100vw', display: 'flex', background: '#f4f4f4' }}>
+      <>
+  <style>{responsiveStyle}</style>
+  <style>{responsiveTableStyle}</style>
+        <div style={{ minHeight: '100vh', width: '100vw', display: 'flex', background: '#f4f4f4' }}>
         {/* Sidebar giống MainPage */}
         <Sidebar activePage="Bệnh nhân" />
         {/* Main content */}
-        <div style={{ flex: 1, padding: '32px 16px 0 16px', minWidth: 0, display: 'flex', flexDirection: 'column', margin: '16px', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)', background: '#fff' }}>
-          <div style={{ background: '#fff', borderRadius: 16, margin: '0 0 24px 0', padding: '24px', boxShadow: '0 2px 8px #0001', maxWidth: '1200px', width: '100%', alignSelf: 'center', minWidth: 280 }}>
+        <div className="dsbn-main" style={{ flex: 1, padding: '32px 16px 0 16px', minWidth: 0, display: 'flex', flexDirection: 'column', margin: '16px', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)', background: '#fff' }}>
+          <div className="dsbn-content" style={{ background: '#fff', borderRadius: 16, margin: '0 0 24px 0', padding: '24px', boxShadow: '0 2px 8px #0001', maxWidth: '1200px', width: '100%', alignSelf: 'center', minWidth: 280 }}>
             {/* Submenu góc trên bên phải giống MainPage */}
             <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 16, flexWrap: 'wrap', marginBottom: 8 }}>
               <img src={appIcon} alt="logo" style={{ width: 40, borderRadius: '50%' }} />
@@ -228,12 +323,12 @@ const DanhSachBenhNhan: React.FC = () => {
                 )}
               </div>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
+            <div className="dsbn-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
               <div style={{ fontSize: '2rem', fontWeight: 600 }}>Danh sách bệnh nhân</div>
-              <button type="button" style={{ background: '#1ec9a4', color: '#fff', border: 'none', borderRadius: 8, padding: '10px 24px', fontWeight: 500, fontSize: 16, cursor: 'pointer', minWidth: 140 }} onClick={() => navigate('/tao-benh-nhan')}>+ Thêm bệnh nhân</button>
+              <button type="button" style={{ background: '#1ec9a4', color: '#fff', border: 'none', borderRadius: 8, padding: '10px 24px', fontWeight: 500, fontSize: 16, cursor: 'pointer', minWidth: 140 }} onClick={() => navigate('/create-benh-nhan')}>+ Thêm bệnh nhân</button>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
-              <div style={{ position: 'relative', minWidth: 120, maxWidth: 320, width: '100%' }}>
+              <div style={{ position: 'relative', minWidth: 120, maxWidth: 200, width: '100%' }}>
                 <span style={{ position: 'absolute', left: 12, top: 10, fontSize: 18, color: '#888' }}>🔍</span>
                 <input
                   type="text"
@@ -243,12 +338,27 @@ const DanhSachBenhNhan: React.FC = () => {
                   // onChange={e => setSearch(e.target.value)}
                 />
               </div>
-              <button type="button" style={{ background: '#1ec9a4', color: '#fff', border: 'none', borderRadius: 8, padding: '10px 24px', fontWeight: 500, fontSize: 16, cursor: 'pointer', minWidth: 100 }}>
+                <button
+                type="button"
+                style={{
+                  background: '#1ec9a4',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: 8,
+                  padding: '10px 24px',
+                  fontWeight: 500,
+                  fontSize: 16,
+                  cursor: 'pointer',
+                  minWidth: 100,
+                  marginLeft: 50, // Push button to the right
+                  display: 'block'
+                }}
+                >
                 Tìm kiếm
-              </button>
+                </button>
             </div>
             <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '1rem', wordBreak: 'break-word', overflowX: 'auto' }}>
+              <table className="dsbn-table" style={{ width: '100%', borderCollapse: 'collapse', fontSize: '1rem', wordBreak: 'break-word', overflowX: 'auto' }}>
                 <thead>
                   <tr style={{ background: '#f4f4f4' }}>
                     <th style={{ padding: '12px 8px', fontWeight: 600 }}>STT</th>
@@ -266,15 +376,71 @@ const DanhSachBenhNhan: React.FC = () => {
                     <tr key={p.id} style={{ background: '#fff', borderBottom: '1px solid #eee' }}>
                       <td style={{ padding: '10px 8px', textAlign: 'center' }}>{idx + 1}</td>
                       <td style={{ padding: '10px 8px', textAlign: 'center' }}>{p.code}</td>
-                      <td style={{ padding: '10px 8px' }}>{p.full_name}</td>
-                      {/* Xóa cột Ảnh đại diện */}
-                      <td style={{ padding: '10px 8px', textAlign: 'center' }}>{p.phone}</td>
-                      <td style={{ padding: '10px 8px', textAlign: 'center' }}>{p.id_number || ''}</td>
-                      <td style={{ padding: '10px 8px' }}>{p.address}</td>
+                      <td style={{ padding: '10px 8px' }}>
+                        {editingId === p.id ? (
+                          <input type="text" value={editFormData?.full_name ?? p.full_name} onChange={e => setEditFormData(f => ({ ...f, full_name: e.target.value }))} style={{ width: '100%', padding: '4px 8px', borderRadius: 4, border: '1px solid #ccc' }} />
+                        ) : p.full_name}
+                      </td>
                       <td style={{ padding: '10px 8px', textAlign: 'center' }}>
-                        <Link to={`/danh-sach-benh-nhan/edit/${p.id}`} style={{ color: '#1ec9a4', fontSize: 18, marginRight: 8 }} title="Chỉnh sửa"><span>✏️</span></Link>
-                        <span style={{ color: '#e53935', fontSize: 18, marginRight: 8, cursor: 'pointer' }} title="Xóa" onClick={() => handleDeleteClick(p)}>🗑️</span>
-                        <Link to={`/danh-sach-benh-nhan/detail/${p.id}`} style={{ color: '#1ec9a4', fontSize: 18 }} title="Chi tiết"><span>�</span></Link>
+                        {editingId === p.id ? (
+                          <input type="text" value={editFormData?.phone ?? p.phone} onChange={e => setEditFormData(f => ({ ...f, phone: e.target.value }))} style={{ width: '100%', padding: '4px 8px', borderRadius: 4, border: '1px solid #ccc' }} />
+                        ) : p.phone}
+                      </td>
+                      <td style={{ padding: '10px 8px', textAlign: 'center' }}>
+                        {editingId === p.id ? (
+                          <input type="text" value={editFormData?.id_number ?? p.id_number} onChange={e => setEditFormData(f => ({ ...f, id_number: e.target.value }))} style={{ width: '100%', padding: '4px 8px', borderRadius: 4, border: '1px solid #ccc' }} />
+                        ) : p.id_number}
+                      </td>
+                      <td style={{ padding: '10px 8px' }}>
+                        {editingId === p.id ? (
+                          <input type="text" value={editFormData?.address ?? p.address} onChange={e => setEditFormData(f => ({ ...f, address: e.target.value }))} style={{ width: '100%', padding: '4px 8px', borderRadius: 4, border: '1px solid #ccc' }} />
+                        ) : p.address}
+                      </td>
+                      <td style={{ padding: '10px 8px', textAlign: 'center' }}>
+                        {editingId === p.id ? (
+                          <span style={{ color: '#1ec9a4', fontSize: 18, marginRight: 8, cursor: 'pointer' }} title="Lưu" onClick={() => {
+                            setPatients(prev => prev.map(bn => bn.id === p.id ? { ...bn, ...editFormData } : bn));
+                            setEditingId(null);
+                            setEditFormData(null);
+                          }}>💾</span>
+                        ) : (
+                          <span style={{ color: '#1ec9a4', fontSize: 18, marginRight: 8, cursor: 'pointer' }} title="Chỉnh sửa" onClick={() => {
+                            setEditingId(p.id);
+                            setEditFormData({ ...p });
+                          }}>✏️</span>
+                        )}
+                        <span style={{ color: '#e53935', fontSize: 18, marginRight: 8, cursor: 'pointer' }} title="Xóa" onClick={() => {
+                          setDeleteTarget(p);
+                          setShowDeleteConfirm(true);
+                        }}>🗑️</span>
+      {/* Xác nhận xóa bệnh nhân */}
+      {showDeleteConfirm && deleteTarget && (
+        <div style={{ position: 'fixed', top: '20%', left: '50%', transform: 'translate(-50%, 0)', zIndex: 9999 }}>
+          <div style={{ background: '#fff', borderRadius: 12, padding: 32, minWidth: 280, boxShadow: '0 2px 12px #0003', textAlign: 'center', border: '1px solid #eee' }}>
+            <div style={{ fontSize: 18, fontWeight: 500, marginBottom: 18 }}>
+              Bạn có muốn xóa Bệnh nhân <span style={{ color: '#e53935', fontWeight: 700 }}>{deleteTarget.full_name}</span>?
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 24 }}>
+              <button style={{ background: '#e53935', color: '#fff', border: 'none', borderRadius: 8, padding: '8px 24px', fontWeight: 500, fontSize: 16, cursor: 'pointer' }}
+                onClick={() => {
+                  setPatients(prev => prev.filter(bn => bn.id !== deleteTarget.id));
+                  setShowDeleteConfirm(false);
+                  setDeleteTarget(null);
+                }}>
+                Có
+              </button>
+              <button style={{ background: '#ccc', color: '#333', border: 'none', borderRadius: 8, padding: '8px 24px', fontWeight: 500, fontSize: 16, cursor: 'pointer' }}
+                onClick={() => {
+                  setShowDeleteConfirm(false);
+                  setDeleteTarget(null);
+                }}>
+                Không
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+                        <Link to={`/danh-sach-benh-nhan/detail/${p.id}`} style={{ color: '#1ec9a4', fontSize: 18 }} title="Chi tiết"><span>👁️</span></Link>
                       </td>
                     </tr>
                   ))}
@@ -309,6 +475,7 @@ const DanhSachBenhNhan: React.FC = () => {
           )}
         </div>
       </div>
+      </>
   );
 };
 export default DanhSachBenhNhan;

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from '../../components/Sidebar';
@@ -14,7 +13,12 @@ interface BenhNhan {
   tienSuBenhNen?: string;
 }
 
-function CreateBN() {
+const generatePatientId = () => {
+  const timestamp = Date.now().toString().slice(-6);
+  return `BN${timestamp}`;
+};
+
+const CreateBN: React.FC = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   
@@ -27,120 +31,7 @@ function CreateBN() {
     tienSuBenhNen: ""
   });
 
-  const generatePatientId = () => {
-    // Generate a new patient ID (BN + 6 digits)
-    const timestamp = Date.now().toString().slice(-6);
-    return `BN${timestamp}`;
-  };
-
-  const validateDate = (dateString: string): boolean => {
-    if (!dateString) return true; // Allow empty date
-    
-    // Parse date in dd/mm/yyyy or dd/mm/yy format
-    const dateRegex = /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/;
-    const match = dateString.match(dateRegex);
-    
-    if (!match) return false;
-    
-    let day = parseInt(match[1], 10);
-    let month = parseInt(match[2], 10);
-    let year = parseInt(match[3], 10);
-    
-    // Convert 2-digit year to 4-digit year
-    if (year < 100) {
-      year += year < 50 ? 2000 : 1900;
-    }
-    
-    // Check if date is valid
-    const date = new Date(year, month - 1, day);
-    if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
-      return false;
-    }
-    
-    // Check date range: 1/1/1900 to current date
-    const minDate = new Date(1900, 0, 1);
-    const maxDate = new Date();
-    
-    return date >= minDate && date <= maxDate;
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Validate required fields
-    if (!formData.tenBenhNhan || !formData.soDienThoai || !formData.diaChi) {
-      alert("Vui lòng điền đầy đủ thông tin có dấu *");
-      return;
-    }
-    
-    // Validate birth date
-    if (formData.ngaySinh && !validateDate(formData.ngaySinh)) {
-      alert("Ngày sinh không hợp lệ. Vui lòng nhập ngày sinh theo định dạng dd/mm/yyyy và trong khoảng từ 1/1/1900 đến ngày hiện tại");
-      return;
-    }
-
-    // Create new patient object
-    const newPatient: BenhNhan = {
-      id: Date.now().toString(),
-      maBenhNhan: generatePatientId(),
-      tenBenhNhan: formData.tenBenhNhan,
-      gioiTinh: formData.gioiTinh,
-      soDienThoai: formData.soDienThoai,
-      ngaySinh: formData.ngaySinh,
-      diaChi: formData.diaChi,
-      tienSuBenhNen: formData.tienSuBenhNen
-    };
-
-    // Store in localStorage to pass to parent component
-    let existingPatients: BenhNhan[] = [];
-    try {
-      existingPatients = JSON.parse(localStorage.getItem('benhNhanList') || '[]');
-      if (!Array.isArray(existingPatients)) existingPatients = [];
-    } catch {
-      existingPatients = [];
-    }
-    // Tránh trùng id
-    existingPatients = existingPatients.filter(p => p.id !== newPatient.id);
-    existingPatients.push(newPatient);
-    localStorage.setItem('benhNhanList', JSON.stringify(existingPatients));
-    localStorage.setItem('newPatientAdded', 'true');
-
-    // Navigate back to patient list
-    navigate('/danh-sach-benh-nhan');
-  };
-
-  const handleCancel = () => {
-    navigate('/danh-sach-benh-nhann');
-  };
-
-  const handleMenuSelect = (option: string) => {
-    setMenuOpen(false);
-    if (option === "Thông tin cá nhân") navigate("/profile");
-    else if (option === "Đổi mật khẩu") navigate("/changepassword");
-    else if (option === "Thoát") navigate("/login");
-  };
-
-  return (
-    <div style={{ minHeight: '100vh', width: '100vw', display: 'flex', background: '#f5f6fa', position: 'relative' }}>
-      {/* Sidebar */}
-      <Sidebar activePage="Bệnh nhân" />
-
-      {/* Main Content */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '24px 32px' }}>
-        {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
-          <div>
-            <h1 style={{ margin: 0, fontSize: 28, fontWeight: 'bold', color: '#1e293b', marginBottom: 8 }}>
-              Thêm bệnh nhân
-            </h1>
-            <p style={{ margin: 0, fontSize: 16, color: '#64748b' }}>
-              Điền đầy đủ thông tin có có dấu <span style={{ color: 'red' }}>*</span> bên dưới
-            </p>
-          </div>
-          <div style={{ position: 'relative' }}>
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              style={{
+  export default CreateBN;
                 background: '#fff',
                 border: '1px solid #e2e8f0',
                 borderRadius: '50%',
@@ -362,6 +253,26 @@ function CreateBN() {
                   borderRadius: '8px',
                   background: '#fff',
                   color: '#374151',
+                const validateDate = (dateString: string): boolean => {
+                  if (!dateString) return true;
+                  const dateRegex = /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/;
+                  const match = dateString.match(dateRegex);
+                  if (!match) return false;
+                  let day = parseInt(match[1], 10);
+                  let month = parseInt(match[2], 10);
+                  let year = parseInt(match[3], 10);
+                  if (year < 100) {
+                    year += year < 50 ? 2000 : 1900;
+                  }
+                  const date = new Date(year, month - 1, day);
+                  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
+                    return false;
+                  }
+                  const minDate = new Date(1900, 0, 1);
+                  const maxDate = new Date();
+                  return date >= minDate && date <= maxDate;
+                };
+
                   fontSize: '14px',
                   fontWeight: '500',
                   cursor: 'pointer',
