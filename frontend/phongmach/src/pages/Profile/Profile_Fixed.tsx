@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import appIcon from '../../assets/appicon.png';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/Sidebar';
 
@@ -7,9 +8,14 @@ const Profile: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editableData, setEditableData] = useState({
-    phone: '10 chữ số',
+    name: 'Admin',
+    cccd: '001122334456',
+    email: 'admin@uit.clinic.edu.vn',
+    dob: '1/1/2002',
+    phone: '09022334456',
     address: 'Đường 1, Thủ Đức',
-    email: 'levanmanh@gmail.com'
+    university: 'UTE – Quản lý công nghiệp',
+    role: 'Quản Trị Viên'
   });
 
   // Close dropdown when clicking outside
@@ -40,9 +46,14 @@ const Profile: React.FC = () => {
     setIsEditing(false);
     // Reset to original data
     setEditableData({
-      phone: '10 chữ số',
+      name: 'Admin',
+      cccd: '001122334456',
+      email: 'admin@uit.clinic.edu.vn',
+      dob: '1/1/2002',
+      phone: '09022334456',
       address: 'Đường 1, Thủ Đức',
-      email: 'levanmanh@gmail.com'
+      university: 'UTE – Quản lý công nghiệp',
+      role: 'Quản Trị Viên'
     });
   };
 
@@ -65,130 +76,38 @@ const Profile: React.FC = () => {
         minHeight: '100vh',
         width: '100%'
       }}>
-        {/* Header */}
+        {/* Header - Submenu giống MainPage */}
         <div style={{
           backgroundColor: 'white',
           padding: '16px 24px',
           borderBottom: '1px solid #e5e7eb',
           display: 'flex',
-          justifyContent: 'space-between',
+          justifyContent: 'flex-end',
           alignItems: 'center',
           boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
         }}>
-          <div>
-            <h1 style={{ 
-              margin: 0, 
-              fontSize: '24px', 
-              fontWeight: '600',
-              color: '#1f2937'
-            }}>
-              Hồ sơ cá nhân
-            </h1>
-            <p style={{ 
-              margin: '4px 0 0 0', 
-              color: '#6b7280', 
-              fontSize: '14px' 
-            }}>
-              Quản lý thông tin cá nhân của bạn
-            </p>
-          </div>
-          
-          {/* User Menu */}
-          <div style={{ position: 'relative' }}>
+          <img src={appIcon} alt="logo" style={{ width: 40, borderRadius: '50%' }} />
+          <span style={{ fontWeight: 500, fontSize: 18, color: '#2d4a7a', marginLeft: 16 }}>Admin</span>
+          <div style={{ position: 'relative', marginLeft: 16 }}>
             <button
-              id="profile-button"
+              style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }}
               onClick={() => setShowDropdown(!showDropdown)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '8px 12px',
-                backgroundColor: 'white',
-                border: '1px solid #d1d5db',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                fontSize: '14px',
-                color: '#374151',
-                boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
-              }}
             >
-              <div style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '50%',
-                backgroundColor: '#3b82f6',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'white',
-                fontSize: '14px',
-                fontWeight: '500'
-              }}>
-                A
-              </div>
-              <span>Admin</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points="6,9 12,15 18,9"></polyline>
-              </svg>
+              ▼
             </button>
-
             {showDropdown && (
-              <div
-                id="profile-dropdown"
-                style={{
-                  position: 'absolute',
-                  top: '100%',
-                  right: 0,
-                  marginTop: '4px',
-                  backgroundColor: 'white',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '8px',
-                  boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-                  minWidth: '200px',
-                  zIndex: 50,
-                  padding: '8px 0'
-                }}
-              >
-                <div
-                  onClick={() => navigate('/profile')}
-                  style={{
-                    padding: '12px 16px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <span style={{ fontSize: '16px' }}>👤</span>
-                  <span style={{ color: '#374151', fontSize: '14px' }}>Thông tin cá nhân</span>
+              <div style={{ position: 'absolute', right: 0, top: 32, background: '#fff', boxShadow: '0 2px 8px #0002', borderRadius: 8, minWidth: 220, zIndex: 10 }}>
+                <div onClick={() => navigate('/profile')}
+                  style={{ padding: '12px 28px', cursor: 'pointer', borderBottom: '1px solid #eee', display: 'flex', alignItems: 'center', gap: 12, whiteSpace: 'nowrap' }}>
+                  <span>👤</span> Thông tin cá nhân
                 </div>
-                
-                <div
-                  onClick={() => navigate('/changepassword')}
-                  style={{
-                    padding: '12px 16px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <span style={{ fontSize: '16px' }}>🔑</span>
-                  <span style={{ color: '#374151', fontSize: '14px' }}>Đổi mật khẩu</span>
+                <div onClick={() => navigate('/changepassword')}
+                  style={{ padding: '12px 28px', cursor: 'pointer', borderBottom: '1px solid #eee', display: 'flex', alignItems: 'center', gap: 12, whiteSpace: 'nowrap' }}>
+                  <span>🔑</span> Đổi mật khẩu
                 </div>
-                
-                <div
-                  onClick={() => navigate('/login')}
-                  style={{
-                    padding: '12px 16px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <span style={{ fontSize: '16px', color: '#ef4444' }}>⏻</span>
-                  <span style={{ color: '#ef4444', fontSize: '14px' }}>Thoát</span>
+                <div onClick={() => navigate('/login')}
+                  style={{ padding: '12px 28px', cursor: 'pointer', color: 'red', display: 'flex', alignItems: 'center', gap: 12, whiteSpace: 'nowrap' }}>
+                  <span>⏻</span> Thoát
                 </div>
               </div>
             )}
@@ -219,132 +138,48 @@ const Profile: React.FC = () => {
               display: 'flex',
               flexDirection: 'column'
             }}>
-              {/* Header với gradient xanh */}
+              {/* Header với gradient xanh - theo thiết kế mới */}
               <div style={{
-                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                padding: '24px',
-                color: 'white',
-                textAlign: 'center'
+                background: '#f3f3f3',
+                borderRadius: '10px',
+                padding: '0',
+                marginBottom: '24px',
+                boxShadow: '0 2px 8px #0001',
+                width: '100%',
+                maxWidth: '350px',
+                margin: '0 auto'
               }}>
                 <div style={{
-                  fontSize: '18px',
-                  fontWeight: '600',
-                  marginBottom: '16px'
+                  background: '#dbeafe',
+                  borderTopLeftRadius: '10px',
+                  borderTopRightRadius: '10px',
+                  padding: '12px 0',
+                  textAlign: 'center',
+                  fontSize: '22px',
+                  color: '#2563eb',
+                  fontWeight: 500
                 }}>
                   Chào mừng trở lại!
                 </div>
-                
-                {/* Logo UIT CLINIC */}
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '12px',
-                  marginBottom: '16px'
-                }}>
-                  <div style={{
-                    width: '40px',
-                    height: '40px',
-                    backgroundColor: 'white',
-                    borderRadius: '8px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    <div style={{
-                      width: '28px',
-                      height: '28px',
-                      background: 'linear-gradient(45deg, #6366f1, #8b5cf6)',
-                      borderRadius: '6px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'white',
-                      fontSize: '16px',
-                      fontWeight: 'bold'
-                    }}>
-                      +
-                    </div>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px 0 0 0' }}>
+                  <img src={appIcon} alt="logo" style={{ width: 70, borderRadius: '50%' }} />
+                  <div style={{ fontWeight: 500, fontSize: 18, marginTop: 8 }}>UIT CLINIC</div>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 32px 0 32px', fontSize: 16 }}>
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ color: '#374151', fontWeight: 500 }}>Mã</div>
+                    <div style={{ color: '#374151' }}>QTV</div>
                   </div>
-                  <div style={{
-                    fontSize: '14px',
-                    fontWeight: '500'
-                  }}>
-                    UIT CLINIC
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ color: '#374151', fontWeight: 500 }}>Giới tính</div>
+                    <div style={{ color: '#374151' }}>Nam</div>
                   </div>
                 </div>
-              </div>
-
-              {/* Profile Info */}
-              <div style={{
-                padding: '24px',
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center'
-              }}>
-                {/* Tên */}
-                <div style={{
-                  fontSize: '20px',
-                  fontWeight: '600',
-                  color: '#1f2937',
-                  marginBottom: '24px'
-                }}>
-                  Mạnh
+                <div style={{ textAlign: 'center', marginTop: 8, fontSize: 17, color: '#374151', fontWeight: 500 }}>Admin</div>
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: 8 }}>
+                  <span style={{ background: '#fbbf24', color: '#fff', borderRadius: 8, padding: '6px 24px', fontWeight: 500, fontSize: 16 }}>Quản Trị Viên</span>
                 </div>
-
-                {/* Thông tin cơ bản */}
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  width: '100%',
-                  marginBottom: '24px'
-                }}>
-                  <div style={{ textAlign: 'center', flex: 1 }}>
-                    <div style={{
-                      fontSize: '12px',
-                      color: '#6b7280',
-                      marginBottom: '4px'
-                    }}>
-                      Mã
-                    </div>
-                    <div style={{
-                      fontSize: '14px',
-                      color: '#6b7280'
-                    }}>
-                      TPK
-                    </div>
-                  </div>
-                  
-                  <div style={{ textAlign: 'center', flex: 1 }}>
-                    <div style={{
-                      fontSize: '12px',
-                      color: '#6b7280',
-                      marginBottom: '4px'
-                    }}>
-                      Giới tính
-                    </div>
-                    <div style={{
-                      fontSize: '14px',
-                      color: '#6b7280'
-                    }}>
-                      Nam
-                    </div>
-                  </div>
-                </div>
-
-                {/* Badge Trưởng phòng khám */}
-                <div style={{
-                  backgroundColor: '#f59e0b',
-                  color: 'white',
-                  padding: '8px 16px',
-                  borderRadius: '20px',
-                  fontSize: '12px',
-                  fontWeight: '500',
-                  textAlign: 'center'
-                }}>
-                  Trưởng phòng khám
-                </div>
+                <div style={{ height: 12 }}></div>
               </div>
             </div>
 

@@ -1,8 +1,8 @@
 /* Đây là code tôi code */
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import appIcon from '../../assets/appicon.png';
-import './Profile.css';
+import Sidebar from '../../components/Sidebar';
 import { Link } from "react-router-dom";
 
 interface IUser {
@@ -24,61 +24,14 @@ const Profile: React.FC = () => {
   const [showInfo, setShowInfo] = useState(false);
 
   // Gọi API khi component mount
-useEffect(() => {
-  const token = localStorage.getItem('access_token');
-  if (!token) {
-    console.error('Chưa có access token');
-    return;
-  }
-
-  axios.get<IUser>('/api/current-user/', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    }
-  })
-  .then(res => {
-    setUser(res.data);
-  })
-  .catch(err => {
-    console.error('Lấy thông tin user lỗi:', err);
-  });
-}, []);
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f5f6fa' }}>
-      {/* Sidebar (giữ nguyên) */}
-      <aside style={{ width: 250, background: '#43536b', color: '#fff', padding: '24px 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <img src="/appicon.png" alt="Logo" style={{ width: 120, borderRadius: '50%', marginBottom: 16 }} />
-        <nav style={{ width: '100%' }}>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-
-            <li style={{ padding: '12px 32px', display: 'flex', alignItems: 'center', gap: 12 }}><span role="img" aria-label="home">🏠</span> Trang chủ</li>
-            <li style={{ padding: '12px 32px', display: 'flex', alignItems: 'center', gap: 12 }}><span role="img" aria-label="exam">📄</span> Giấy khám bệnh</li>
-            <li style={{ padding: '12px 32px', display: 'flex', alignItems: 'center', gap: 12 }}><span role="img" aria-label="patient">🧑‍⚕️</span> Bệnh nhân</li>
-            <li style={{ padding: '12px 32px', display: 'flex', alignItems: 'center', gap: 12 }}><span role="img" aria-label="prescription">💊</span> Đơn thuốc</li>
-            <li style={{ padding: '12px 32px', display: 'flex', alignItems: 'center', gap: 12 }}><span role="img" aria-label="medicine">🩺</span> Thuốc</li>
-            <li style={{ padding: '12px 32px', display: 'flex', alignItems: 'center', gap: 12 }}><span role="img" aria-label="supply">🔔</span> Vật tư</li>
-            <li style={{ padding: '12px 32px', display: 'flex', alignItems: 'center', gap: 12 }}><span role="img" aria-label="settings">⚙️</span> Cài đặt</li>
-            {/* ... menu */}
-
-          </ul>
-        </nav>
-      </aside>
+  {/* Sidebar mới giống MainPage */}
+  <Sidebar activePage="Thông tin cá nhân" />
 
       {/* Main Content */}
       <main style={{ flex: 1, padding: '32px 0 0 0' }}>
-        <div
-          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 32px', cursor: 'pointer' }}
-          onClick={() => setShowInfo(!showInfo)}
-          title="Nhấn để xem/chỉnh sửa thông tin cá nhân"
-        >
-          <div style={{ fontSize: '1.4rem', fontWeight: 600 }}>Thông tin cá nhân</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <img src="/logo.png" alt="Logo" style={{ width: 40, borderRadius: '50%' }} />
-            <span style={{ fontWeight: 500 }}>{user?.full_name || 'Loading...'}</span>
-            <span style={{ fontSize: 18 }}>▼</span>
-          </div>
-        </div>
 
         {showInfo && user && (
           <div style={{ padding: '0 32px', marginTop: 24 }}>

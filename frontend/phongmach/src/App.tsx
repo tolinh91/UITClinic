@@ -3,7 +3,7 @@ import { VatTuProvider } from './contexts/VatTuContext';
 import { AccountProvider } from './contexts/AccountContext';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
-import Profile from './pages/Profile/Profile';
+import Profile_Fixed from './pages/Profile/Profile_Fixed';
 import SearchPass1 from './pages/Profile/SearchPass1';
 import SearchPass2 from './pages/Profile/SearchPass2';
 import SearchPass3 from './pages/Profile/SearchPass3';
@@ -48,7 +48,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<Profile_Fixed />} />
           <Route path="/profile/searchpass1" element={<SearchPass1 />} />
           <Route path="/profile/searchpass2" element={<SearchPass2 />} />
           <Route path="/profile/searchpass3" element={<SearchPass3 />} />
