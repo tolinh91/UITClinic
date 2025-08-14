@@ -15,7 +15,7 @@ import DetailGKB from './pages/GiayKhamBenh/DetailGKB';
 import EditGKB from './pages/GiayKhamBenh/EditGKB';
 import PrintGKB from './pages/GiayKhamBenh/PrintGKB';
 //import CreateGKB from './pages/GiayKhamBenh/CreateGKB';
-import QLDonThuoc from './pages/DonThuoc/QLDonThuoc';
+import QLDonThuoc from './pages/DonThuoc/QLDonThuoc copy';
 import EditDonThuoc from './pages/DonThuoc/EditDonThuoc';
 import QLVatTu from './pages/VatTu/QLVatTu';
 //import CreateVT from './pages/VatTu/CreateVT';
