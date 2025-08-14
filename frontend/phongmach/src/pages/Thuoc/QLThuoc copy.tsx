@@ -333,20 +333,6 @@ const QLThuoc = () => {
                           <button type="button" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#1ec9a4', fontSize: 20 }} title="Sửa" onClick={() => navigate(`/thuoc/edit/${thuoc.id}`)}>
                             <span role="img" aria-label="edit">✏️</span>
                           </button>
-                           <button
-                                type="button"
-                                style={{
-                                  background: "none",
-                                  border: "none",
-                                  cursor: "pointer",
-                                  color: "#007bff", // màu xanh cho nút xem
-                                  fontSize: 20
-                                }}
-                                title="Xem"
-                                onClick={() => navigate(`/danh-sach-thuoc`)}
-                              >
-                                <span role="img" aria-label="view">👁️</span>
-                              </button>
                           <button type="button" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'red', fontSize: 20 }} title="Xóa" onClick={() => handleDelete(idx)}>
                             <span role="img" aria-label="delete">🗑️</span>
                           </button>

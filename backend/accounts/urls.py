@@ -10,6 +10,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from .views import current_user
 from .views import ChangePasswordAPIView
 from rest_framework import generics
+from .views import api_add_drug_supply
 from .views import PrescriptionDetailView, using_prescription_list
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -64,8 +65,9 @@ urlpatterns = [
     path('appointments/', views.appointment_list, name='appointment_list'),
     path('giay-kham-benh/<int:pk>/', views.giay_kham_benh_detail, name='giay_kham_benh_detail'),
     path('prescriptions/', using_prescription_list, name='using_prescription'),
-    path('using_prescription/<int:pk>/', PrescriptionDetailView.as_view(), name='prescription-detail')
-
+    path('using_prescription/<int:pk>/', PrescriptionDetailView.as_view(), name='prescription-detail'),
+    path('drugs/', api_add_drug_supply, name='api_add_drug_supply'),
+    path('drug-supplies/', views.api_list_drug_supply, name='api_list_drug_supply'),
 ]
 
 

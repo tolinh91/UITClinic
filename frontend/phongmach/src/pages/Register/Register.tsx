@@ -152,8 +152,12 @@ function Register() {
               <InputField label="CCCD" name="id_number" value={form.id_number} onChange={handleChange} required />
               <div style={{ marginBottom: 12 }}>
                 <label>Giới tính <span style={{ color: "red" }}>*</span></label><br />
-                <label><input type="radio" name="gender" value="Nam" checked={form.gender === "Nam"} onChange={handleChange} /> Nam</label>
-                <label style={{ marginLeft: 16 }}><input type="radio" name="gender" value="Nữ" checked={form.gender === "Nữ"} onChange={handleChange} /> Nữ</label>
+                <label style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <input type="radio" name="gender" value="Nam" checked={form.gender === "Nam"} onChange={handleChange} />
+                    Nam</label>
+                <label style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginLeft: 16 }}>
+                <input type="radio" name="gender" value="Nữ" checked={form.gender === "Nữ"} onChange={handleChange} />
+                    Nữ</label>
               </div>
               <InputField label="Ngày sinh" name="birth_date" type="date" value={form.birth_date ? convertDateToISO(form.birth_date) : ""} onChange={handleChange} />
               <InputField label="Số điện thoại" name="phone_number" value={form.phone_number} onChange={handleChange} required />

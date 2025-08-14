@@ -37,7 +37,8 @@ import QLXuatNhap from './pages/QLKho/QLXuatNhap';
 import AddPhieu from './pages/QLKho/AddPhieu';
 import CaiDatTaiKhoan from './pages/CaiDat/CaiDatTaiKhoan';
 import CaiDatVaiTro from './pages/CaiDat/CaiDatVaiTro';
-
+import AddDrugForm from './pages/Thuoc/CreateThuoc';
+import DanhSachThuoc from "./pages/Thuoc/DanhSachThuoc";
 function App() {
   return (
     <Router>
@@ -72,6 +73,8 @@ function App() {
         <Route path="/thuoc/edit/:code" element={<EditDonThuoc />} />
         <Route path="/qlkho/addphieu" element={<AddPhieu />} />
         <Route path="/qlgkb/edit" element={<EditGKB />} />
+        <Route path="/QLThuoc/themthuoc" element={<AddDrugForm/>} />
+         <Route path="danh-sach-thuoc" element={<DanhSachThuoc />} />
       </Routes>
     </Router>
   )

@@ -3,6 +3,7 @@ from .models import GiayKhamBenh
 from .models import using_Prescription
 from .models import PrescriptionMedicine
 from rest_framework import generics
+from .models import DrugSupply
 
 class GiayKhamBenhSerializer(serializers.ModelSerializer):
     class Meta:
@@ -37,3 +38,8 @@ class PrescriptionSerializer(serializers.ModelSerializer):
 class PrescriptionDetailView(generics.RetrieveAPIView):
     queryset = using_Prescription.objects.all()
     serializer_class = PrescriptionSerializer
+
+class DrugSupplySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DrugSupply
+        fields = '__all__'

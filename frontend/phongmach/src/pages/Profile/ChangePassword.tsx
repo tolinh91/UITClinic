@@ -8,7 +8,7 @@ const ChangePassword: React.FC = () => {
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const token = localStorage.getItem('access_token');
+  //const token = localStorage.getItem('access_token');
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -29,6 +29,7 @@ const ChangePassword: React.FC = () => {
     setLoading(true);
 
     try {
+      const token = localStorage.getItem('access_token');
       if (!token) {
           setError('Bạn chưa đăng nhập. Vui lòng đăng nhập trước.');
           setLoading(false);

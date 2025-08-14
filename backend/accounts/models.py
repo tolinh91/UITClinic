@@ -259,7 +259,20 @@ class PrescriptionMedicine(models.Model):
     medicine = models.CharField(max_length=255)
     quantity = models.CharField(max_length=100)
     usage = models.CharField(max_length=255)
-    
+# Thêm thuốc mới
+class DrugSupply(models.Model):
+    code = models.CharField(max_length=20)  # Mã thuốc
+    name = models.CharField(max_length=100)  # Tên thuốc
+    quantity = models.PositiveIntegerField()  # Số lượng
+    unit = models.CharField(max_length=20)  # Đơn vị
+    expiration_date = models.DateField()  # Hạn sử dụng
+    description = models.TextField(blank=True)  # Mô tả
+    supplier = models.CharField(max_length=255, blank=True)  # Nhà cung cấp
+    threshold = models.IntegerField(default=10)  # Ngưỡng tồn kho tối thiểu
+    unit_price = models.IntegerField()  # Giá
+
+    def __str__(self):
+        return f"{self.code} {self.name} ({self.quantity} {self.unit})"
 class Invoice(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     consultation_fee = models.DecimalField(default=100000, max_digits=10, decimal_places=0)

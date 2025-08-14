@@ -310,7 +310,7 @@ def medical_supply_list(request): #Hiển thị danh sách vật tư y tế
     supplies = MedicalSupply.objects.all()
     return render(request, 'supplies/supply_list.html', {'supplies': supplies})
 @login_required
-def edit_medical_supply(request, supply_id): #Sữa vật tư.
+def edit_medical_supply(request, supply_id): #Sửa vật tư.
     supply = get_object_or_404(MedicalSupply, id=supply_id)
     if request.method == 'POST':
         form = MedicalSupplyForm(request.POST, instance=supply)
@@ -652,8 +652,77 @@ from .serializers import PrescriptionSerializer
 class PrescriptionDetailView(generics.RetrieveAPIView):
     queryset = using_Prescription.objects.all()
     serializer_class = PrescriptionSerializer
+# Thêm thuốc
+from .models import DrugSupply
+from .serializers import DrugSupplySerializer
+#Hàm thêm thuốc mới
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def api_add_drug_supply(request):
+    serializer = DrugSupplySerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+from .models import DrugSupply
+from .serializers import DrugSupplySerializer
+from django.shortcuts import get_object_or_404
 
+# Xem thông tin thuốc theo ID
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def api_get_drug_supply(request, pk):
+    drug = get_object_or_404(DrugSupply, pk=pk)
+    serializer = DrugSupplySerializer(drug)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
+# Chỉnh sửa thông tin thuốc theo ID
+@api_view(['PUT', 'PATCH'])
+@permission_classes([IsAuthenticated])
+def api_update_drug_supply(request, pk):
+    drug = get_object_or_404(DrugSupply, pk=pk)
+    serializer = DrugSupplySerializer(drug, data=request.data, partial=True)  
+    # partial=True cho phép update 1 phần dữ liệu
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Xóa thuốc theo ID
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def api_delete_drug_supply(request, pk):
+    drug = get_object_or_404(DrugSupply, pk=pk)
+    drug.delete()
+    return Response({"message": "Đã xóa thuốc thành công"}, status=status.HTTP_200_OK)
+from django.utils import timezone
+from datetime import timedelta
+from django.db import models
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def api_drug_warnings(request):
+    today = timezone.now().date()
+    six_months_later = today + timedelta(days=6*30)  # 6 tháng
+
+    # Thuốc tồn kho thấp
+    low_stock = DrugSupply.objects.filter(quantity__lte=models.F('threshold'))
+    low_stock_data = DrugSupplySerializer(low_stock, many=True).data
+
+    # Thuốc hết hạn hoặc sắp hết hạn
+    expiring = DrugSupply.objects.filter(expiration_date__lte=six_months_later)
+    expiring_data = DrugSupplySerializer(expiring, many=True).data
+
+    return Response({
+        "low_stock": low_stock_data,
+        "expiring": expiring_data
+    }, status=status.HTTP_200_OK)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def api_list_drug_supply(request):
+    drugs = DrugSupply.objects.all().order_by('name')  # Sắp xếp theo tên thuốc
+    serializer = DrugSupplySerializer(drugs, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 GIÁ_ECG = 200000
 GIÁ_SIÊU_ÂM = 300000
 TEST_TYPE_PRICE = {
