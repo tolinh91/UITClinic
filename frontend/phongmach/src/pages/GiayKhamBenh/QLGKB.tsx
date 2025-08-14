@@ -38,23 +38,52 @@ function QLGKB() {
   useEffect(() => {
     axios.get<Patient[]>("http://127.0.0.1:8000/api/patient_list/")
       .then(res => {
-        if (Array.isArray(res.data)) {
+        if (Array.isArray(res.data) && res.data.length > 0) {
           // Map từ bệnh nhân sang giấy khám bệnh
           const mapped: GKB[] = res.data.map((p, index) => ({
             id: p.id,
             code: `BN-${String(p.id).padStart(5, '0')}`,
             patient: p.full_name,
-            title: "Khám tổng quát", // tạm thời đặt cố định hoặc backend trả về
+            title: "Khám tổng quát",
             room: "Phòng 101",
             doctor: "BS. Nguyễn Văn A",
             date: new Date(p.created_at).toISOString().split('T')[0],
             status: "Chưa khám"
           }));
           setData(mapped);
+        } else {
+          // Nếu không có dữ liệu từ API, dùng dữ liệu mẫu
+          const sample: GKB[] = [
+            { id: 1, code: 'BN-00001', patient: 'Nguyễn Văn A', title: 'Khám tổng quát', room: 'Phòng 101', doctor: 'BS. Minh', date: '2025-08-01', status: 'Chưa khám' },
+            { id: 2, code: 'BN-00002', patient: 'Trần Thị B', title: 'Khám tổng quát', room: 'Phòng 102', doctor: 'BS. Linh', date: '2025-08-02', status: 'Đã khám' },
+            { id: 3, code: 'BN-00003', patient: 'Lê Văn C', title: 'Khám tổng quát', room: 'Phòng 103', doctor: 'BS. Hùng', date: '2025-08-03', status: 'Chưa khám' },
+            { id: 4, code: 'BN-00004', patient: 'Phạm Thị D', title: 'Khám tổng quát', room: 'Phòng 104', doctor: 'BS. Lan', date: '2025-08-04', status: 'Đã khám' },
+            { id: 5, code: 'BN-00005', patient: 'Hoàng Văn E', title: 'Khám tổng quát', room: 'Phòng 105', doctor: 'BS. Sơn', date: '2025-08-05', status: 'Chưa khám' },
+            { id: 6, code: 'BN-00006', patient: 'Đỗ Thị F', title: 'Khám tổng quát', room: 'Phòng 106', doctor: 'BS. Mai', date: '2025-08-06', status: 'Đã khám' },
+            { id: 7, code: 'BN-00007', patient: 'Vũ Văn G', title: 'Khám tổng quát', room: 'Phòng 107', doctor: 'BS. Hạnh', date: '2025-08-07', status: 'Chưa khám' },
+            { id: 8, code: 'BN-00008', patient: 'Ngô Thị H', title: 'Khám tổng quát', room: 'Phòng 108', doctor: 'BS. Quang', date: '2025-08-08', status: 'Đã khám' },
+            { id: 9, code: 'BN-00009', patient: 'Bùi Văn I', title: 'Khám tổng quát', room: 'Phòng 109', doctor: 'BS. Dũng', date: '2025-08-09', status: 'Chưa khám' },
+            { id: 10, code: 'BN-00010', patient: 'Phan Thị K', title: 'Khám tổng quát', room: 'Phòng 110', doctor: 'BS. Trang', date: '2025-08-10', status: 'Đã khám' },
+          ];
+          setData(sample);
         }
       })
       .catch(err => {
         console.error("Lỗi khi lấy danh sách bệnh nhân:", err);
+        // Nếu lỗi, cũng dùng dữ liệu mẫu
+        const sample: GKB[] = [
+          { id: 1, code: 'BN-00001', patient: 'Nguyễn Văn A', title: 'Khám tổng quát', room: 'Phòng 101', doctor: 'BS. Minh', date: '2025-08-01', status: 'Chưa khám' },
+          { id: 2, code: 'BN-00002', patient: 'Trần Thị B', title: 'Khám tổng quát', room: 'Phòng 102', doctor: 'BS. Linh', date: '2025-08-02', status: 'Đã khám' },
+          { id: 3, code: 'BN-00003', patient: 'Lê Văn C', title: 'Khám tổng quát', room: 'Phòng 103', doctor: 'BS. Hùng', date: '2025-08-03', status: 'Chưa khám' },
+          { id: 4, code: 'BN-00004', patient: 'Phạm Thị D', title: 'Khám tổng quát', room: 'Phòng 104', doctor: 'BS. Lan', date: '2025-08-04', status: 'Đã khám' },
+          { id: 5, code: 'BN-00005', patient: 'Hoàng Văn E', title: 'Khám tổng quát', room: 'Phòng 105', doctor: 'BS. Sơn', date: '2025-08-05', status: 'Chưa khám' },
+          { id: 6, code: 'BN-00006', patient: 'Đỗ Thị F', title: 'Khám tổng quát', room: 'Phòng 106', doctor: 'BS. Mai', date: '2025-08-06', status: 'Đã khám' },
+          { id: 7, code: 'BN-00007', patient: 'Vũ Văn G', title: 'Khám tổng quát', room: 'Phòng 107', doctor: 'BS. Hạnh', date: '2025-08-07', status: 'Chưa khám' },
+          { id: 8, code: 'BN-00008', patient: 'Ngô Thị H', title: 'Khám tổng quát', room: 'Phòng 108', doctor: 'BS. Quang', date: '2025-08-08', status: 'Đã khám' },
+          { id: 9, code: 'BN-00009', patient: 'Bùi Văn I', title: 'Khám tổng quát', room: 'Phòng 109', doctor: 'BS. Dũng', date: '2025-08-09', status: 'Chưa khám' },
+          { id: 10, code: 'BN-00010', patient: 'Phan Thị K', title: 'Khám tổng quát', room: 'Phòng 110', doctor: 'BS. Trang', date: '2025-08-10', status: 'Đã khám' },
+        ];
+        setData(sample);
       });
   }, []);
 
@@ -114,7 +143,6 @@ function QLGKB() {
             </div>
           </div>
 
-          <div style={{ fontSize: 18, color: '#888', marginBottom: 8, marginTop: 8 }}>Quản lý / Danh sách giấy khám bệnh</div>
           <h2 style={{ color: "#2d4a7a", fontWeight: 600, marginBottom: 18 }}>Danh sách giấy khám bệnh</h2>
 
           <div style={{ background: '#fff', borderRadius: 16, padding: 24, marginBottom: 24 }}>
