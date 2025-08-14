@@ -5,7 +5,7 @@ import appIcon from '../assets/appicon.png';
 const sidebarItems = [
   { label: "Trang chủ", icon: "🏠", route: "/main" },
   { label: "Giấy khám bệnh", icon: "📄", route: "/qlgkb" },
-  { label: "Bệnh nhân", icon: "👤", route: "/qlbenhnhan" },
+  { label: "Bệnh nhân", icon: "👤", route: "/danh-sach-benh-nhan" },
   { label: "Đơn thuốc", icon: "📝", route: "/qldonthuoc" },
   { label: "Thuốc", icon: "💊", route: "/thuoc" },
   { label: "Vật tư", icon: "🔧", route: "/qlvattu" },

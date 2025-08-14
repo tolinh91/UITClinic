@@ -413,6 +413,7 @@ def create_patient(request):
         except Exception as e:
             return JsonResponse({"success": False, "errors": str(e)}, status=400)
     return JsonResponse({"error": "Method not allowed"}, status=405)
+
 def patient_list(request):
     patients = Patient.objects.all().order_by('-created_at')
     data = []
@@ -438,6 +439,8 @@ def patient_list(request):
             "created_at": p.created_at.strftime("%Y-%m-%d %H:%M:%S"),
         })
     return JsonResponse(data, safe=False)
+
+
 def search_patient(request):
     form = PatientSearchForm(request.GET or None)
     results = None

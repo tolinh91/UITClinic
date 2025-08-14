@@ -106,11 +106,11 @@ function CreateBN() {
     localStorage.setItem('newPatientAdded', 'true');
 
     // Navigate back to patient list
-    navigate('/qlbenhnhan');
+    navigate('/danh-sach-benh-nhan');
   };
 
   const handleCancel = () => {
-    navigate('/qlbenhnhan');
+    navigate('/danh-sach-benh-nhann');
   };
 
   const handleMenuSelect = (option: string) => {

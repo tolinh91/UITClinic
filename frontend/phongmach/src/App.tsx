@@ -28,11 +28,10 @@ import Hotro from './pages/HoTro/Hotro';
 //import TaiKhoan from './pages/TaiKhoan/TaiKhoan';
 //import ThemTaiKhoan from './pages/TaiKhoan/ThemTaiKhoan';
 //import QLVaiTro from './pages/VaiTro/QLVaiTro';
-import QLBenhNhan from './pages/BenhNhan/QLBenhNhan';
+import DanhSachBenhNhan from './pages/BenhNhan/DanhSachBenhNhan';
 import TaoBenhNhan from './pages/BenhNhan/TaoBenhNhan';
 import XoaBenhNhan from './pages/BenhNhan/XoaBenhNhan';
 import EditBenhNhan from './pages/BenhNhan/EditBenhNhan';
-import DanhSachBenhNhan from "./pages/BenhNhan/DanhSachBenhNhan";
 import QLXuatNhap from './pages/QLKho/QLXuatNhap';
 import AddPhieu from './pages/QLKho/AddPhieu';
 import CaiDatTaiKhoan from './pages/CaiDat/CaiDatTaiKhoan';
@@ -61,7 +60,6 @@ function App() {
         <Route path="/danh-sach-benh-nhan" element={<DanhSachBenhNhan/>} />
         <Route path="/xoa-benh-nhan/:id" element={<XoaBenhNhan/>} />
         <Route path="/danh-sach-benh-nhan/edit/:id" element={<EditBenhNhan />} />
-        <Route path="/qlbenhnhan" element={<QLBenhNhan />} />
         <Route path="/qldonthuoc" element={<QLDonThuoc />} />
         <Route path="/qlvattu" element={<QLVatTu />} />
         <Route path="/caidat" element={<CaiDat />} />

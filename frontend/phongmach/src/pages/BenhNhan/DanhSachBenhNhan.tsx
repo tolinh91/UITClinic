@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from '../../components/Sidebar';
+import appIcon from '../../assets/appicon.png';
 import { Link } from "react-router-dom";
 import axios from "axios";
 import './DanhSachBenhNhan.css';
@@ -191,80 +192,123 @@ const DanhSachBenhNhan: React.FC = () => {
     else if (option === "Thoát") navigate("/login");
   };
 
-  return (
-    <div className="page-background">
-      <h2>Danh sách bệnh nhân</h2>
-      <div className="table-container">
-      <table border={1} cellPadding={5} className={styles.table}>
-        <thead>
-          <tr>
-            <th>Mã</th>
-            <th>Họ tên</th>
-            <th>CCCD</th>
-            <th>Điện thoại</th>
-            <th>Ngày tạo</th>
-            <th>Chi tiết</th>
-            <th>Chỉnh sửa</th>
-            <th>Xóa</th>
-          </tr>
-        </thead>
-        <tbody>
-          {patients.map((p) => (
-            <tr key={p.id}>
-              <td>{p.code}</td>
-              <td>{p.full_name}</td>
-              <td>{p.id_number}</td>
-              <td>{p.phone}</td>
-              <td>{new Date(p.created_at).toLocaleDateString()}</td>
-              <td>
-                <button className={styles.detailButton} onClick={() => setSelectedPatient(p)}>Xem</button>
-              </td>
-              <td>
-                <button>
-                   <Link to={`/danh-sach-benh-nhan/edit/${p.id}`} className={styles.editButton}>
-                      Chỉnh sửa
-                    </Link>
-                  </button>
-                </td>
-                <td>
-                  <button
-                      className={styles.deleteButton}
-                      onClick={() => handleDeleteClick(p)}
-                    >
-                      🗑️ Xóa
-                    </button>
-                </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      </div>
-      {selectedPatient && (
-          <div className="patient-detail">
-          <h3>Thông tin bệnh nhân: {selectedPatient.full_name}</h3>
-          <ul>
-            <li>Mã: {selectedPatient.code}</li>
-            <li>CMND/CCCD: {selectedPatient.id_number}</li>
-            <li>Bảo hiểm: {selectedPatient.has_insurance ? "Có" : "Không"}</li>
-            <li>Địa chỉ: {selectedPatient.address}</li>
-            <li>Điện thoại: {selectedPatient.phone}</li>
-            <li>Dị ứng: {selectedPatient.allergy}</li>
-            <li>Tiền sử bệnh: {selectedPatient.medical_history}</li>
-            <li>Thuốc đang dùng: {selectedPatient.current_medications}</li>
-            <li>Triệu chứng: {selectedPatient.symptoms}</li>
-            <li>
-              Huyết áp: {selectedPatient.blood_pressure_systolic}/{selectedPatient.blood_pressure_diastolic} mmHg
-            </li>
-            <li>Mạch: {selectedPatient.pulse} bpm</li>
-            <li>SpO₂: {selectedPatient.spo2} %</li>
-            <li>Nhiệt độ: {selectedPatient.temperature} °C</li>
-            <li>Kết quả xét nghiệm cũ: {selectedPatient.old_test_results}</li>
-            <li>Ngày tạo: {new Date(selectedPatient.created_at).toLocaleString()}</li>
-          </ul>
-          <button onClick={() => setSelectedPatient(null)}>Đóng</button>
+    return (
+      <div style={{ minHeight: '100vh', width: '100vw', display: 'flex', background: '#f4f4f4' }}>
+        {/* Sidebar giống MainPage */}
+        <Sidebar activePage="Bệnh nhân" />
+        {/* Main content */}
+        <div style={{ flex: 1, padding: '32px 16px 0 16px', minWidth: 0, display: 'flex', flexDirection: 'column', margin: '16px', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)', background: '#fff' }}>
+          <div style={{ background: '#fff', borderRadius: 16, margin: '0 0 24px 0', padding: '24px', boxShadow: '0 2px 8px #0001', maxWidth: '1200px', width: '100%', alignSelf: 'center', minWidth: 280 }}>
+            {/* Submenu góc trên bên phải giống MainPage */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 16, flexWrap: 'wrap', marginBottom: 8 }}>
+              <img src={appIcon} alt="logo" style={{ width: 40, borderRadius: '50%' }} />
+              <span style={{ fontWeight: 500, fontSize: 18, color: '#2d4a7a' }}>Admin</span>
+              <div style={{ position: 'relative' }}>
+                <button
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }}
+                  onClick={() => setMenuOpen && setMenuOpen((prev: boolean) => !prev)}
+                >
+                  ▼
+                </button>
+                {typeof menuOpen !== 'undefined' && menuOpen && (
+                  <div style={{ position: 'absolute', right: 0, top: 32, background: '#fff', boxShadow: '0 2px 8px #0002', borderRadius: 8, minWidth: 220, zIndex: 10 }}>
+                    <div onClick={() => handleMenuSelect('Thông tin cá nhân')}
+                      style={{ padding: '12px 28px', cursor: 'pointer', borderBottom: '1px solid #eee', display: 'flex', alignItems: 'center', gap: 12, whiteSpace: 'nowrap' }}>
+                      <span>👤</span> Thông tin cá nhân
+                    </div>
+                    <div onClick={() => handleMenuSelect('Đổi mật khẩu')}
+                      style={{ padding: '12px 28px', cursor: 'pointer', borderBottom: '1px solid #eee', display: 'flex', alignItems: 'center', gap: 12, whiteSpace: 'nowrap' }}>
+                      <span>🔑</span> Đổi mật khẩu
+                    </div>
+                    <div onClick={() => handleMenuSelect('Thoát')}
+                      style={{ padding: '12px 28px', cursor: 'pointer', color: 'red', display: 'flex', alignItems: 'center', gap: 12, whiteSpace: 'nowrap' }}>
+                      <span>⏻</span> Thoát
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
+              <div style={{ fontSize: '2rem', fontWeight: 600 }}>Danh sách bệnh nhân</div>
+              <button type="button" style={{ background: '#1ec9a4', color: '#fff', border: 'none', borderRadius: 8, padding: '10px 24px', fontWeight: 500, fontSize: 16, cursor: 'pointer', minWidth: 140 }} onClick={() => navigate('/tao-benh-nhan')}>+ Thêm bệnh nhân</button>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
+              <div style={{ position: 'relative', minWidth: 120, maxWidth: 320, width: '100%' }}>
+                <span style={{ position: 'absolute', left: 12, top: 10, fontSize: 18, color: '#888' }}>🔍</span>
+                <input
+                  type="text"
+                  placeholder="Nhập tên bệnh nhân"
+                  style={{ flex: 1, padding: '10px 14px 10px 30px', borderRadius: 8, border: '1px solid #ccc', fontSize: 16, minWidth: 120, maxWidth: 400, width: '100%' }}
+                  // value={search}
+                  // onChange={e => setSearch(e.target.value)}
+                />
+              </div>
+              <button type="button" style={{ background: '#1ec9a4', color: '#fff', border: 'none', borderRadius: 8, padding: '10px 24px', fontWeight: 500, fontSize: 16, cursor: 'pointer', minWidth: 100 }}>
+                Tìm kiếm
+              </button>
+            </div>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '1rem', wordBreak: 'break-word', overflowX: 'auto' }}>
+                <thead>
+                  <tr style={{ background: '#f4f4f4' }}>
+                    <th style={{ padding: '12px 8px', fontWeight: 600 }}>STT</th>
+                    <th style={{ padding: '12px 8px', fontWeight: 600 }}>Mã</th>
+                    <th style={{ padding: '12px 8px', fontWeight: 600 }}>Tên bệnh nhân</th>
+                    {/* Xóa cột Ảnh đại diện */}
+                    <th style={{ padding: '12px 8px', fontWeight: 600 }}>Số điện thoại</th>
+                    <th style={{ padding: '12px 8px', fontWeight: 600 }}>CCCD</th>
+                    <th style={{ padding: '12px 8px', fontWeight: 600 }}>Địa chỉ</th>
+                    <th style={{ padding: '12px 8px', fontWeight: 600 }}>Hành động</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {patients.map((p, idx) => (
+                    <tr key={p.id} style={{ background: '#fff', borderBottom: '1px solid #eee' }}>
+                      <td style={{ padding: '10px 8px', textAlign: 'center' }}>{idx + 1}</td>
+                      <td style={{ padding: '10px 8px', textAlign: 'center' }}>{p.code}</td>
+                      <td style={{ padding: '10px 8px' }}>{p.full_name}</td>
+                      {/* Xóa cột Ảnh đại diện */}
+                      <td style={{ padding: '10px 8px', textAlign: 'center' }}>{p.phone}</td>
+                      <td style={{ padding: '10px 8px', textAlign: 'center' }}>{p.id_number || ''}</td>
+                      <td style={{ padding: '10px 8px' }}>{p.address}</td>
+                      <td style={{ padding: '10px 8px', textAlign: 'center' }}>
+                        <Link to={`/danh-sach-benh-nhan/edit/${p.id}`} style={{ color: '#1ec9a4', fontSize: 18, marginRight: 8 }} title="Chỉnh sửa"><span>✏️</span></Link>
+                        <span style={{ color: '#e53935', fontSize: 18, marginRight: 8, cursor: 'pointer' }} title="Xóa" onClick={() => handleDeleteClick(p)}>🗑️</span>
+                        <Link to={`/danh-sach-benh-nhan/detail/${p.id}`} style={{ color: '#1ec9a4', fontSize: 18 }} title="Chi tiết"><span>�</span></Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          {selectedPatient && (
+            <div className="patient-detail">
+              <h3>Thông tin bệnh nhân: {selectedPatient.full_name}</h3>
+              <ul>
+                <li>Mã: {selectedPatient.code}</li>
+                <li>CMND/CCCD: {selectedPatient.id_number}</li>
+                <li>Bảo hiểm: {selectedPatient.has_insurance ? "Có" : "Không"}</li>
+                <li>Địa chỉ: {selectedPatient.address}</li>
+                <li>Điện thoại: {selectedPatient.phone}</li>
+                <li>Dị ứng: {selectedPatient.allergy}</li>
+                <li>Tiền sử bệnh: {selectedPatient.medical_history}</li>
+                <li>Thuốc đang dùng: {selectedPatient.current_medications}</li>
+                <li>Triệu chứng: {selectedPatient.symptoms}</li>
+                <li>
+                  Huyết áp: {selectedPatient.blood_pressure_systolic}/{selectedPatient.blood_pressure_diastolic} mmHg
+                </li>
+                <li>Mạch: {selectedPatient.pulse} bpm</li>
+                <li>SpO₂: {selectedPatient.spo2} %</li>
+                <li>Nhiệt độ: {selectedPatient.temperature} °C</li>
+                <li>Kết quả xét nghiệm cũ: {selectedPatient.old_test_results}</li>
+                <li>Ngày tạo: {new Date(selectedPatient.created_at).toLocaleString()}</li>
+              </ul>
+              <button onClick={() => setSelectedPatient(null)}>Đóng</button>
+            </div>
+          )}
         </div>
-      )}
-    </div>
+      </div>
   );
 };
 export default DanhSachBenhNhan;
