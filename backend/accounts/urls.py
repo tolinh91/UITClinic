@@ -68,6 +68,8 @@ urlpatterns = [
     path('using_prescription/<int:pk>/', PrescriptionDetailView.as_view(), name='prescription-detail'),
     path('drugs/', api_add_drug_supply, name='api_add_drug_supply'),
     path('drug-supplies/', views.api_list_drug_supply, name='api_list_drug_supply'),
+    path('drugs/<int:pk>/delete/', views.api_delete_drug_supply, name='api_delete_drug_supply'),
+    path('drugs/<str:code>/', views.api_get_drug_supply, name='api_get_drug_supply'),
 ]
 
 

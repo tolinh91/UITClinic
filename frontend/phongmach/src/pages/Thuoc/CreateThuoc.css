@@ -1,0 +1,125 @@
+/* Toàn bộ màn hình bao quanh form */
+.form-wrapper {
+  min-height: 100vh; /* chiếm toàn bộ chiều cao */
+  display: flex;
+  justify-content: center; /* căn giữa ngang */
+  align-items: center;     /* căn giữa dọc */
+  background-image: url('/path/to/your/image.jpg'); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: 'relative';
+  padding: 20px; /* khoảng cách viền khi màn hình nhỏ */
+}
+.form-container {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 25px 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+  text-align: center; /* Căn giữa nội dung */
+}
+
+/* Label */
+.form-container label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+/* Input & Button */
+.form-container input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.form-container button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.form-container button:hover {
+  background-color: #45a049;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .form-container {
+    padding: 20px;
+  }
+  .form-container input, 
+  .form-container button {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+.responsive-form {
+  background: rgba(255, 255, 255, 0.95); /* nền trắng mờ để nhìn nền phía sau */
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 500px; /* form tối đa 500px */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Nhãn */
+.responsive-form label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* Input và select */
+.responsive-form input,
+.responsive-form select,
+.responsive-form textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Nút bấm */
+.responsive-form button {
+  background-color: #007bff;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.responsive-form button:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive mobile */
+@media (max-width: 480px) {
+  .responsive-form {
+    padding: 20px;
+    gap: 10px;
+  }
+
+  .responsive-form button {
+    font-size: 14px;
+    padding: 10px;
+  }
+}

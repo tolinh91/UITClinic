@@ -1,7 +1,152 @@
+/* Container chính */
 .page-background {
   background-image: url('./src/assets/patient-caring.jpg'); /* đường dẫn ảnh */
-  background-size: cover;
-  background-position: center;
-  min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
+  box-sizing: border-box;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Tiêu đề */
+.page-background h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Table */
+.table-container {
+  overflow-x: auto; /* cho phép cuộn ngang khi màn hình nhỏ */
+}
+
+.table {
+  width: 100%;
+  min-width: 600px; /* đảm bảo table không quá hẹp */
+  border-collapse: collapse;
+  margin: 0 auto 20px auto;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.table th, .table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.table tr:hover {
+  background-color: #e0f0ff;
+}
+
+/* Nút */
+button {
+  cursor: pointer;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.detailButton {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.editButton {
+  background-color: #ffc107;
+  color: #333;
+  text-decoration: none; 
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 5px;
+}
+
+.deleteButton {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Phần chi tiết bệnh nhân */
+.patient-detail {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.patient-detail h3 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.patient-detail ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.patient-detail ul li {
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.patient-detail button {
+  display: block;
+  margin: 15px auto 0 auto;
+  background-color: #6c757d;
+  color: white;
+}
+
+/* Responsive cho màn hình nhỏ */
+@media screen and (max-width: 768px) {
+  .table th, .table td {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  .detailButton, .editButton, .deleteButton {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+
+  .patient-detail {
+    padding: 15px;
+  }
+
+  .patient-detail ul li {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .page-background {
+    padding: 10px;
+  }
+
+  .table {
+    min-width: 100%;
+    font-size: 12px;
+  }
+
+  .patient-detail {
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  .patient-detail ul li {
+    font-size: 13px;
+  }
 }

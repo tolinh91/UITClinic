@@ -669,12 +669,19 @@ from .serializers import DrugSupplySerializer
 from django.shortcuts import get_object_or_404
 
 # Xem thông tin thuốc theo ID
-@api_view(['GET'])
+'''@api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def api_get_drug_supply(request, pk):
     drug = get_object_or_404(DrugSupply, pk=pk)
     serializer = DrugSupplySerializer(drug)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.data, status=status.HTTP_200_OK)'''
+# Xem thông tin thuốc theo code
+@api_view(['GET', 'PUT'])
+@permission_classes([IsAuthenticated])
+def api_get_drug_supply(request, code):
+    drug = get_object_or_404(DrugSupply, code=code)
+    serializer = DrugSupplySerializer(drug)
+    return Response(serializer.data)
 
 # Chỉnh sửa thông tin thuốc theo ID
 @api_view(['PUT', 'PATCH'])
@@ -695,6 +702,7 @@ def api_delete_drug_supply(request, pk):
     drug = get_object_or_404(DrugSupply, pk=pk)
     drug.delete()
     return Response({"message": "Đã xóa thuốc thành công"}, status=status.HTTP_200_OK)
+
 from django.utils import timezone
 from datetime import timedelta
 from django.db import models

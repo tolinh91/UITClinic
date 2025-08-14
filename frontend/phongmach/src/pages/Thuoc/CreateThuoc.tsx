@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import donthuocBg from "../../assets/donthuoc.jpg";
+import './CreateThuoc.css';
 interface DrugFormData {
   code: string;
   name: string;
@@ -89,8 +90,9 @@ const AddDrugForm: React.FC = () => {
 };
 
   return (
-     <div
+     <div  className="form-wrapper"
       style={{
+        position: 'relative', // Giúp định vị các phần tử con
         minHeight: '100vh',
         backgroundImage: `url(${donthuocBg})`,
         backgroundSize: 'cover',
@@ -100,7 +102,7 @@ const AddDrugForm: React.FC = () => {
         justifyContent: 'center',
         padding: '20px'
       }} >
-    <form onSubmit={handleSubmit} style={{ maxWidth: 400, margin: 'auto' }}>
+    <form onSubmit={handleSubmit} className="form-container">
   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
     
     <div>

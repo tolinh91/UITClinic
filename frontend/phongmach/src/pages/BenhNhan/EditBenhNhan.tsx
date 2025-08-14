@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import './ChinhSuaBenhNhan.css';
 const EditBenhNhan = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -64,6 +64,7 @@ const EditBenhNhan = () => {
   if (loading) return <p>Đang tải dữ liệu bệnh nhân...</p>;
 
   return (
+    <div className="form-container">
     <div className="form-group" >
       <h2>Chỉnh sửa thông tin bệnh nhân</h2>
       <form onSubmit={handleSubmit}>
@@ -131,6 +132,7 @@ const EditBenhNhan = () => {
         </div>
       </form>
     </div>
+  </div>
   );
 };
 

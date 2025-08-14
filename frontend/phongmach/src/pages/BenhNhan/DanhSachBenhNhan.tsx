@@ -194,6 +194,7 @@ const DanhSachBenhNhan: React.FC = () => {
   return (
     <div className="page-background">
       <h2>Danh sách bệnh nhân</h2>
+      <div className="table-container">
       <table border={1} cellPadding={5} className={styles.table}>
         <thead>
           <tr>
@@ -237,9 +238,9 @@ const DanhSachBenhNhan: React.FC = () => {
           ))}
         </tbody>
       </table>
-
+      </div>
       {selectedPatient && (
-        <div style={{ marginTop: "20px", border: "1px solid #ccc", padding: "10px" }}>
+          <div className="patient-detail">
           <h3>Thông tin bệnh nhân: {selectedPatient.full_name}</h3>
           <ul>
             <li>Mã: {selectedPatient.code}</li>

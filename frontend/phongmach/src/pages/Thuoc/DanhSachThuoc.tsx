@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import donthuocBg from "../../assets/donthuoc.jpg"
-
+import "./DanhSachThuoc.css";
 interface Drug {
   id: number;
   code: string;
@@ -67,12 +67,12 @@ const DanhSachThuoc: React.FC = () => {
         padding: "20px",
       }}
     >
-      <div style={{ background: "rgba(255,255,255,0.9)", padding: "20px", borderRadius: "10px" }}>
+      <div className = "drug-list-content">
         <h2>📋 Danh sách thuốc</h2>
         {loading && <p>⏳ Đang tải...</p>}
         {error && <p style={{ color: "red" }}>{error}</p>}
         {!loading && !error && (
-          <table border={1} cellPadding={8} style={{ borderCollapse: "collapse", width: "100%" }}>
+          <table border={1} cellPadding={8} style={{ borderCollapse: "collapse", width: "100%" }} className="drug-list-table">
             <thead>
               <tr>
                 <th>Mã</th>

@@ -330,7 +330,18 @@ const QLThuoc = () => {
                       <td style={{ padding: '8px 12px', border: '1px solid #ddd', width: 120 }}>{thuoc.supplier}</td>
                       <td style={{ padding: '8px 4px', border: '1px solid #ddd', width: 60, textAlign: 'center', verticalAlign: 'middle' }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                          <button type="button" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#1ec9a4', fontSize: 20 }} title="Sửa" onClick={() => navigate(`/thuoc/edit/${thuoc.id}`)}>
+                          <button
+                            type="button"
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              cursor: 'pointer',
+                              color: '#1ec9a4',
+                              fontSize: 20
+                            }}
+                            title="Sửa"
+                            onClick={() => navigate(`/thuoc/edit/${thuoc.code}`)}
+                          >
                             <span role="img" aria-label="edit">✏️</span>
                           </button>
                            <button
