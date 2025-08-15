@@ -15,7 +15,6 @@ const typeOptions = [
   "Thiết bị văn phòng"
 ];
 
-const currentUser = { email: "admin@gmail.com", password: "1234" };
 
 function QLVatTu() {
   const navigate = useNavigate();
