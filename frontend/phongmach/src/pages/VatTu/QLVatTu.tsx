@@ -5,86 +5,16 @@ import { useVatTu } from '../../contexts/VatTuContext';
 import Sidebar from '../../components/Sidebar';
 import appIcon from '../../assets/appicon.png';
 
-const storageOptions = [
-  "Tủ vật tư 1", "Tủ vật tư 2", "Tủ vật tư 3", "Tủ vật tư 4", "Tủ vật tư 5"
-];
-const typeOptions = [
-  "Tiêu hao dùng 1 lần",
-  "Tiêu hao nhiều lần",
-  "Dụng cụ hỗ trợ khám",
-  "Thiết bị văn phòng"
-];
-
 
 function QLVatTu() {
   const navigate = useNavigate();
-  const { vatTuList, deleteVatTu, updateVatTu } = useVatTu();
+  const { vatTuList, deleteVatTu } = useVatTu();
   const [menuOpen, setMenuOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [deleteIdx, setDeleteIdx] = useState<number|null>(null);
   const [deletePassword, setDeletePassword] = useState("");
   const [deleteError, setDeleteError] = useState("");
   const [deleteSuccess, setDeleteSuccess] = useState(false);
-
-  // Các lựa chọn cho tên vật tư theo loại
-  const nameOptionsByType: Record<string, string[]> = {
-    "Tiêu hao dùng 1 lần": [
-      "Găng tay cao su",
-      "Găng tay nitrile",
-      "Khẩu trang 3 lớp",
-      "Kim tiêm 23G/25G",
-      "Ống tiêm 1ml",
-      "Ống tiêm 3ml",
-      "Ống tiêm 5ml",
-      "Gạc vô trùng",
-      "Bông thấm",
-      "Băng cuộn",
-      "Ống nghiệm máu",
-      "Que thử đường huyết",
-      "Que thử nước tiểu"
-    ],
-    "Tiêu hao nhiều lần": [
-      "Cồn 70 độ",
-      "Chlorhexidine",
-      "Gel rửa tay",
-      "Khăn lau tay",
-      "Giấy khám bệnh",
-      "Giấy xét nghiệm",
-      "Tăm bông vô trùng",
-      "Que đè lưỡi gỗ"
-    ],
-    "Dụng cụ hỗ trợ khám": [
-      "Đèn soi tai",
-      "Gương soi họng",
-      "Ống nội soi nhỏ",
-      "Máy đo huyết áp điện tử",
-      "Máy đo huyết áp thủy ngân",
-      "Ống nghe y tế 1 đầu",
-      "Ống nghe y tế 2 đầu",
-      "Glucometer",
-      "Que thử đường huyết",
-      "Nhiệt kế hồng ngoại",
-      "Nhiệt kế điện tử",
-      "Máy xét nghiệm nước tiểu",
-      "Máy test nhanh nước tiểu"
-    ],
-    "Thiết bị văn phòng": [
-      "Máy in phiếu khám",
-      "Giấy in toa thuốc",
-      "Thẻ từ",
-      "Hồ sơ",
-      "Sổ khám",
-      "Đơn thuốc",
-      "Hóa đơn"
-    ]
-  };
-
-  const handleNameChange = (idx: number, value: string) => {
-    const vatTu = vatTuList[idx];
-    if (vatTu) {
-      updateVatTu(vatTu.id, { name: value });
-    }
-  };
 
   const handleSearch = () => {
     return vatTuList.filter(t => t.name.toLowerCase().includes(search.toLowerCase()));
@@ -229,34 +159,14 @@ function QLVatTu() {
                       <td style={{ padding: '8px 12px', border: '1px solid #ddd' }}>{idx + 1}</td>
                       <td style={{ padding: '8px 12px', border: '1px solid #ddd' }}>{vattu.id}</td>
                       <td style={{ padding: '8px 12px', border: '1px solid #ddd', width: 220 }}>
-                        {nameOptionsByType[vattu.type] ? (
-                          <select value={vattu.name} style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid #ccc', fontSize: 12, background: '#fff' }} onChange={e => handleNameChange(idx, e.target.value)}>
-                            {nameOptionsByType[vattu.type].map(opt => (
-                              <option key={opt} value={opt}>{opt}</option>
-                            ))}
-                          </select>
-                        ) : (
-                          vattu.name
-                        )}
+                        {vattu.name}
                       </td>
                       <td style={{ padding: '8px 12px', border: '1px solid #ddd', width: 70 }}>{vattu.price}</td>
                       <td style={{ padding: '8px 12px', border: '1px solid #ddd', width: 100 }}>
-                        <select value={vattu.type} style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid #ccc', fontSize: 12, background: '#fff' }} onChange={e => {
-                          const newType = e.target.value;
-                          const newName = nameOptionsByType[newType]?.[0] || vattu.name;
-                          updateVatTu(vattu.id, { type: newType, name: newName });
-                        }}>
-                          {typeOptions.map(opt => (
-                            <option key={opt} value={opt}>{opt}</option>
-                          ))}
-                        </select>
+                        {vattu.type}
                       </td>
                       <td style={{ padding: '8px 12px', border: '1px solid #ddd', width: 120 }}>
-                        <select value={vattu.storage} style={{ padding: '4px 8px', borderRadius: 6, border: '1px solid #ccc', fontSize: 12, background: '#fff' }} onChange={e => updateVatTu(vattu.id, { storage: e.target.value })}>
-                          {storageOptions.map(opt => (
-                            <option key={opt} value={opt}>{opt}</option>
-                          ))}
-                        </select>
+                        {vattu.storage}
                       </td>
                       <td style={{ padding: '8px 12px', border: '1px solid #ddd', width: 100 }}>{vattu.dateImport}</td>
                       <td style={{ padding: '8px 12px', border: '1px solid #ddd', width: 100, color: expiryColor }}>{vattu.expiry}</td>
