@@ -1,7 +1,6 @@
 import ViewDT from './pages/DonThuoc/ViewDT';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { VatTuProvider } from './contexts/VatTuContext';
-import { AccountProvider } from './contexts/AccountContext';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import Profile_Fixed from './pages/Profile/Profile_Fixed';
@@ -22,7 +21,6 @@ import QLVatTu from './pages/VatTu/QLVatTu';
 //import CreateVT from './pages/VatTu/CreateVT';
 //import EditVT from './pages/VatTu/EditVT';
 import CaiDat from './pages/CaiDat/CaiDat';
-import CreateDT from './pages/DonThuoc/CreateDT';
 import QLThuoc from './pages/Thuoc/QLThuoc';
 import Hotro from './pages/HoTro/Hotro';
 //import CaiDatVatTu from './pages/CaiDat/CaiDatVatTu';

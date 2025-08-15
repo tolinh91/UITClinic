@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from '../../components/Sidebar';
 
-function HotroVatTu() {
+function HotroTaiKhoan() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -102,4 +102,4 @@ function HotroVatTu() {
   );
 }
 
-export default HotroVatTu;
+export default HotroTaiKhoan;
