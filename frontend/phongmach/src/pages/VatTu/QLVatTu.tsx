@@ -86,7 +86,7 @@ function QLVatTu() {
         {/* Top right menu */}
         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 16, flexWrap: 'wrap', padding: '0 32px' }}>
           <img src={appIcon} alt="logo" style={{ width: 40, borderRadius: '50%' }} />
-          <span style={{ fontWeight: 500, fontSize: 18, color: '#2d4a7a' }}>Mạnh</span>
+          <span style={{ fontWeight: 500, fontSize: 18, color: '#2d4a7a' }}>Admin</span>
           <div style={{ position: 'relative' }}>
             <button
               style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }}
