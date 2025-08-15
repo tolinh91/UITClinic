@@ -40,6 +40,7 @@ import CaiDatVaiTro from './pages/CaiDat/CaiDatVaiTro';
 import AddDrugForm from './pages/Thuoc/CreateThuoc';
 import DanhSachThuoc from "./pages/Thuoc/DanhSachThuoc";
 import EditThuoc from './pages/Thuoc/EditThuoc';
+import PrintDT from './pages/DonThuoc/PrintDT';
 // import CreateBN from './pages/BenhNhan/CreateBN';
 function App() {
   return (
@@ -81,6 +82,7 @@ function App() {
           <Route path="/QLThuoc/themthuoc" element={<AddDrugForm/>} />
           <Route path="danh-sach-thuoc" element={<DanhSachThuoc />} />
           <Route path="thuoc/edit/:code" element={<EditThuoc />} />
+          <Route path="/print-donthuoc/:code" element={<PrintDT />} />
         </Routes>
       </Router>
     </VatTuProvider>

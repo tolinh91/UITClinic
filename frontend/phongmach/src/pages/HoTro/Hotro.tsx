@@ -16,8 +16,7 @@ function Hotro() {
   return (
     <div style={{ minHeight: '100vh', width: '100vw', display: 'flex', background: '#f5f6fa', position: 'relative' }}>
       {/* Sidebar */}
-      <Sidebar activePage="Hỗ trợ kỹ thuật" />
-
+      <Sidebar activePage="Trang chủ" />
       {/* Main Content */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '24px 32px' }}>
         {/* Header */}
@@ -30,58 +29,32 @@ function Hotro() {
               Trung tâm hỗ trợ và giải đáp thắc mắc
             </p>
           </div>
-          <div style={{ position: 'relative' }}>
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              style={{
-                background: '#fff',
-                border: '1px solid #e2e8f0',
-                borderRadius: '50%',
-                width: 48,
-                height: 48,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                fontSize: 14,
-                fontWeight: 'bold',
-                color: '#1e293b'
-              }}
-            >
-              Mạnh
-            </button>
-            {menuOpen && (
-              <div style={{
-                position: 'absolute',
-                top: '100%',
-                right: 0,
-                marginTop: 8,
-                background: '#fff',
-                border: '1px solid #e2e8f0',
-                borderRadius: 8,
-                boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
-                zIndex: 1000,
-                minWidth: 160
-              }}>
-                {["Thông tin cá nhân", "Đổi mật khẩu", "Thoát"].map(option => (
-                  <div
-                    key={option}
-                    onClick={() => handleMenuSelect(option)}
-                    style={{
-                      padding: '12px 16px',
-                      cursor: 'pointer',
-                      fontSize: 14,
-                      color: '#374151',
-                      borderBottom: option !== "Thoát" ? '1px solid #f3f4f6' : 'none'
-                    }}
-                    onMouseOver={(e) => e.currentTarget.style.background = '#f9fafb'}
-                    onMouseOut={(e) => e.currentTarget.style.background = '#fff'}
-                  >
-                    {option}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <span style={{ fontWeight: 500, fontSize: 18, color: '#2d4a7a' }}>Admin</span>
+            <div style={{ position: 'relative' }}>
+              <button
+                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }}
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
+                ▼
+              </button>
+              {menuOpen && (
+                <div style={{ position: 'absolute', right: 0, top: 32, background: '#fff', boxShadow: '0 2px 8px #0002', borderRadius: 8, minWidth: 220, zIndex: 10 }}>
+                  <div onClick={() => handleMenuSelect('Thông tin cá nhân')}
+                    style={{ padding: '12px 28px', cursor: 'pointer', borderBottom: '1px solid #eee', display: 'flex', alignItems: 'center', gap: 12, whiteSpace: 'nowrap' }}>
+                    <span>👤</span> Thông tin cá nhân
                   </div>
-                ))}
-              </div>
-            )}
+                  <div onClick={() => handleMenuSelect('Đổi mật khẩu')}
+                    style={{ padding: '12px 28px', cursor: 'pointer', borderBottom: '1px solid #eee', display: 'flex', alignItems: 'center', gap: 12, whiteSpace: 'nowrap' }}>
+                    <span>🔑</span> Đổi mật khẩu
+                  </div>
+                  <div onClick={() => handleMenuSelect('Thoát')}
+                    style={{ padding: '12px 28px', cursor: 'pointer', color: 'red', display: 'flex', alignItems: 'center', gap: 12, whiteSpace: 'nowrap' }}>
+                    <span>⏻</span> Thoát
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -101,7 +74,7 @@ function Hotro() {
               <div style={{ padding: '24px', border: '1px solid #e2e8f0', borderRadius: '12px', textAlign: 'center' }}>
                 <div style={{ fontSize: 32, marginBottom: 16 }}>📞</div>
                 <h3 style={{ fontSize: 18, fontWeight: 'bold', color: '#1e293b', marginBottom: 8 }}>Hotline</h3>
-                <p style={{ fontSize: 16, color: '#3b82f6', fontWeight: '500' }}>1900-xxxx</p>
+                <p style={{ fontSize: 16, color: '#3b82f6', fontWeight: '500' }}>0902334456</p>
               </div>
               
               <div style={{ padding: '24px', border: '1px solid #e2e8f0', borderRadius: '12px', textAlign: 'center' }}>

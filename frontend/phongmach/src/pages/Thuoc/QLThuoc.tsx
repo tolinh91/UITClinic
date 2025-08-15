@@ -233,8 +233,7 @@ const QLThuoc = () => {
         )}
         {/* Top right menu */}
         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 16, flexWrap: 'wrap', padding: '0 32px' }}>
-          <img src={appIcon} alt="logo" style={{ width: 40, borderRadius: '50%' }} />
-          <span style={{ fontWeight: 500, fontSize: 18, color: '#2d4a7a' }}>Mạnh</span>
+          <span style={{ fontWeight: 500, fontSize: 18, color: '#2d4a7a' }}>Admin</span>
           <div style={{ position: 'relative' }}>
             <button
               style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }}
@@ -330,34 +329,9 @@ const QLThuoc = () => {
                       <td style={{ padding: '8px 12px', border: '1px solid #ddd', width: 120 }}>{thuoc.supplier}</td>
                       <td style={{ padding: '8px 4px', border: '1px solid #ddd', width: 60, textAlign: 'center', verticalAlign: 'middle' }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                          <button
-                            type="button"
-                            style={{
-                              background: 'none',
-                              border: 'none',
-                              cursor: 'pointer',
-                              color: '#1ec9a4',
-                              fontSize: 20
-                            }}
-                            title="Sửa"
-                            onClick={() => navigate(`/thuoc/edit/${thuoc.code}`)}
-                          >
+                          <button type="button" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#1ec9a4', fontSize: 20 }} title="Sửa" onClick={() => navigate(`/thuoc/edit/${thuoc.id}`)}>
                             <span role="img" aria-label="edit">✏️</span>
                           </button>
-                           <button
-                                type="button"
-                                style={{
-                                  background: "none",
-                                  border: "none",
-                                  cursor: "pointer",
-                                  color: "#007bff", // màu xanh cho nút xem
-                                  fontSize: 20
-                                }}
-                                title="Xem"
-                                onClick={() => navigate(`/danh-sach-thuoc`)}
-                              >
-                                <span role="img" aria-label="view">👁️</span>
-                              </button>
                           <button type="button" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'red', fontSize: 20 }} title="Xóa" onClick={() => handleDelete(idx)}>
                             <span role="img" aria-label="delete">🗑️</span>
                           </button>

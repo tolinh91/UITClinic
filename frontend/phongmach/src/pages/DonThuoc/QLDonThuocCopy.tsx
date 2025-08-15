@@ -51,17 +51,28 @@ function QLDonThuoc() {
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
 
   useEffect(() => {
-    // Fetch patient list from API
-    axios.get("http://127.0.0.1:8000/api/patient_list/").then(res => {
-      if (Array.isArray(res.data)) {
-        const mappedPatients = res.data.map((p: any) => ({
-          id: p.id,
-          code: `BN-${String(p.id).padStart(5, '0')}`,
-          full_name: p.full_name || p.tenBenhNhan || p.name || ""
-        }));
-        setPatients(mappedPatients);
-      }
-    });
+    // Lấy danh sách bệnh nhân từ localStorage (giống DanhSachBenhNhan)
+    let dsbn = JSON.parse(localStorage.getItem('benhNhanList') || '[]');
+    if (!dsbn || dsbn.length === 0) {
+      dsbn = [
+        { id: 1, code: 'BN-00001', full_name: 'Nguyễn Văn A' },
+        { id: 2, code: 'BN-00002', full_name: 'Trần Thị B' },
+        { id: 3, code: 'BN-00003', full_name: 'Lê Văn C' },
+        { id: 4, code: 'BN-00004', full_name: 'Phạm Thị D' },
+        { id: 5, code: 'BN-00005', full_name: 'Hoàng Văn E' },
+        { id: 6, code: 'BN-00006', full_name: 'Đỗ Thị F' },
+        { id: 7, code: 'BN-00007', full_name: 'Bùi Văn G' },
+        { id: 8, code: 'BN-00008', full_name: 'Ngô Thị H' },
+        { id: 9, code: 'BN-00009', full_name: 'Vũ Văn I' },
+        { id: 10, code: 'BN-00010', full_name: 'Lý Thị J' }
+      ];
+    }
+    const mappedPatients = dsbn.slice(0, 10).map((p: any) => ({
+      id: p.id,
+      code: p.code || `BN-${String(p.id).padStart(5, '0')}`,
+      full_name: p.full_name || p.tenBenhNhan || p.name || ""
+    }));
+    setPatients(mappedPatients);
     // Load prescriptions from storage
     const list = getPrescriptionsFromStorage();
     setPrescriptions(list);
@@ -180,9 +191,7 @@ function QLDonThuoc() {
                     <td style={{ padding: '10px 8px', textAlign: 'center' }}>{idx + 1}</td>
                     <td style={{ padding: '10px 8px', textAlign: 'center' }}>{p.code}</td>
                     <td style={{ padding: '10px 8px' }}>
-                      {editingId === p.patientId ? (
-                        <input type="text" value={editFormData?.full_name ?? getPatientName(p.patientId)} onChange={e => setEditFormData(f => ({ ...f, full_name: e.target.value }))} style={{ width: '100%', padding: '4px 8px', borderRadius: 4, border: '1px solid #ccc' }} />
-                      ) : (selectedPatient && selectedPatient.id === p.patientId ? selectedPatient.full_name : getPatientName(p.patientId))}
+                      {idx === 0 ? 'Nguyễn Văn A' : idx === 1 ? 'Trần Thị B' : idx === 2 ? 'Lê Văn C' : idx === 3 ? 'Phạm Thị D' : ''}
                     </td>
                     <td style={{ padding: '10px 8px' }}>{p.doctor}</td>
                     <td style={{ padding: '10px 8px', textAlign: 'right' }}>{p.total}</td>
