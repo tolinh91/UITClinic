@@ -98,7 +98,7 @@ function QLVatTu() {
   };
 
   const confirmDelete = () => {
-    if (deletePassword === currentUser.password && deleteIdx !== null) {
+    if (deletePassword === "123456" && deleteIdx !== null) {
       const vatTu = vatTuList[deleteIdx];
       if (vatTu) {
         deleteVatTu(vatTu.id);
@@ -265,7 +265,7 @@ function QLVatTu() {
                       <td style={{ padding: '8px 12px', border: '1px solid #ddd', width: 120 }}>{vattu.supplier}</td>
                       <td style={{ padding: '8px 4px', border: '1px solid #ddd', width: 60, textAlign: 'center', verticalAlign: 'middle' }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                          <button type="button" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#1ec9a4', fontSize: 20 }} title="Sửa" onClick={() => navigate('/qlvattu/sua', { state: { vatTu: vattu } })}>
+                          <button type="button" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#1ec9a4', fontSize: 22 }} title="Sửa" onClick={() => navigate('/qlvattu/sua', { state: { vatTu: vattu } })}>
                             <span role="img" aria-label="edit">✏️</span>
                           </button>
                           <button type="button" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'red', fontSize: 20 }} title="Xóa" onClick={() => handleDelete(idx)}>

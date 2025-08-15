@@ -18,8 +18,8 @@ import PrintGKB from './pages/GiayKhamBenh/PrintGKB';
 import QLDonThuocCopy from './pages/DonThuoc/QLDonThuocCopy';
 import EditDonThuoc from './pages/DonThuoc/EditDonThuoc';
 import QLVatTu from './pages/VatTu/QLVatTu';
-//import CreateVT from './pages/VatTu/CreateVT';
-//import EditVT from './pages/VatTu/EditVT';
+import CreateVatTu from './pages/VatTu/CreateVatTu';
+import UpdateVatTu from './pages/VatTu/UpdateVatTu';
 import CaiDat from './pages/CaiDat/CaiDat';
 import QLThuoc from './pages/Thuoc/QLThuoc';
 import Hotro from './pages/HoTro/Hotro';
@@ -64,6 +64,8 @@ function App() {
           <Route path="/danh-sach-benh-nhan/edit/:id" element={<EditBenhNhan />} />
           <Route path="/viewdt/:code" element={<ViewDT />} />
           <Route path="/qlvattu" element={<QLVatTu />} />
+          <Route path="/qlvattu/tao" element={<CreateVatTu />} />
+          <Route path="/qlvattu/sua" element={<UpdateVatTu />} />
           <Route path="/caidat" element={<CaiDat />} />
             <Route path="/QLDonThuocCopy" element={<QLDonThuocCopy />} />
             <Route path="/QLDonThuocCopy/tao" element={<QLDonThuocCopy />} />
