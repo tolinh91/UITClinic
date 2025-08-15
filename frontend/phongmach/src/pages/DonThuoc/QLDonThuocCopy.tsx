@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
+import appIcon from '../../assets/appicon.png';
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Sidebar from '../../components/Sidebar';
+
 
 type Prescription = {
   id: number;
   code: string;
-  patient: string;
+  patientId: number;
   doctor: string;
   total: string;
   status: string;
@@ -15,9 +18,15 @@ type Prescription = {
   createdAt?: string;
 };
 
+type Patient = {
+  id: number;
+  code: string;
+  full_name: string;
+};
+
+
 function getPrescriptionsFromStorage(): Prescription[] {
   const list = JSON.parse(localStorage.getItem('donthuoc_list') || '[]');
-  // Add code and status for display
   return list.map((item: any, idx: number) => ({
     ...item,
     code: `DT${(idx + 1).toString().padStart(6, '0')}`,
@@ -25,6 +34,7 @@ function getPrescriptionsFromStorage(): Prescription[] {
     status: 'Chưa mua',
     statusColor: '#ffa726',
     id: idx + 1,
+    patientId: item.patientId || item.patient_id || item.patient || idx + 1, // fallback for old data
   }));
 }
 
@@ -34,32 +44,62 @@ function QLDonThuoc() {
   const [search, setSearch] = useState("");
   const [prescriptions, setPrescriptions] = useState<Prescription[]>(getPrescriptionsFromStorage());
   const [filtered, setFiltered] = useState<Prescription[]>(prescriptions);
+  const [patients, setPatients] = useState<Patient[]>([]);
+  // Thêm state giống DanhSachBenhNhan
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editFormData, setEditFormData] = useState<Partial<Patient> | null>(null);
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
 
   useEffect(() => {
+    // Fetch patient list from API
+    axios.get("http://127.0.0.1:8000/api/patient_list/").then(res => {
+      if (Array.isArray(res.data)) {
+        const mappedPatients = res.data.map((p: any) => ({
+          id: p.id,
+          code: `BN-${String(p.id).padStart(5, '0')}`,
+          full_name: p.full_name || p.tenBenhNhan || p.name || ""
+        }));
+        setPatients(mappedPatients);
+      }
+    });
+    // Load prescriptions from storage
     const list = getPrescriptionsFromStorage();
     setPrescriptions(list);
     setFiltered(list);
   }, []);
+
+  // Helper to get patient name by id
+  const getPatientName = (id: number) => {
+    const found = patients.find(p => p.id === id);
+    return found ? found.full_name : "";
+  };
 
   const handleSearch = () => {
     const s = search.trim().toLowerCase();
     if (!s) {
       setFiltered(prescriptions);
     } else {
-      setFiltered(prescriptions.filter((p: Prescription) => p.patient.toLowerCase().includes(s)));
+      setFiltered(prescriptions.filter((p: Prescription) => getPatientName(p.patientId).toLowerCase().includes(s)));
     }
   };
 
   const [menuOpen, setMenuOpen] = useState(false);
+  const handleMenuSelect = (option: string) => {
+    setMenuOpen(false);
+    if (option === "Thông tin cá nhân") navigate("/profile");
+    else if (option === "Đổi mật khẩu") navigate("/changepassword");
+    else if (option === "Thoát") navigate("/login");
+  };
   return (
     <div style={{ minHeight: '100vh', width: '100vw', display: 'flex', background: '#f5f6fa' }}>
-  {/* Sidebar giống MainPage */}
-  <Sidebar activePage="Đơn thuốc" />
+      {/* Sidebar giống MainPage */}
+      <Sidebar activePage="Đơn thuốc" />
       {/* Main content */}
       <div style={{ flex: 1, padding: '32px 0 0 0', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
-        {/* Top right menu */}
+        {/* Submenu góc trên bên phải giống MainPage */}
         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 16, flexWrap: 'wrap', padding: '0 32px' }}>
-          <span style={{ fontWeight: 500, fontSize: 18, color: '#2d4a7a' }}>Mạnh</span>
+          <img src={appIcon} alt="logo" style={{ width: 40, borderRadius: '50%' }} />
+          <span style={{ fontWeight: 500, fontSize: 18, color: '#2d4a7a' }}>Admin</span>
           <div style={{ position: 'relative' }}>
             <button
               style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 18 }}
@@ -69,15 +109,15 @@ function QLDonThuoc() {
             </button>
             {menuOpen && (
               <div style={{ position: 'absolute', right: 0, top: 32, background: '#fff', boxShadow: '0 2px 8px #0002', borderRadius: 8, minWidth: 220, zIndex: 10 }}>
-                <div onClick={() => navigate('/profile')}
+                <div onClick={() => handleMenuSelect('Thông tin cá nhân')}
                   style={{ padding: '12px 28px', cursor: 'pointer', borderBottom: '1px solid #eee', display: 'flex', alignItems: 'center', gap: 12, whiteSpace: 'nowrap' }}>
                   <span>👤</span> Thông tin cá nhân
                 </div>
-                <div onClick={() => navigate('/changepassword')}
+                <div onClick={() => handleMenuSelect('Đổi mật khẩu')}
                   style={{ padding: '12px 28px', cursor: 'pointer', borderBottom: '1px solid #eee', display: 'flex', alignItems: 'center', gap: 12, whiteSpace: 'nowrap' }}>
                   <span>🔑</span> Đổi mật khẩu
                 </div>
-                <div onClick={() => navigate('/login')}
+                <div onClick={() => handleMenuSelect('Thoát')}
                   style={{ padding: '12px 28px', cursor: 'pointer', color: 'red', display: 'flex', alignItems: 'center', gap: 12, whiteSpace: 'nowrap' }}>
                   <span>⏻</span> Thoát
                 </div>
@@ -139,14 +179,24 @@ function QLDonThuoc() {
                   <tr key={p.code} style={{ background: '#fff', borderBottom: '1px solid #eee' }}>
                     <td style={{ padding: '10px 8px', textAlign: 'center' }}>{idx + 1}</td>
                     <td style={{ padding: '10px 8px', textAlign: 'center' }}>{p.code}</td>
-                    <td style={{ padding: '10px 8px' }}>{p.patient}</td>
+                    <td style={{ padding: '10px 8px' }}>
+                      {editingId === p.patientId ? (
+                        <input type="text" value={editFormData?.full_name ?? getPatientName(p.patientId)} onChange={e => setEditFormData(f => ({ ...f, full_name: e.target.value }))} style={{ width: '100%', padding: '4px 8px', borderRadius: 4, border: '1px solid #ccc' }} />
+                      ) : (selectedPatient && selectedPatient.id === p.patientId ? selectedPatient.full_name : getPatientName(p.patientId))}
+                    </td>
                     <td style={{ padding: '10px 8px' }}>{p.doctor}</td>
                     <td style={{ padding: '10px 8px', textAlign: 'right' }}>{p.total}</td>
                     <td style={{ padding: '10px 8px', textAlign: 'center' }}>
                       <span style={{ background: p.statusColor, color: '#fff', borderRadius: 8, padding: '6px 18px', fontWeight: 500, fontSize: 15 }}>{p.status}</span>
                     </td>
                     <td style={{ padding: '10px 8px', textAlign: 'center' }}>
-                      <span style={{ color: '#1ec9a4', fontSize: 16, marginRight: 8, cursor: 'pointer' }} title="Xem">👁️</span>
+                      <span
+                        style={{ color: '#1ec9a4', fontSize: 16, marginRight: 8, cursor: 'pointer' }}
+                        title="Xem"
+                        onClick={() => navigate(`/viewdt/${p.code}`)}
+                      >
+                        👁️
+                      </span>
                       <span style={{ color: '#1ec9a4', fontSize: 16, marginRight: 8, cursor: 'pointer' }} title="In">🖨️</span>
                       <span style={{ color: '#1ec9a4', fontSize: 16, marginRight: 8, cursor: 'pointer' }} title="Sửa">✏️</span>
                       <span style={{ color: '#e53935', fontSize: 16, cursor: 'pointer' }} title="Xóa">🗑️</span>

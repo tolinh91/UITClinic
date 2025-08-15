@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ViewDT from './pages/DonThuoc/ViewDT';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { VatTuProvider } from './contexts/VatTuContext';
 import { AccountProvider } from './contexts/AccountContext';
 import Login from './pages/Login/Login';
@@ -15,7 +16,7 @@ import DetailGKB from './pages/GiayKhamBenh/DetailGKB';
 import EditGKB from './pages/GiayKhamBenh/EditGKB';
 import PrintGKB from './pages/GiayKhamBenh/PrintGKB';
 //import CreateGKB from './pages/GiayKhamBenh/CreateGKB';
-import QLDonThuoc from './pages/DonThuoc/QLDonThuoc copy';
+import QLDonThuocCopy from './pages/DonThuoc/QLDonThuocCopy';
 import EditDonThuoc from './pages/DonThuoc/EditDonThuoc';
 import QLVatTu from './pages/VatTu/QLVatTu';
 //import CreateVT from './pages/VatTu/CreateVT';
@@ -62,10 +63,13 @@ function App() {
           <Route path="/danh-sach-benh-nhan" element={<DanhSachBenhNhan/>} />
           <Route path="/xoa-benh-nhan/:id" element={<XoaBenhNhan/>} />
           <Route path="/danh-sach-benh-nhan/edit/:id" element={<EditBenhNhan />} />
-          <Route path="/qldonthuoc" element={<QLDonThuoc />} />
+          <Route path="/viewdt/:code" element={<ViewDT />} />
           <Route path="/qlvattu" element={<QLVatTu />} />
           <Route path="/caidat" element={<CaiDat />} />
-          <Route path="/qldonthuoc/tao" element={<CreateDT />} />
+            <Route path="/QLDonThuocCopy" element={<QLDonThuocCopy />} />
+            <Route path="/QLDonThuocCopy/tao" element={<QLDonThuocCopy />} />
+            <Route path="/qldonthuoc" element={<Navigate to="/QLDonThuocCopy" replace />} />
+            <Route path="/qldonthuoc/tao" element={<Navigate to="/QLDonThuocCopy/tao" replace />} />
           <Route path="/thuoc" element={<QLThuoc />} />
           <Route path="/qlkho/qlxuatnhap" element={<QLXuatNhap />} />
           <Route path="/hotro" element={<Hotro />} />
